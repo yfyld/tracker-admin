@@ -1,4 +1,4 @@
-import { LOGIN_FAILURE, LOGIN_SUCCESS, LOGIN_REQUEST } from './../../constants/actionType';
+import { LOGIN_FAILURE, LOGIN_SUCCESS, LOGIN_REQUEST } from '@/constants';
 import { createAsyncAction } from 'typesafe-actions';
 
 
