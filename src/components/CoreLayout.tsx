@@ -1,19 +1,41 @@
 import * as React from 'react';
 import AppHeader from "./AppHeader"
 import style from "./CoreLayout.module.less"
+import AppSidebar from './AppSidebar';
+import { connect } from 'react-redux';
+import { RootState } from '@/types';
 
-const CoreLayout=(props:{children:any})=>{
+interface Props{
+  children:any
+  collapsed:boolean
+}
+
+const CoreLayout=({children,collapsed}:Props)=>{
   return (
-    <div className={style.wrapper}>
+    <div className={style.wrapper+" "+(collapsed?style.collapsedWrapper:'')}>
         <div className={style.header}>
           <AppHeader />
         </div>
+        <div className={style.sidebar}>
+          <AppSidebar />
+        </div>
         <div className={style.content}>
-          {props.children}
+          {children}
         </div>
     </div>
   )
 }
 
 
-export default  CoreLayout
+const mapStateToProps = (state:RootState) => {
+  const { collapsed } = state.app;
+  return {
+    collapsed
+  }
+};
+
+
+
+export default connect(mapStateToProps)(CoreLayout);
+
+

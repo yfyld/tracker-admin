@@ -1,4 +1,4 @@
 export default{
-  baseURL:"http://127.0.0.1:7001/",
+  baseURL:"http://localhost:8080/",
   useServerDate:false
 }

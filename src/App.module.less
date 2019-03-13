@@ -1,0 +1,23 @@
+:global(#app){
+  height:100%;
+}
+.spin {
+  position: absolute!important;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99999;
+
+  > :global(.ant-spin-dot) {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -25px -10px -10px;
+  }
+  > :global(.ant-spin-text) {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+  }
+}

@@ -8,12 +8,17 @@ import axios, {
 } from 'axios'
 import config from '@/config'
 import {message} from "antd"
+import { doChangeLoadingStatus } from '@/store/actions';
+import {store} from "@/index"
+import { localStore } from '@/utils';
+
+
 
 const Loading = {
   loadingNum: 0,
-  add(): void {
+  add(type:string): void {
     if (this.loadingNum === 0) {
-      this.dispatch(true)
+      this.dispatch(true,type)
     }
     this.loadingNum++
   },
@@ -24,8 +29,9 @@ const Loading = {
       this.dispatch(false)
     }
   },
-  dispatch(loading: boolean) {
-    console.log(1)
+  dispatch(loading: boolean,type:string="GET") {
+    store.dispatch(doChangeLoadingStatus(loading,type));
+    //console.log(1)
   }
 }
 
@@ -40,6 +46,9 @@ const errorMessage = (mes: string) => {
   curMes = mes
 }
 
+
+
+
 // 实例
 const instance: AxiosInstance = axios.create({
   baseURL: config.baseURL,
@@ -52,7 +61,9 @@ const instance: AxiosInstance = axios.create({
 
 instance.interceptors.request.use(
   (config: AxiosRequestConfig) => {
-    Loading.add()
+    if((config as any).showLoading!==false){
+      Loading.add(config.method.toUpperCase())
+    }
     return config
   },
   (error: AxiosError) => {
@@ -62,17 +73,22 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (response: AxiosResponse) => {
-    Loading.remove()
-    if(response.data.status===2000){
-      response.data=response.data.data;
+    if((response as any).config.showLoading!==false){
+      Loading.remove();
+    }
+    
+    if(response.data.code===200){
+      response.data=response.data.result;
       return Promise.resolve(response)
     }else{
-      errorMessage(response.data.msg)
+      errorMessage(response.data.message)
       return Promise.reject(response)
     }
   },
   (error: AxiosError) => {
-    Loading.remove()
+    if((error as any).config.showLoading!==false){
+      Loading.remove();
+    }
 
     if (error.code === 'ECONNABORTED') {
       errorMessage('网络连接超时')
@@ -95,4 +111,15 @@ instance.get = (
   return getFn(url, config)
 }
 
+export async function updateToken(token?:string){
+  if(!token){
+    token = await localStore.getItem("token");
+  }else{
+    await localStore.setItem("token",token)
+  }
+  instance.defaults.headers['Authorization'] = token;
+  return token;
+}
+
+updateToken();
 export default instance

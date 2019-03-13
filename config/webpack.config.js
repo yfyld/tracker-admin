@@ -23,7 +23,7 @@ const getClientEnvironment = require('./env');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin-alt');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
-
+const tsImportPluginFactory = require('ts-import-plugin');
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
@@ -345,6 +345,13 @@ module.exports = function(webpackEnv) {
                 customize: require.resolve(
                   'babel-preset-react-app/webpack-overrides'
                 ),
+                // getCustomTransformers: () => ({
+                //   before: [tsImportPluginFactory({
+                //     libraryDirectory: 'es',
+                //     libraryName: 'antd',
+                //     style: true
+                //   })]
+                // }),
                 
                 plugins: [
                   [

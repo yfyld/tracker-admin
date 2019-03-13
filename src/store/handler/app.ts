@@ -1,16 +1,16 @@
 
 import { CACHE_TIME } from '@/constants';
 import {RootState, Handler} from "@/types"
-import { doLogin } from '@/store/actions';
+import { doGetUserInfo } from '@/store/actions';
 
 
 export default {
-  '/home': ({ pathname, search },state:RootState):Handler[] => {
+  '/*': ({ pathname, search }:any,state:RootState):Handler[] => {
     return [
       {
-        action: doLogin.request(""),
+        action: doGetUserInfo.request(),
         ttl: CACHE_TIME,
-        disable: false
+        disable: pathname==="/signup"||pathname==="/login"||!!state.app.userInfo.id
       },
     ]
   }

@@ -4,8 +4,11 @@ import { Spin } from 'antd'
 import { history } from '@/utils'
 import CoreRouter from './CoreRouter'
 import { ConnectedRouter } from 'connected-react-router'
-const Login = React.lazy(() => import('@/pages/account/Login'))
 
+const Login = React.lazy(() => import('@/pages/account/Login'))
+const Signup = React.lazy(() => import('@/pages/account/Signup'))
+
+const ProjectList = React.lazy(() => import('@/pages/projectList/ProjectList'))
 export default class Routes extends React.Component {
   public render() {
     return (  
@@ -19,6 +22,8 @@ export default class Routes extends React.Component {
           <>
             <Switch>
               <Route exact path="/login" component={Login} />
+              <Route exact path="/signup" component={Signup} />
+              <Route exact path="/project-list" component={ProjectList} />
               <Route path="/" component={CoreRouter} />
             </Switch>
           </>

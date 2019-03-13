@@ -2,7 +2,7 @@
   height:@header-height;
   background: @primary;
   color: #fff;
-  padding:0 25px;
+  padding-right:25px;
   width:100%;
 }
 
@@ -11,8 +11,29 @@
   line-height: @header-height;
 }
 
-.nav{
+.headerLeft{
   float: left;
+  
+}
+
+.title{
+  line-height: @header-height;
+  border-left: 1px solid @border;
+  padding-left: .5em;
+
+}
+
+.collapsedBtn{
+  height: @header-height;
+  width:@header-height;
+  border:0;
+  background: transparent;
+  line-height: @header-height;
+  color:@font;
+}
+
+.navRight{
+  float: right;
   list-style: none;
   line-height: @header-height;
   >li{

@@ -1,8 +1,15 @@
-import * as React from 'react';
-import {Link} from "react-router-dom"
-export default class Login extends React.Component{
+import * as React from 'react'
 
-  render(){
-    return <div><Link to="/login">login</Link></div>
+import { Button } from 'antd'
+
+
+export default class Login extends React.Component {
+
+  render() {
+    return (
+      <div>
+        <Button type="primary">Primary</Button>
+      </div>
+    )
   }
 }
