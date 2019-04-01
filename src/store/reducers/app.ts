@@ -1,6 +1,6 @@
 import update from 'immutability-helper'
 import { getType } from 'typesafe-actions'
-import { Action, UserInfo } from '@/types'
+import { Action, UserInfo, MenuItem } from '@/types'
 //import * as Api from "@/api"
 
 import {
@@ -11,6 +11,8 @@ import {
   doChangeCollapsed
 } from '@/store/actions'
 
+
+
 export interface AppState {
   test: number
   userInfo: UserInfo
@@ -18,6 +20,7 @@ export interface AppState {
   loading: boolean
   loadingText: string
   collapsed: boolean
+  menuData:MenuItem[]
 }
 
 const initialState = (): AppState => ({
@@ -26,7 +29,46 @@ const initialState = (): AppState => ({
   token: '',
   loading: false,
   loadingText: '加载中',
-  collapsed: false
+  collapsed: false,
+  menuData:[{
+    key:"/project/1/info",
+    name:"项目信息",
+    icon:"setting",
+    auth:["admin"]
+  },{
+    key:"broad",
+    name:"数据看板",
+    icon:"setting",
+    children:[
+      {
+        key:"/project/1/broad/1",
+        icon:"setting",
+        name:"老板看板"
+      }
+    ]
+  },{
+    key:"analyse",
+    name:"行为分析",
+    auth:["dev","admin"],
+    icon:"setting",
+    children:[
+      {
+        key:"/project/1/analyse-event",
+        icon:"setting",
+        name:"事件分析"
+      }
+    ]
+  },{
+    key:"/project/1/event-list",
+    name:"元数据",
+    icon:"setting",
+    auth:["admin"]
+  },{
+    key:"http://www.baidu.com",
+    name:"自定义查询",
+    icon:"setting",
+    auth:["admin"]
+  }]
 })
 
 export const appReducer = (

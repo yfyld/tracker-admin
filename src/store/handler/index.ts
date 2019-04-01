@@ -1,6 +1,8 @@
 import appHandlers from "./app"
+import projectHandlers from "./project"
 const handlers={
-  ...appHandlers
+  ...appHandlers,
+  ...projectHandlers
 }
 
 export default handlers;

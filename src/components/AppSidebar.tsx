@@ -1,69 +1,66 @@
-import { Menu, Icon } from 'antd';
-import * as React from "react";
+import { Menu, Icon } from 'antd'
+import * as React from 'react'
 import style from './AppSidebar.module.less'
-import { RootState } from '@/types';
-import { connect } from 'react-redux';
-const SubMenu = Menu.SubMenu;
+import { RootState, MenuItem } from '@/types'
+import { connect } from 'react-redux'
+import { history } from '@/utils';
+
+const SubMenu = Menu.SubMenu
 
 interface Props {
-  collapsed:boolean
-  
+  collapsed: boolean
+  menuData: MenuItem[]
 }
 
+const renderMenuItem = (data: MenuItem) => {
+  if (!data.children) {
+    return (
+      <Menu.Item key={data.key}>
+        <Icon type={data.icon} />
+        <span>{data.name}</span>
+      </Menu.Item>
+    )
+  } else {
+    return (
+      <SubMenu
+        key={data.key}
+        title={
+          <span>
+            <Icon type={data.icon} />
+            <span>{data.name}</span>
+          </span>
+        }
+      >
+        {data.children.map(item => renderMenuItem(item))}
+      </SubMenu>
+    )
+  }
+}
 
-const AppSidebar = ({collapsed}:Props)=>{
+const AppSidebar = ({ collapsed, menuData }: Props) => {
   return (
     <div className={style.wrapper}>
-      <div className={style.logo}>
-        logo
-      </div>
+      <div className={style.logo}>logo</div>
       <Menu
+        onClick={({key})=>history.push(key)}
         defaultSelectedKeys={['1']}
         defaultOpenKeys={['sub1']}
         mode="inline"
         theme="dark"
         inlineCollapsed={collapsed}
       >
-        <Menu.Item key="1">
-          <Icon type="pie-chart" />
-          <span>Option 1</span>
-        </Menu.Item>
-        <Menu.Item key="2">
-          <Icon type="desktop" />
-          <span>Option 2</span>
-        </Menu.Item>
-        <Menu.Item key="3">
-          <Icon type="inbox" />
-          <span>Option 3</span>
-        </Menu.Item>
-        <SubMenu key="sub1" title={<span><Icon type="mail" /><span>Navigation One</span></span>}>
-          <Menu.Item key="5">Option 5</Menu.Item>
-          <Menu.Item key="6">Option 6</Menu.Item>
-          <Menu.Item key="7">Option 7</Menu.Item>
-          <Menu.Item key="8">Option 8</Menu.Item>
-        </SubMenu>
-        <SubMenu key="sub2" title={<span><Icon type="appstore" /><span>Navigation Two</span></span>}>
-          <Menu.Item key="9">Option 9</Menu.Item>
-          <Menu.Item key="10">Option 10</Menu.Item>
-          <SubMenu key="sub3" title="Submenu">
-            <Menu.Item key="11">Option 11</Menu.Item>
-            <Menu.Item key="12">Option 12</Menu.Item>
-          </SubMenu>
-        </SubMenu>
+        {menuData.map(item => renderMenuItem(item))}
       </Menu>
     </div>
-  );
+  )
 }
 
-
-
-const mapStateToProps = (state:RootState) => {
-  const { collapsed } = state.app;
+const mapStateToProps = (state: RootState) => {
+  const { collapsed, menuData } = state.app
   return {
-    collapsed
+    collapsed,
+    menuData
   }
-};
+}
 
-
-
-export default connect(mapStateToProps)(AppSidebar);
+export default connect(mapStateToProps)(AppSidebar)

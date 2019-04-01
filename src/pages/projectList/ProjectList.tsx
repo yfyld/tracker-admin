@@ -6,11 +6,12 @@ import {
   Action,
   GetProjectListParams,
   PageData,
-  ProjectInfo
+  ProjectInfo,
+  Role
 } from '@/types'
 import { doGetProjectList } from '@/store/actions'
 import { bindActionCreators, Dispatch } from 'redux'
-import { Tabs } from 'antd'
+import { Tabs, Button } from 'antd'
 import AppHeader from '@/components/AppHeader'
 import ProjectPane from './components/ProjectPane'
 
@@ -21,28 +22,35 @@ interface Props {
   projectList: PageData<ProjectInfo>
 }
 
+
+
 const ProjectList = ({ projectList, doGetProjectList }: Props) => {
+  const operations=<Button size="small">新建项目</Button>
   return (
     <div className={style.wrapper}>
       <AppHeader alone />
       <Tabs
+        tabBarExtraContent={operations}
+        defaultActiveKey={Role.member}
         onChange={role => doGetProjectList({ role, page: 1, pageSize: 20 })}
       >
-        <TabPane tab="所有项目" key="ALL">
+        <TabPane tab="所有项目" key={Role.member}>
           {projectList.list.map(project => (
-            <ProjectPane projectInfo={project} />
+            <ProjectPane key={project.id} projectInfo={project} />
           ))}
         </TabPane>
-        <TabPane tab="我的项目" key="ADMIN">
+        <TabPane tab="我的项目" key={Role.admin}>
           {projectList.list.map(project => (
-            <ProjectPane projectInfo={project} />
+            <ProjectPane key={project.id} projectInfo={project} />
           ))}
         </TabPane>
-        <TabPane tab="参与项目" key="MEMBER">
+        <TabPane tab="参与项目" key={Role.developer}>
           {projectList.list.map(project => (
-            <ProjectPane projectInfo={project} />
+            <ProjectPane key={project.id} projectInfo={project} />
           ))}
         </TabPane>
+
+
       </Tabs>
     </div>
   )

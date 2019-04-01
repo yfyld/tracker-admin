@@ -26,7 +26,7 @@ const AppHeader = ({ collapsed, doChangeCollapsed,alone=false }: Props) => {
         <span className={style.title}>埋点管理平台</span>
       </div>}
       <div className={style.navRight}>
-        <Link to="/projectList">项目列表</Link>
+        <Link to="/project-list">项目列表</Link>
         <Link to="/login">登录</Link>
         <Link to="/signup">注册</Link>
       </div>

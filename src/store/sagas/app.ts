@@ -46,7 +46,7 @@ function* login(action: ReturnType<typeof doLogin.request>): Generator {
   }
   
   yield delay(300)
-  yield put(push("/home"))
+  yield put(push("/project-list"))
   
 }
 

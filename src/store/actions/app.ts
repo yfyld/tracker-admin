@@ -51,3 +51,5 @@ export const doChangeLoadingStatus = createAction(
 export const doResetStore=createAction(RESET_STORE)
 
 export const doChangeCollapsed=createAction(CHANGE_COLLAPSED,action=>(collapsed:boolean)=>action(collapsed))
+
+//export const doRouterPush=createAction(CHANGE_COLLAPSED,action=>(path:string)=>action(path))

@@ -3,7 +3,7 @@ import axios, {
   AxiosRequestConfig,
   AxiosResponse,
   AxiosError,
-  AxiosInstance,
+  AxiosInterceptorManager,
   
 } from 'axios'
 import config from '@/config'
@@ -12,6 +12,24 @@ import { doChangeLoadingStatus } from '@/store/actions';
 import {store} from "@/index"
 import { localStore } from '@/utils';
 
+
+
+export interface AxiosInstance {
+  (config: AxiosRequestConfig): AxiosPromise;
+  (url: string, config?: AxiosRequestConfig): AxiosPromise;
+  defaults: AxiosRequestConfig;
+  interceptors: {
+    request: AxiosInterceptorManager<AxiosRequestConfig>;
+    response: AxiosInterceptorManager<AxiosResponse>;
+  };
+  request<T = any>(config: AxiosRequestConfig): AxiosPromise<T>;
+  get<T = any>(url: string,data?:object,config?: AxiosRequestConfig): AxiosPromise<T>;
+  delete(url: string, config?: AxiosRequestConfig): AxiosPromise;
+  head(url: string, config?: AxiosRequestConfig): AxiosPromise;
+  post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>;
+  put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>;
+  patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>;
+}
 
 
 const Loading = {
@@ -100,10 +118,12 @@ instance.interceptors.response.use(
   }
 )
 
+
+
 // 重写instance.get
 const getFn = instance.get
 instance.get = (
-  url,
+  url:string,
   data?: object,
   config: AxiosRequestConfig = {}
 ): AxiosPromise => {
@@ -111,11 +131,12 @@ instance.get = (
   return getFn(url, config)
 }
 
-export async function updateToken(token?:string){
+
+export function updateToken(token?:string){
   if(!token){
-    token = await localStore.getItem("token");
+    token =  localStore.getSyncItem("token");
   }else{
-    await localStore.setItem("token",token)
+    localStore.setSyncItem("token",token)
   }
   instance.defaults.headers['Authorization'] = token;
   return token;

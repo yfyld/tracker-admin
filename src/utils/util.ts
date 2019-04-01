@@ -38,6 +38,12 @@ export const localStore={
     },
     setItem:(key:string,value:any):Promise<any>=>{
         return localForage.setItem(key,value)
+    },
+    getSyncItem:(key:string):string=>{
+        return localStorage.getItem(key)
+    },
+    setSyncItem:(key:string,value:any):void=>{
+        return localStorage.setItem(key,value)
     }
 }
 

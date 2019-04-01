@@ -2,6 +2,7 @@ import { RootState } from '@/store/reducers';
 import * as actions from '@/store/actions'
 import { ActionType } from 'typesafe-actions'
 
+
 export type Action = ActionType<typeof actions>
 
 export interface ActionAny {
@@ -30,6 +31,15 @@ export interface Handler {
   ttl:number,
   disable:boolean
 } 
+
+export interface MenuItem{
+  key:string,
+  name:string,
+  icon:string,
+  link?:string,
+  auth?:string[],
+  children?:MenuItem[]
+}
 
 //用户
 export interface LoginParams{
@@ -62,9 +72,35 @@ export interface ProjectInfo{
 
 
 
+export enum Role{
+  super="SUPER_ADMIN",
+  admin="ADMIN",
+  developer="DEVELOPER",
+  member=""
+}
+
 
 export interface GetProjectListParams{
   role?:string,
-  page?:number,
-  pageSize?:number
+  page:number,
+  pageSize:number
+}
+
+export interface AddProjectParams{
+  name:string
+}
+
+
+
+export interface EventInfo{
+  id:number,
+  name:string,
+  tag?:string
+}
+
+export interface GetEventListParams{
+  tag?:string,
+  status?:number,
+  page:number,
+  pageSize:number
 }

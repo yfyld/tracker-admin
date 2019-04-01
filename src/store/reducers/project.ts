@@ -14,7 +14,7 @@ export interface ProjectState {
 const initialState = (): ProjectState => ({
   projectInfo:{},
   projectList:{totalCount:0,list:[]},
-  getProjectListParams:{page:1,pageSize:20,role:"ALL"}
+  getProjectListParams:{page:1,pageSize:20,role:""}
 })
 
 export const projectReducer = (
