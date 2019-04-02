@@ -41,7 +41,7 @@ const initialState = (): AppState => ({
     icon:"setting",
     children:[
       {
-        key:"/project/1/broad/1",
+        key:"/project/1/board/1",
         icon:"setting",
         name:"老板看板"
       }
@@ -59,7 +59,7 @@ const initialState = (): AppState => ({
       }
     ]
   },{
-    key:"/project/1/event-list",
+    key:"/project/1/metadata-list",
     name:"元数据",
     icon:"setting",
     auth:["admin"]

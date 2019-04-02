@@ -1,28 +1,20 @@
 import * as React from 'react'
-import style from './ProjectPane.module.less'
+import style from './BoardPane.module.less'
 import { connect } from 'react-redux'
-import { RootState, Action,ProjectInfo } from '@/types'
+import { RootState, Action } from '@/types'
 import { bindActionCreators, Dispatch } from 'redux'
-import { Link } from 'react-router-dom';
-
-
 
 
 
 interface Props {
-  projectInfo: ProjectInfo
+  info: any
 }
 
-const ProjectPane = ({ projectInfo }: Props) => {
+const BoardPane = ({ info }: Props) => {
   return (
-    <Link to={{
-      pathname: `/project/${projectInfo.id}/analyse-event`,
-      state: { fromDashboard: true }
-    }}>
-      <div className={style.wrapper}>
-      <h3>{projectInfo.name}</h3>
+    <div className={style.wrapper}>
+      <h3>{info.name}</h3>
     </div>
-    </Link>
   )
 }
 
@@ -46,4 +38,4 @@ const mapStateToProps = (state: RootState) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProjectPane)
+)(BoardPane)

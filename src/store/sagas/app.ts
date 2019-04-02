@@ -16,6 +16,10 @@ function* triggerFetchOnLocation(): Generator {
     yield call(updateToken);
   }
   const state = yield select(state => state)
+  const projectPath=state.router.location.pathname.match(/^\/project\/(\d+)/);
+  if(projectPath){
+    http.defaults.headers['projectId']=projectPath[1];
+  }
   const actions = mapLocationIntoActions(
     state.router.location,
     handlers,

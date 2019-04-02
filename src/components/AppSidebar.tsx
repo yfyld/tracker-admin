@@ -3,11 +3,13 @@ import * as React from 'react'
 import style from './AppSidebar.module.less'
 import { RootState, MenuItem } from '@/types'
 import { connect } from 'react-redux'
-import { history } from '@/utils';
+
+import {withRouter,RouteComponentProps} from "react-router-dom";
+
 
 const SubMenu = Menu.SubMenu
 
-interface Props {
+interface Props extends RouteComponentProps{
   collapsed: boolean
   menuData: MenuItem[]
 }
@@ -37,12 +39,18 @@ const renderMenuItem = (data: MenuItem) => {
   }
 }
 
-const AppSidebar = ({ collapsed, menuData }: Props) => {
+const AppSidebar = ({ collapsed, menuData,history }: Props) => {
   return (
     <div className={style.wrapper}>
       <div className={style.logo}>logo</div>
       <Menu
-        onClick={({key})=>history.push(key)}
+        onClick={({key})=>{
+          if(/http/.test(key)){
+            window.open(key)
+          }else{
+            history.push(key)
+          }
+        }}
         defaultSelectedKeys={['1']}
         defaultOpenKeys={['sub1']}
         mode="inline"
@@ -63,4 +71,4 @@ const mapStateToProps = (state: RootState) => {
   }
 }
 
-export default connect(mapStateToProps)(AppSidebar)
+export default withRouter(connect(mapStateToProps)(AppSidebar))

@@ -22,8 +22,8 @@ const AnalyseRangePicker = ({
             <Tag>上个月</Tag>
             <Tag>一周 </Tag>
           </div>}
-          showTime
-          format="YYYY/MM/DD HH:mm:ss"
+          
+          format="YYYY-MM-DD"
           value={dates}
           onChange={()=>{onChange(dates,"2")}}
         />
