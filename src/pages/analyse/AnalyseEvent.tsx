@@ -1,4 +1,4 @@
-import { Icon, Collapse, Divider } from 'antd'
+import { Icon, Collapse, Divider,Select,Input } from 'antd'
 import * as React from 'react'
 import AnalyseRangePicker from '@/components/AnalyseRangePicker'
 import * as moment from 'moment'
@@ -7,7 +7,9 @@ import ReactEcharts from 'echarts-for-react'
 import Indicator from '@/components/Indicator'
 import Dimension from '@/components/Dimension'
 import Filter from '@/components/Filter'
-const Panel = Collapse.Panel
+const {Option} = Select;
+const {Panel} = Collapse;
+const {Group}=Input;
 interface Props {
   analyseInfo: any
 }
@@ -52,7 +54,7 @@ const AnalyseEvent = ({ analyseInfo }: Props) => {
                 添加指标
               </span>
             </div>
-            <Indicator />
+            <Indicator/>
             <Divider />
           </div>
 
@@ -87,7 +89,22 @@ const AnalyseEvent = ({ analyseInfo }: Props) => {
           <AnalyseRangePicker
             onChange={onChange}
             dates={[moment(), moment()]}
-          />
+          />|本月
+        </div>
+        <div>
+        <Group compact>
+          <Select style={{ width: '33%' }} defaultValue="Home">
+            <Option value="Company">Company</Option>
+          </Select>
+          <Select style={{ width: '33%' }} defaultValue="Home">
+            <Option value="Home">折线图</Option>
+            <Option value="Company">饼图</Option>
+          </Select>
+          <Select style={{ width: '33%' }} defaultValue="Home">
+            <Option value="Home">按天</Option>
+            <Option value="Company">按月</Option>
+          </Select>
+        </Group>
         </div>
         <div>
           <ReactEcharts option={options} notMerge={true} lazyUpdate={true} />

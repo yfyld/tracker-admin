@@ -8,14 +8,14 @@ interface IndicatorItem {
 }
 
 interface Props {
-  indicators: IndicatorItem[]
+  indicators?: IndicatorItem[]
 }
 
 const Indicator = ({ indicators }: Props) => {
   return (
     <div className={style.wrapper}>
-      {indicators.map(item => (
-        <Row>
+      {[1,2,3].map(item => (
+        <Row className={style.item}>
           <Col span={1}>
             <div className={style.center}>
               <Tag color="gold">1</Tag>
