@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import style from './Board.module.less'
 import { RootState, Action,BoardPaneInfo, BoardInfo } from '@/types'
 import { bindActionCreators, Dispatch } from 'redux'
-import { Icon } from '_antd@3.16.1@antd';
+import { Icon } from 'antd';
 
 const ReactGridLayout = RGL.WidthProvider(RGL)
 

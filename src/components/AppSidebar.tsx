@@ -4,12 +4,12 @@ import style from './AppSidebar.module.less'
 import { RootState, MenuItem } from '@/types'
 import { connect } from 'react-redux'
 
-import {withRouter,RouteComponentProps} from "react-router-dom";
-
+import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { ADD_BROAD } from '@/constants';
 
 const SubMenu = Menu.SubMenu
 
-interface Props extends RouteComponentProps{
+interface Props extends RouteComponentProps {
   collapsed: boolean
   menuData: MenuItem[]
 }
@@ -21,6 +21,20 @@ const renderMenuItem = (data: MenuItem) => {
         <Icon type={data.icon} />
         <span>{data.name}</span>
       </Menu.Item>
+    )
+  } else if (data.action===ADD_BROAD) {
+    return (
+      <SubMenu
+        key={data.key}
+        title={
+          <span>
+            <Icon type={data.icon} />
+            <span>{data.name}</span>
+          </span>
+        }
+      >
+        {data.children.map(item => renderMenuItem(item))}
+      </SubMenu>
     )
   } else {
     return (
@@ -39,15 +53,15 @@ const renderMenuItem = (data: MenuItem) => {
   }
 }
 
-const AppSidebar = ({ collapsed, menuData,history }: Props) => {
+const AppSidebar = ({ collapsed, menuData, history }: Props) => {
   return (
     <div className={style.wrapper}>
       <div className={style.logo}>logo</div>
       <Menu
-        onClick={({key})=>{
-          if(/http/.test(key)){
+        onClick={({ key }) => {
+          if (/http/.test(key)) {
             window.open(key)
-          }else{
+          } else {
             history.push(key)
           }
         }}

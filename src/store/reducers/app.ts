@@ -10,6 +10,7 @@ import {
   doGetUserInfo,
   doChangeCollapsed
 } from '@/store/actions'
+import { ADD_BROAD } from '@/constants';
 
 
 
@@ -39,6 +40,7 @@ const initialState = (): AppState => ({
     key:"broad",
     name:"数据看板",
     icon:"setting",
+    action:ADD_BROAD,
     children:[
       {
         key:"/project/1/board/1",
@@ -62,12 +64,17 @@ const initialState = (): AppState => ({
     key:"/project/1/metadata-list",
     name:"元数据",
     icon:"setting",
-    auth:["admin"]
+    auth:["dev","admin"]
   },{
-    key:"http://www.baidu.com",
+    key:"/project/1/draft",
+    name:"草稿箱",
+    icon:"setting",
+    auth:["dev","admin"]
+  },{
+    key:"http://127.0.0.1:5601",
     name:"自定义查询",
     icon:"setting",
-    auth:["admin"]
+    auth:["dev","admin"]
   }]
 })
 

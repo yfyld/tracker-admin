@@ -2,6 +2,8 @@ import { RootState } from '@/store/reducers'
 import * as actions from '@/store/actions'
 import { ActionType } from 'typesafe-actions'
 
+//全局
+
 export type Action = ActionType<typeof actions>
 
 export interface ActionAny {
@@ -36,6 +38,7 @@ export interface MenuItem {
   link?: string
   auth?: string[]
   children?: MenuItem[]
+  action?:string
 }
 
 //用户
