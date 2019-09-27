@@ -1,11 +1,11 @@
+import { put,takeEvery,delay} from 'redux-saga/effects'
 
-import { put, call ,select,takeEvery,delay} from 'redux-saga/effects'
 import {  getType } from 'typesafe-actions';
-import { mapLocationIntoActions } from '@/utils'
+import { mapLocationIntoActions,call ,select} from '@/utils'
 import handlers from '@/store/handler'
 import { doLogin, doGetUserInfo } from '@/store/actions'
 import { fetchLogin, fetchUserInfo } from '@/api'
-import { AxiosResponse } from 'axios';
+
 import { message } from 'antd';
 import { push } from 'connected-react-router';
 import http, { updateToken } from '@/api/http';
@@ -15,7 +15,7 @@ function* triggerFetchOnLocation(): Generator {
   if(!http.defaults.headers['Authorization']){
     yield call(updateToken);
   }
-  const state = yield select(state => state)
+  const state = yield* select(state => state)
   const projectPath=state.router.location.pathname.match(/^\/project\/(\d+)/);
   if(projectPath){
     http.defaults.headers['projectId']=projectPath[1];
@@ -39,7 +39,7 @@ function* triggerFetchOnLocation(): Generator {
 
 function* login(action: ReturnType<typeof doLogin.request>): Generator {
   try {
-    const response: AxiosResponse<{token:string}> = yield call(fetchLogin,action.payload)
+    const response = yield* call(fetchLogin,action.payload)
     yield put(doLogin.success(response.data))
     message.success('登录成功');
     

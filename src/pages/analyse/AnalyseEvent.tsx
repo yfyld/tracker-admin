@@ -1,7 +1,7 @@
 import { Icon, Collapse, Divider,Select,Input } from 'antd'
 import * as React from 'react'
 import AnalyseRangePicker from '@/components/AnalyseRangePicker'
-import * as moment from 'moment'
+import moment from 'moment'
 import style from './AnalyseEvent.module.less'
 import ReactEcharts from 'echarts-for-react'
 import Indicator from '@/components/Indicator'

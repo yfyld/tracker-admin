@@ -109,13 +109,10 @@ export const appReducer = (
             switch (action.payload.type) {
               case 'GET':
                 return '加载中'
-                break
               case 'DELETE':
                 return '删除中'
-                break
               default:
                 return '提交中'
-                break
             }
           }
         }

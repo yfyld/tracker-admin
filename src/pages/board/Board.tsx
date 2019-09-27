@@ -1,6 +1,6 @@
-import * as RGL from 'react-grid-layout'
+import  RGL from 'react-grid-layout'
 import * as React from 'react'
-import * as _ from 'lodash'
+
 import BoardPane from './components/BoardPane'
 import { connect } from 'react-redux'
 import style from './Board.module.less'

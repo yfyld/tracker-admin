@@ -1,5 +1,5 @@
 import { Table } from 'antd'
-import * as React from 'react'
+import React from 'react'
 
 
 
@@ -25,8 +25,8 @@ const columns = [
     key: 'action',
     render: (text: any, record: any) => (
       <span>
-        <a href="javascript:;">编辑</a>
-        <a href="javascript:;">移除</a>
+        <button>编辑</button>
+        <button>移除</button>
       </span>
     )
   }
