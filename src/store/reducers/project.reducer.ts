@@ -1,14 +1,15 @@
 import update from 'immutability-helper'
 import { getType } from 'typesafe-actions'
-import { Action,  ProjectInfo, PageData, GetProjectListParams } from '@/types'
+import { Action, PageData } from '@/types'
 import { doGetProjectList } from '@/store/actions';
+import { IProjectInfo, IProjectListParam } from '@/api';
 //import * as Api from "@/api"
 
 
 export interface ProjectState {
-  projectInfo: ProjectInfo
-  projectList:PageData<ProjectInfo>
-  getProjectListParams:GetProjectListParams
+  projectInfo: IProjectInfo
+  projectList:PageData<IProjectInfo>
+  getProjectListParams:IProjectListParam
 }
 
 const initialState = (): ProjectState => ({

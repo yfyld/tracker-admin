@@ -4,25 +4,24 @@ import { connect } from 'react-redux'
 import {
   RootState,
   Action,
-  PageData,
-  MetadataInfo,
-  GetMetadataListParams
+  PageData
 } from '@/types'
 import { doGetMetadataList } from '@/store/actions'
 import { bindActionCreators, Dispatch } from 'redux'
 import {  Table } from 'antd'
 import { PaginationConfig, SorterResult, ColumnProps } from 'antd/lib/table';
+import { IMetadataListParam, IMetadataInfo } from '@/api'
 
 
 
 
 interface Props {
-  doGetMetadataList: (params: GetMetadataListParams) => Action
-  metadataList: PageData<MetadataInfo>
+  doGetMetadataList: (params: IMetadataListParam) => Action
+  metadataList: PageData<IMetadataInfo>
 }
 
 
-const columns:ColumnProps<MetadataInfo>[] = [{
+const columns:ColumnProps<IMetadataInfo>[] = [{
   key: 'code',
   title: 'Code',
   dataIndex: 'code',

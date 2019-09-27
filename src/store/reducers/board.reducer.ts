@@ -1,11 +1,12 @@
 // import update from 'immutability-helper'
 // import { getType } from 'typesafe-actions'
-import { Action,BoardInfo,BoardPaneInfo} from '@/types'
+import { Action} from '@/types'
+import { IBoardInfo, IBoardPaneInfo } from '@/api'
 
 
 export interface BoardState {
-  boardInfo: BoardInfo
-  boardPaneList:BoardPaneInfo[]
+  boardInfo: IBoardInfo
+  boardPaneList:IBoardPaneInfo[]
 }
 
 const initialState = (): BoardState => ({

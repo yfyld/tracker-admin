@@ -1,7 +1,7 @@
 import { Menu, Icon } from 'antd'
 import * as React from 'react'
 import style from './AppSidebar.module.less'
-import { RootState, MenuItem } from '@/types'
+import { RootState, IMenuItem } from '@/types'
 import { connect } from 'react-redux'
 
 import { withRouter, RouteComponentProps } from 'react-router-dom'
@@ -11,10 +11,10 @@ const SubMenu = Menu.SubMenu
 
 interface Props extends RouteComponentProps {
   collapsed: boolean
-  menuData: MenuItem[]
+  menuData: IMenuItem[]
 }
 
-const renderMenuItem = (data: MenuItem) => {
+const renderMenuItem = (data: IMenuItem) => {
   if (!data.children) {
     return (
       <Menu.Item key={data.key}>

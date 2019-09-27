@@ -1,6 +1,6 @@
 import update from 'immutability-helper'
 import { getType } from 'typesafe-actions'
-import { Action, UserInfo, MenuItem } from '@/types'
+import { Action, IMenuItem } from '@/types'
 //import * as Api from "@/api"
 
 import {
@@ -11,17 +11,18 @@ import {
   doChangeCollapsed
 } from '@/store/actions'
 import { ADD_BROAD } from '@/constants';
+import { IUserInfo } from '@/api';
 
 
 
 export interface AppState {
   test: number
-  userInfo: UserInfo
+  userInfo: IUserInfo
   token: string
   loading: boolean
   loadingText: string
   collapsed: boolean
-  menuData:MenuItem[]
+  menuData:IMenuItem[]
 }
 
 const initialState = (): AppState => ({
@@ -89,7 +90,7 @@ export const appReducer = (
       return update(state, { $set: initialState() })
     case getType(doLogin.success):
       return update(state, {
-        token: { $set: action.payload.token }
+        token: { $set: action.payload.accessToken }
       })
 
     case getType(doChangeCollapsed):

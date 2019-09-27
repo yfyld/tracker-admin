@@ -1,3 +1,4 @@
+import { IUserInfo, ILoginRes, ILoginParam, ISignupParam } from '@/api';
 import {
   LOGIN_FAILURE,
   LOGIN_SUCCESS,
@@ -16,7 +17,6 @@ import {
   CHANGE_COLLAPSED
 } from '@/constants'
 import { createAsyncAction, createAction } from 'typesafe-actions'
-import { LoginParams, UserInfo, SignupParams } from '@/types'
 
 export const doAppInit = createAsyncAction(
   APP_INIT_REQUEST,
@@ -28,19 +28,19 @@ export const doLogin = createAsyncAction(
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE
-)<LoginParams, { token: string }, Error>()
+)<ILoginParam, ILoginRes, Error>()
 
 export const doGetUserInfo = createAsyncAction(
   GET_USER_INFO_REQUEST,
   GET_USER_INFO_SUCCESS,
   GET_USER_INFO_FAILURE
-)<undefined, UserInfo, Error>()
+)<undefined, IUserInfo, Error>()
 
 export const doSignup = createAsyncAction(
   SIGNUP_REQUEST,
   SIGNUP_SUCCESS,
   SIGNUP_FAILURE
-)<SignupParams, any, Error>()
+)<ISignupParam, any, Error>()
 
 export const doChangeLoadingStatus = createAction(
   CHANGE_LOADING_STATUS,

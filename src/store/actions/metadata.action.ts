@@ -1,9 +1,10 @@
 import { createAsyncAction } from 'typesafe-actions'
-import {  PageData, GetMetadataListParams, MetadataInfo } from '@/types';
+import {  PageData } from '@/types';
 import { GET_METADATA_LIST_REQUEST, GET_METADATA_LIST_SUCCESS, GET_METADATA_LIST_FAILURE } from '@/constants';
+import { IMetadataListParam, IMetadataInfo } from '@/api';
 
 export const doGetMetadataList = createAsyncAction(
   GET_METADATA_LIST_REQUEST,
   GET_METADATA_LIST_SUCCESS,
   GET_METADATA_LIST_FAILURE
-)<GetMetadataListParams, PageData<MetadataInfo>, Error>()
+)<IMetadataListParam, PageData<IMetadataInfo>, Error>()

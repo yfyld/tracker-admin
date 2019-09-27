@@ -8,14 +8,15 @@ import * as actions from '@/store/actions'
 import AccountLayout from './components/AccountLayout'
 import {Link} from "react-router-dom";
 import style from "./Account.less"
-import {Action, SignupParams} from "@/types"
+import {Action} from "@/types"
+import { ISignupParam } from '@/api';
 interface Props {
   form:WrappedFormUtils,
-  doSignupRequest:(params:SignupParams)=>{}
+  doSignupRequest:(params:ISignupParam)=>{}
 }
 
 
-const onSubmit=(e:React.FormEvent,form:WrappedFormUtils,doLoginRequest:(params:SignupParams)=>{})=>{
+const onSubmit=(e:React.FormEvent,form:WrappedFormUtils,doLoginRequest:(params:ISignupParam)=>{})=>{
   e.preventDefault();
   form.validateFields((err,values)=>{
     if(err){
@@ -93,7 +94,7 @@ const Signup=({form,doSignupRequest}:Props)=>{
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>)=>bindActionCreators({
-  doSignupRequest:(params:SignupParams)=>{
+  doSignupRequest:(params:ISignupParam)=>{
     return actions.doSignup.request(params)
   }
 },dispatch)

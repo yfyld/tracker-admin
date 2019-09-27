@@ -4,22 +4,20 @@ import { connect } from 'react-redux'
 import {
   RootState,
   Action,
-  GetProjectListParams,
   PageData,
-  ProjectInfo,
-  Role
 } from '@/types'
 import { doGetProjectList } from '@/store/actions'
 import { bindActionCreators, Dispatch } from 'redux'
 import { Tabs, Button } from 'antd'
 import AppHeader from '@/components/AppHeader'
 import ProjectPane from './components/ProjectPane'
+import { IRole, IProjectListParam, IProjectInfo } from '@/api'
 
 const TabPane = Tabs.TabPane
 
 interface Props {
-  doGetProjectList: (params: GetProjectListParams) => Action
-  projectList: PageData<ProjectInfo>
+  doGetProjectList: (params: IProjectListParam) => Action
+  projectList: PageData<IProjectInfo>
 }
 
 
@@ -31,20 +29,20 @@ const ProjectList = ({ projectList, doGetProjectList }: Props) => {
       <AppHeader alone />
       <Tabs
         tabBarExtraContent={operations}
-        defaultActiveKey={Role.member}
+        defaultActiveKey={IRole.member}
         onChange={role => doGetProjectList({ role, page: 1, pageSize: 20 })}
       >
-        <TabPane tab="所有项目" key={Role.member}>
+        <TabPane tab="所有项目" key={IRole.member}>
           {projectList.list.map(project => (
             <ProjectPane key={project.id} projectInfo={project} />
           ))}
         </TabPane>
-        <TabPane tab="我的项目" key={Role.admin}>
+        <TabPane tab="我的项目" key={IRole.admin}>
           {projectList.list.map(project => (
             <ProjectPane key={project.id} projectInfo={project} />
           ))}
         </TabPane>
-        <TabPane tab="参与项目" key={Role.developer}>
+        <TabPane tab="参与项目" key={IRole.developer}>
           {projectList.list.map(project => (
             <ProjectPane key={project.id} projectInfo={project} />
           ))}

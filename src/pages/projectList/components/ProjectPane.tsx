@@ -1,16 +1,17 @@
 import * as React from 'react'
 import style from './ProjectPane.module.less'
 import { connect } from 'react-redux'
-import { RootState, Action,ProjectInfo } from '@/types'
+import { RootState, Action } from '@/types'
 import { bindActionCreators, Dispatch } from 'redux'
 import { Link } from 'react-router-dom';
+import { IProjectInfo } from '@/api'
 
 
 
 
 
 interface Props {
-  projectInfo: ProjectInfo
+  projectInfo: IProjectInfo
 }
 
 const ProjectPane = ({ projectInfo }: Props) => {

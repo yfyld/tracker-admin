@@ -2,13 +2,14 @@ import { put,takeEvery,delay} from 'redux-saga/effects'
 
 import {  getType } from 'typesafe-actions';
 import { mapLocationIntoActions,call ,select} from '@/utils'
-import handlers from '@/store/handler'
+
 import { doLogin, doGetUserInfo } from '@/store/actions'
 import { fetchLogin, fetchUserInfo } from '@/api'
 
 import { message } from 'antd';
 import { push } from 'connected-react-router';
 import http, { updateToken } from '@/api/http';
+import handlers from '@/router/handler';
 
 
 function* triggerFetchOnLocation(): Generator {
@@ -43,7 +44,7 @@ function* login(action: ReturnType<typeof doLogin.request>): Generator {
     yield put(doLogin.success(response.data))
     message.success('登录成功');
     
-    yield call(updateToken,response.data.token);
+    yield call(updateToken,response.data.accessToken);
   } catch (error) {
     yield put(doLogin.failure(error))
     return;

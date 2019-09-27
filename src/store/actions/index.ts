@@ -1,3 +1,3 @@
-export * from "./app"
-export * from "./project"
-export * from "./metadata"
+export * from "./app.action"
+export * from "./project.action"
+export * from "./metadata.action"

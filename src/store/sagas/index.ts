@@ -1,7 +1,7 @@
 import { all, fork } from 'redux-saga/effects';
-import appSagas from './app';
-import projectSagas from './project';
-import metadataSagas from './metadata';
+import appSagas from './app.saga';
+import projectSagas from './project.saga';
+import metadataSagas from './metadata.saga';
 
 
 function *sagas() {

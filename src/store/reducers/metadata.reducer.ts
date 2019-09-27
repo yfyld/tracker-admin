@@ -1,12 +1,13 @@
 import update from 'immutability-helper'
 import { getType } from 'typesafe-actions'
-import { Action, PageData,MetadataInfo, GetMetadataListParams } from '@/types'
+import { Action, PageData } from '@/types'
 import { doGetMetadataList } from '@/store/actions';
+import { IMetadataInfo, IMetadataListParam } from '@/api';
 
 export interface MetadataState {
-  metadataInfo: MetadataInfo
-  metadataList:PageData<MetadataInfo>
-  getMetadataListParams:GetMetadataListParams
+  metadataInfo: IMetadataInfo
+  metadataList:PageData<IMetadataInfo>
+  getMetadataListParams:IMetadataListParam
 }
 
 const initialState = (): MetadataState => ({

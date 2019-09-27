@@ -1,9 +1,9 @@
 import { combineReducers } from "redux";
 
-import { appReducer, AppState } from "./app";
-import { projectReducer, ProjectState } from "./project";
-import { metadataReducer, MetadataState } from "./metadata";
-import { boardReducer, BoardState } from "./board";
+import { appReducer, AppState } from "./app.reducer";
+import { projectReducer, ProjectState } from "./project.reducer";
+import { metadataReducer, MetadataState } from "./metadata.reducer";
+import { boardReducer, BoardState } from "./board.reducer";
 import { RouterState, connectRouter } from 'connected-react-router'
 import {history} from "@/utils"
 export interface RootState  {

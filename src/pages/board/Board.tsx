@@ -4,19 +4,20 @@ import * as React from 'react'
 import BoardPane from './components/BoardPane'
 import { connect } from 'react-redux'
 import style from './Board.module.less'
-import { RootState, Action,BoardPaneInfo, BoardInfo } from '@/types'
+import { RootState, Action} from '@/types'
 import { bindActionCreators, Dispatch } from 'redux'
 import { Icon } from 'antd';
+import { IBoardPaneInfo, IBoardInfo } from '@/api'
 
 const ReactGridLayout = RGL.WidthProvider(RGL)
 
 interface Props {
-  boardPaneList: BoardPaneInfo[]
-  boardInfo: BoardInfo
+  boardPaneList: IBoardPaneInfo[]
+  boardInfo: IBoardInfo
   onLayoutChange: (param: any) => {}
 }
 
-function generateDOM(boardPaneList: BoardPaneInfo[]) {
+function generateDOM(boardPaneList: IBoardPaneInfo[]) {
   return boardPaneList.map(item => (
     <div key={item.id}>
       <BoardPane info={item} />

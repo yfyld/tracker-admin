@@ -8,18 +8,19 @@ import AccountLayout from './components/AccountLayout'
 import {Link} from "react-router-dom";
 
 
-import {Action, LoginParams} from "@/types"
+import {Action} from "@/types"
 import style from "./Account.less"
 import { doLogin } from '@/store/actions';
+import {ILoginParam } from '@/api';
 
 
 
 interface Props {
   form:WrappedFormUtils,
-  doLoginRequest:(params:LoginParams)=>{}
+  doLoginRequest:(params:ILoginParam)=>{}
 }
 
-const onSubmit=(e:React.FormEvent,form:WrappedFormUtils,doLoginRequest:(params:LoginParams)=>{})=>{
+const onSubmit=(e:React.FormEvent,form:WrappedFormUtils,doLoginRequest:(params:ILoginParam)=>{})=>{
   e.preventDefault();
   form.validateFields((err,values)=>{
     if(err){
@@ -84,7 +85,7 @@ const Login=({form,doLoginRequest}:Props)=>{
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>)=>bindActionCreators({
-  doLoginRequest:(params:LoginParams)=>{
+  doLoginRequest:(params:ILoginParam)=>{
     return doLogin.request(params)
   }
 },dispatch)
