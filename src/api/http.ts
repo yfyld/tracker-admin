@@ -95,7 +95,7 @@ instance.interceptors.response.use(
       Loading.remove();
     }
     
-    if(response.data.code===200){
+    if(response.data.status===200){
       response.data=response.data.result;
       return Promise.resolve(response)
     }else{
@@ -138,7 +138,7 @@ export function updateToken(token?:string){
   }else{
     localStore.setSyncItem("token",token)
   }
-  instance.defaults.headers['Authorization'] = token;
+  instance.defaults.headers['Authorization'] = "Bearer "+token;
   return token;
 }
 

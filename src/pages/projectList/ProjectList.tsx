@@ -1,77 +1,70 @@
-import * as React from 'react'
-import style from './ProjectList.module.less'
-import { connect } from 'react-redux'
-import {
-  RootState,
-  Action,
-  PageData,
-} from '@/types'
-import { doGetProjectList } from '@/store/actions'
-import { bindActionCreators, Dispatch } from 'redux'
-import { Tabs, Button } from 'antd'
-import AppHeader from '@/components/AppHeader'
-import ProjectPane from './components/ProjectPane'
-import { IRole, IProjectListParam, IProjectInfo } from '@/api'
+import * as React from 'react';
+import style from './ProjectList.module.less';
+import { connect } from 'react-redux';
+import { RootState, IPageData } from '@/types';
 
-const TabPane = Tabs.TabPane
+import { Button, Pagination } from 'antd';
+import AppHeader from '@/components/AppHeader';
+import ProjectPane from './components/ProjectPane';
+import { IProjectListItem, IProjectListParam } from '@/api';
+import ProjectAddModel from './components/ProjectAddModel';
+
+import { Action } from '@/types';
+import { bindActionCreators, Dispatch } from 'redux';
+import { doGetProjectList } from '@/store/actions';
+import ProjectListForm from './components/ProjectListForm';
 
 interface Props {
-  doGetProjectList: (params: IProjectListParam) => Action
-  projectList: PageData<IProjectInfo>
+  projectList: IPageData<IProjectListItem>;
+  projectListParams: IProjectListParam;
+  handleSubmit: (param: IProjectListParam) => Action;
 }
 
+const ProjectList = ({ projectList, handleSubmit, projectListParams }: Props) => {
+  const [addProjectVisible, setAddProjectVisible] = React.useState(false);
 
-
-const ProjectList = ({ projectList, doGetProjectList }: Props) => {
-  const operations=<Button size="small">新建项目</Button>
   return (
     <div className={style.wrapper}>
+      <ProjectAddModel visible={addProjectVisible} onClose={setAddProjectVisible}></ProjectAddModel>
       <AppHeader alone />
-      <Tabs
-        tabBarExtraContent={operations}
-        defaultActiveKey={IRole.member}
-        onChange={role => doGetProjectList({ role, page: 1, pageSize: 20 })}
-      >
-        <TabPane tab="所有项目" key={IRole.member}>
-          {projectList.list.map(project => (
-            <ProjectPane key={project.id} projectInfo={project} />
-          ))}
-        </TabPane>
-        <TabPane tab="我的项目" key={IRole.admin}>
-          {projectList.list.map(project => (
-            <ProjectPane key={project.id} projectInfo={project} />
-          ))}
-        </TabPane>
-        <TabPane tab="参与项目" key={IRole.developer}>
-          {projectList.list.map(project => (
-            <ProjectPane key={project.id} projectInfo={project} />
-          ))}
-        </TabPane>
-
-
-      </Tabs>
+      <div>
+        <ProjectListForm defaultValue={projectListParams} onSubmit={handleSubmit}></ProjectListForm>
+        <Button onClick={() => setAddProjectVisible(true)} size='small'>
+          新建项目
+        </Button>
+      </div>
+      {projectList.list.map(project => (
+        <ProjectPane key={project.id} projectInfo={project} />
+      ))}
+      <Pagination
+        onChange={(page, pageSize) => handleSubmit({ ...projectListParams, page, pageSize })}
+        pageSize={projectListParams.pageSize}
+        current={projectListParams.page}
+        total={projectList.totalCount}
+      />
     </div>
-  )
-}
+  );
+};
+
+const mapStateToProps = (state: RootState) => {
+  const { projectList, projectListParams } = state.project;
+  return {
+    projectList,
+    projectListParams
+  };
+};
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) =>
   bindActionCreators(
     {
-      doGetProjectList: params => {
-        return doGetProjectList.request(params)
+      handleSubmit: (params: IProjectListParam) => {
+        return doGetProjectList.request(params);
       }
     },
     dispatch
-  )
-
-const mapStateToProps = (state: RootState) => {
-  const { projectList } = state.project
-  return {
-    projectList
-  }
-}
+  );
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProjectList)
+)(ProjectList);

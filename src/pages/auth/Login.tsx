@@ -55,7 +55,7 @@ const Login=({form,doLoginRequest}:Props)=>{
         <Form.Item>
           {getFieldDecorator('password', {
             rules: [
-              { required: true, message: 'Please input your Password!' }
+              { required: true, message: '请输入密码' }
             ]
           })(
             <Input
