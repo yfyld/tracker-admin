@@ -1,6 +1,7 @@
+import { doGetProjectInfo } from './../actions/project.action';
 import update from 'immutability-helper';
 import { getType } from 'typesafe-actions';
-import { Action, IPageData } from '@/types';
+import { IAction, IPageData } from '@/types';
 import { doGetProjectList } from '@/store/actions';
 import { IProjectInfo, IProjectListParam, IProjectListItem } from '@/api';
 //import * as Api from "@/api"
@@ -19,13 +20,14 @@ const initialState = (): ProjectState => ({
     creator: {
       nickname: ''
     },
+    members: [],
     description: ''
   },
   projectList: { totalCount: 0, list: [] },
   projectListParams: { page: 1, pageSize: 20, name: '' }
 });
 
-export const projectReducer = (state: ProjectState = initialState(), action: Action): ProjectState => {
+export const projectReducer = (state: ProjectState = initialState(), action: IAction): ProjectState => {
   switch (action.type) {
     case getType(doGetProjectList.request):
       return update(state, { projectListParams: { $set: action.payload } });
@@ -33,6 +35,11 @@ export const projectReducer = (state: ProjectState = initialState(), action: Act
       return update(state, {
         projectList: { $set: action.payload }
       });
+    case getType(doGetProjectInfo.success):
+      return update(state, {
+        projectInfo: { $set: action.payload }
+      });
+
     default:
       return state;
   }

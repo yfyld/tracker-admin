@@ -1,7 +1,7 @@
 import * as React from 'react';
 import style from './MetadataList.module.less';
 import { connect } from 'react-redux';
-import { RootState, Action, IPageData } from '@/types';
+import { IStoreState, IAction, IPageData } from '@/types';
 import { doGetMetadataList } from '@/store/actions';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Table } from 'antd';
@@ -9,7 +9,7 @@ import { PaginationConfig, SorterResult, ColumnProps } from 'antd/lib/table';
 import { IMetadataListParam, IMetadataInfo } from '@/api';
 
 interface Props {
-  doGetMetadataList: (params: IMetadataListParam) => Action;
+  doGetMetadataList: (params: IMetadataListParam) => IAction;
   metadataList: IPageData<IMetadataInfo>;
 }
 
@@ -79,7 +79,7 @@ const MetadataList = ({ metadataList, doGetMetadataList }: Props) => {
   );
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>) =>
+const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
       doGetMetadataList: params => {
@@ -89,7 +89,7 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) =>
     dispatch
   );
 
-const mapStateToProps = (state: RootState) => {
+const mapStateToProps = (state: IStoreState) => {
   const { metadataList } = state.metadata;
   return {
     metadataList

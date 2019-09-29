@@ -1,17 +1,18 @@
-import { Menu, Icon } from 'antd'
-import * as React from 'react'
-import style from './AppSidebar.module.less'
-import { RootState, IMenuItem } from '@/types'
-import { connect } from 'react-redux'
+import { Menu, Icon } from 'antd';
+import * as React from 'react';
+import style from './AppSidebar.module.less';
+import { IStoreState, IMenuItem } from '@/types';
+import { connect } from 'react-redux';
 
-import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { ADD_BROAD } from '@/constants';
+import { menuDataSelector } from '@/store/selectors';
 
-const SubMenu = Menu.SubMenu
+const SubMenu = Menu.SubMenu;
 
 interface Props extends RouteComponentProps {
-  collapsed: boolean
-  menuData: IMenuItem[]
+  collapsed: boolean;
+  menuData: IMenuItem[];
 }
 
 const renderMenuItem = (data: IMenuItem) => {
@@ -21,8 +22,8 @@ const renderMenuItem = (data: IMenuItem) => {
         <Icon type={data.icon} />
         <span>{data.name}</span>
       </Menu.Item>
-    )
-  } else if (data.action===ADD_BROAD) {
+    );
+  } else if (data.action === ADD_BROAD) {
     return (
       <SubMenu
         key={data.key}
@@ -35,7 +36,7 @@ const renderMenuItem = (data: IMenuItem) => {
       >
         {data.children.map(item => renderMenuItem(item))}
       </SubMenu>
-    )
+    );
   } else {
     return (
       <SubMenu
@@ -49,9 +50,9 @@ const renderMenuItem = (data: IMenuItem) => {
       >
         {data.children.map(item => renderMenuItem(item))}
       </SubMenu>
-    )
+    );
   }
-}
+};
 
 const AppSidebar = ({ collapsed, menuData, history }: Props) => {
   return (
@@ -60,29 +61,30 @@ const AppSidebar = ({ collapsed, menuData, history }: Props) => {
       <Menu
         onClick={({ key }) => {
           if (/http/.test(key)) {
-            window.open(key)
+            window.open(key);
           } else {
-            history.push(key)
+            history.push(key);
           }
         }}
         defaultSelectedKeys={['1']}
         defaultOpenKeys={['sub1']}
-        mode="inline"
-        theme="dark"
+        mode='inline'
+        theme='dark'
         inlineCollapsed={collapsed}
       >
         {menuData.map(item => renderMenuItem(item))}
       </Menu>
     </div>
-  )
-}
+  );
+};
 
-const mapStateToProps = (state: RootState) => {
-  const { collapsed, menuData } = state.app
+const mapStateToProps = (state: IStoreState) => {
+  const { collapsed } = state.app;
+  const menuData = menuDataSelector(state);
   return {
     collapsed,
     menuData
-  }
-}
+  };
+};
 
-export default withRouter(connect(mapStateToProps)(AppSidebar))
+export default withRouter(connect(mapStateToProps)(AppSidebar));

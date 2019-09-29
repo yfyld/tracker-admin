@@ -1,6 +1,6 @@
 import update from 'immutability-helper';
 import { getType } from 'typesafe-actions';
-import { Action, IPageData } from '@/types';
+import { IAction, IPageData } from '@/types';
 import { doGetMetadataList } from '@/store/actions';
 import { IMetadataInfo, IMetadataListParam } from '@/api';
 
@@ -19,7 +19,7 @@ const initialState = (): MetadataState => ({
   getMetadataListParams: { page: 1, pageSize: 20, projectId: 1 }
 });
 
-export const metadataReducer = (state: MetadataState = initialState(), action: Action): MetadataState => {
+export const metadataReducer = (state: MetadataState = initialState(), action: IAction): MetadataState => {
   switch (action.type) {
     case getType(doGetMetadataList.request):
       return update(state, { getMetadataListParams: { $set: action.payload } });

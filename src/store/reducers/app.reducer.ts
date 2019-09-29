@@ -1,28 +1,19 @@
-import update from 'immutability-helper'
-import { getType } from 'typesafe-actions'
-import { Action, IMenuItem } from '@/types'
+import update from 'immutability-helper';
+import { getType } from 'typesafe-actions';
+import { IAction, IMenuItem } from '@/types';
 //import * as Api from "@/api"
 
-import {
-  doLogin,
-  doChangeLoadingStatus,
-  doResetStore,
-  doGetUserInfo,
-  doChangeCollapsed
-} from '@/store/actions'
+import { doLogin, doChangeLoadingStatus, doResetStore, doGetUserInfo, doChangeCollapsed } from '@/store/actions';
 import { ADD_BROAD } from '@/constants';
 import { IUserInfo } from '@/api';
 
-
-
 export interface AppState {
-  test: number
-  userInfo: IUserInfo
-  token: string
-  loading: boolean
-  loadingText: string
-  collapsed: boolean
-  menuData:IMenuItem[]
+  test: number;
+  userInfo: IUserInfo;
+  token: string;
+  loading: boolean;
+  loadingText: string;
+  collapsed: boolean;
 }
 
 const initialState = (): AppState => ({
@@ -31,77 +22,29 @@ const initialState = (): AppState => ({
   token: '',
   loading: false,
   loadingText: '加载中',
-  collapsed: false,
-  menuData:[{
-    key:"/project/1/info",
-    name:"项目信息",
-    icon:"setting",
-    auth:["admin"]
-  },{
-    key:"broad",
-    name:"数据看板",
-    icon:"setting",
-    action:ADD_BROAD,
-    children:[
-      {
-        key:"/project/1/board/1",
-        icon:"setting",
-        name:"老板看板"
-      }
-    ]
-  },{
-    key:"analyse",
-    name:"行为分析",
-    auth:["dev","admin"],
-    icon:"setting",
-    children:[
-      {
-        key:"/project/1/analyse-event",
-        icon:"setting",
-        name:"事件分析"
-      }
-    ]
-  },{
-    key:"/project/1/metadata-list",
-    name:"元数据",
-    icon:"setting",
-    auth:["dev","admin"]
-  },{
-    key:"/project/1/draft",
-    name:"草稿箱",
-    icon:"setting",
-    auth:["dev","admin"]
-  },{
-    key:"http://127.0.0.1:5601",
-    name:"自定义查询",
-    icon:"setting",
-    auth:["dev","admin"]
-  }]
-})
+  collapsed: false
+});
 
-export const appReducer = (
-  state: AppState = initialState(),
-  action: Action
-): AppState => {
+export const appReducer = (state: AppState = initialState(), action: IAction): AppState => {
   switch (action.type) {
     case getType(doResetStore):
-      return update(state, { $set: initialState() })
+      return update(state, { $set: initialState() });
     case getType(doLogin.request):
-      return update(state, { $set: initialState() })
+      return update(state, { $set: initialState() });
     case getType(doLogin.success):
       return update(state, {
         token: { $set: action.payload.accessToken }
-      })
+      });
 
     case getType(doChangeCollapsed):
       return update(state, {
         collapsed: { $set: action.payload }
-      })
+      });
 
     case getType(doGetUserInfo.success):
       return update(state, {
         userInfo: { $set: action.payload }
-      })
+      });
     case getType(doChangeLoadingStatus):
       return update(state, {
         loading: { $set: action.payload.status },
@@ -109,17 +52,17 @@ export const appReducer = (
           $apply: () => {
             switch (action.payload.type) {
               case 'GET':
-                return '加载中'
+                return '加载中';
               case 'DELETE':
-                return '删除中'
+                return '删除中';
               default:
-                return '提交中'
+                return '提交中';
             }
           }
         }
-      })
+      });
 
     default:
-      return state
+      return state;
   }
-}
+};

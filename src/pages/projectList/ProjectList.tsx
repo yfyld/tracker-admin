@@ -1,7 +1,7 @@
 import * as React from 'react';
 import style from './ProjectList.module.less';
 import { connect } from 'react-redux';
-import { RootState, IPageData } from '@/types';
+import { IStoreState, IPageData } from '@/types';
 
 import { Button, Pagination } from 'antd';
 import AppHeader from '@/components/AppHeader';
@@ -9,7 +9,7 @@ import ProjectPane from './components/ProjectPane';
 import { IProjectListItem, IProjectListParam } from '@/api';
 import ProjectAddModel from './components/ProjectAddModel';
 
-import { Action } from '@/types';
+import { IAction } from '@/types';
 import { bindActionCreators, Dispatch } from 'redux';
 import { doGetProjectList } from '@/store/actions';
 import ProjectListForm from './components/ProjectListForm';
@@ -17,7 +17,7 @@ import ProjectListForm from './components/ProjectListForm';
 interface Props {
   projectList: IPageData<IProjectListItem>;
   projectListParams: IProjectListParam;
-  handleSubmit: (param: IProjectListParam) => Action;
+  handleSubmit: (param: IProjectListParam) => IAction;
 }
 
 const ProjectList = ({ projectList, handleSubmit, projectListParams }: Props) => {
@@ -46,7 +46,7 @@ const ProjectList = ({ projectList, handleSubmit, projectListParams }: Props) =>
   );
 };
 
-const mapStateToProps = (state: RootState) => {
+const mapStateToProps = (state: IStoreState) => {
   const { projectList, projectListParams } = state.project;
   return {
     projectList,
@@ -54,7 +54,7 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>) =>
+const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
       handleSubmit: (params: IProjectListParam) => {

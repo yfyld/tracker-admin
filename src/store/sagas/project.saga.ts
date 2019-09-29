@@ -1,7 +1,7 @@
 import { put, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
-import { doGetProjectList, doAddProject, doDeleteProject } from '@/store/actions';
-import { fetchProjectList, fetchProjectAdd, fetchProjectDel } from '@/api';
+import { doGetProjectList, doAddProject, doDeleteProject, doGetProjectInfo, doUpdateProject } from '@/store/actions';
+import { fetchProjectList, fetchProjectAdd, fetchProjectDel, fetchProjectInfo, fetchProjectUpdate } from '@/api';
 import { call } from '@/utils';
 import { message } from 'antd';
 
@@ -34,8 +34,29 @@ function* deleteProject(action: ReturnType<typeof doDeleteProject.request>): Gen
   }
 }
 
+function* getProjectInfo(action: ReturnType<typeof doGetProjectInfo.request>): Generator {
+  try {
+    const response = yield* call(fetchProjectInfo, action.payload);
+    yield put(doGetProjectInfo.success(response.data));
+  } catch (error) {
+    yield put(doGetProjectInfo.failure(error));
+  }
+}
+
+function* updateProject(action: ReturnType<typeof doUpdateProject.request>): Generator {
+  try {
+    yield* call(fetchProjectUpdate, action.payload);
+    yield put(doUpdateProject.success());
+    yield put(doGetProjectInfo.request(action.payload.id));
+  } catch (error) {
+    yield put(doUpdateProject.failure(error));
+  }
+}
+
 export default function* watchProject() {
   yield takeEvery(getType(doGetProjectList.request), getProjectList);
   yield takeEvery(getType(doAddProject.request), addProject);
   yield takeEvery(getType(doDeleteProject.request), deleteProject);
+  yield takeEvery(getType(doGetProjectInfo.request), getProjectInfo);
+  yield takeEvery(getType(doUpdateProject.request), updateProject);
 }

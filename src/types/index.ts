@@ -1,17 +1,17 @@
-import { RootState } from '@/store/reducers';
+import { IStoreState } from '@/store/reducers';
 import * as actions from '@/store/actions';
 import { ActionType } from 'typesafe-actions';
 
 //全局
 
-export type Action = ActionType<typeof actions>;
+export type IAction = ActionType<typeof actions>;
 
-export interface ActionAny {
+export interface IActionAny {
   type: string;
   payload?: any;
 }
 
-export type RootState = RootState;
+export type IStoreState = IStoreState;
 
 export interface Store {
   nameSpace: string;
@@ -25,8 +25,8 @@ export interface IPageData<T> {
   list: T[];
 }
 
-export interface Handler {
-  action: Action;
+export interface IHandler {
+  action: IAction;
   ttl: number;
   disable: boolean;
 }

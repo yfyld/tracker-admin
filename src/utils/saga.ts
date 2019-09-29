@@ -1,4 +1,4 @@
-import { Action } from "redux";
+import { Action } from 'redux';
 import {
   ActionPattern,
   call as rawCall,
@@ -7,18 +7,15 @@ import {
   select as rawSelect,
   Tail,
   Effect,
-  take as rawTake,
-} from "redux-saga/effects";
-import { RootState } from "@/types";
-
+  take as rawTake
+} from 'redux-saga/effects';
+import { IStoreState } from '@/types';
 
 // tslint:disable: readonly-array
 
 export declare type SagaIterator<RT = any> = Generator<Effect<any>, RT, any>;
 
-export function* take<A extends Action>(
-  pattern?: ActionPattern<A>,
-): SagaIterator<A> {
+export function* take<A extends Action>(pattern?: ActionPattern<A>): SagaIterator<A> {
   return yield rawTake(pattern);
 }
 
@@ -29,7 +26,7 @@ export function* call<Fn extends (...args: any[]) => any>(
   return yield rawCall(fn, ...args);
 }
 
-export function* select<Fn extends (state: RootState, ...args: any[]) => any>(
+export function* select<Fn extends (state: IStoreState, ...args: any[]) => any>(
   selector: Fn,
   ...args: Tail<Parameters<Fn>>
 ): SagaIterator<ReturnType<Fn>> {
@@ -39,6 +36,3 @@ export function* select<Fn extends (state: RootState, ...args: any[]) => any>(
 export function* cancelled(): SagaIterator<boolean> {
   return yield rawCancelled();
 }
-
-
-

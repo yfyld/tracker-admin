@@ -1,20 +1,20 @@
-import  RGL from 'react-grid-layout'
-import * as React from 'react'
+import RGL from 'react-grid-layout';
+import * as React from 'react';
 
-import BoardPane from './components/BoardPane'
-import { connect } from 'react-redux'
-import style from './Board.module.less'
-import { RootState, Action} from '@/types'
-import { bindActionCreators, Dispatch } from 'redux'
+import BoardPane from './components/BoardPane';
+import { connect } from 'react-redux';
+import style from './Board.module.less';
+import { IStoreState, IAction } from '@/types';
+import { bindActionCreators, Dispatch } from 'redux';
 import { Icon } from 'antd';
-import { IBoardPaneInfo, IBoardInfo } from '@/api'
+import { IBoardPaneInfo, IBoardInfo } from '@/api';
 
-const ReactGridLayout = RGL.WidthProvider(RGL)
+const ReactGridLayout = RGL.WidthProvider(RGL);
 
 interface Props {
-  boardPaneList: IBoardPaneInfo[]
-  boardInfo: IBoardInfo
-  onLayoutChange: (param: any) => {}
+  boardPaneList: IBoardPaneInfo[];
+  boardInfo: IBoardInfo;
+  onLayoutChange: (param: any) => {};
 }
 
 function generateDOM(boardPaneList: IBoardPaneInfo[]) {
@@ -22,26 +22,26 @@ function generateDOM(boardPaneList: IBoardPaneInfo[]) {
     <div key={item.id}>
       <BoardPane info={item} />
     </div>
-  ))
+  ));
 }
 
-function onLayoutChange1(a:RGL.Layout[]){
-  console.log(a)
+function onLayoutChange1(a: RGL.Layout[]) {
+  console.log(a);
 }
 
 const BasicLayout = ({ boardPaneList, boardInfo, onLayoutChange }: Props) => {
   return (
     <div className={style.wrapper}>
-      <div className="app-title">
+      <div className='app-title'>
         <h2>
-          老板看板 <Icon type="edit" />
+          老板看板 <Icon type='edit' />
         </h2>
         <div>
-          <Icon type="save" />
+          <Icon type='save' />
         </div>
       </div>
       <ReactGridLayout
-        className="layout"
+        className='layout'
         layout={boardInfo.layout}
         onLayoutChange={onLayoutChange1}
         cols={20}
@@ -50,21 +50,20 @@ const BasicLayout = ({ boardPaneList, boardInfo, onLayoutChange }: Props) => {
         {generateDOM(boardPaneList)}
       </ReactGridLayout>
     </div>
-  )
-}
+  );
+};
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>) =>
-  bindActionCreators({}, dispatch)
+const mapDispatchToProps = (dispatch: Dispatch<IAction>) => bindActionCreators({}, dispatch);
 
-const mapStateToProps = (state: RootState) => {
-  const { boardInfo, boardPaneList } = state.board
+const mapStateToProps = (state: IStoreState) => {
+  const { boardInfo, boardPaneList } = state.board;
   return {
     boardPaneList,
     boardInfo
-  }
-}
+  };
+};
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(BasicLayout)
+)(BasicLayout);

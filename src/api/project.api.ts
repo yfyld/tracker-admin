@@ -15,7 +15,15 @@ export interface IProjectInfo {
   creator: {
     nickname: string;
   };
+  members: IMemberInfo[];
   description: string;
+}
+
+export interface IMemberInfo {
+  id: number;
+  username: string;
+  nickname: string;
+  roleCode: string;
 }
 
 export interface IAddProject {
@@ -23,6 +31,11 @@ export interface IAddProject {
 }
 export interface IAddProjectRes {
   id: string;
+}
+
+export interface IUpdateProjectParam {
+  id: number;
+  name: string;
 }
 
 export interface IProjectListItem {
@@ -47,7 +60,7 @@ export function fetchProjectList(params: IProjectListParam) {
 }
 
 export function fetchProjectInfo(projectId: number) {
-  return fetch.get<IProjectInfo>(`/project/${projectId}`);
+  return fetch.get<IProjectInfo>(`/project/info`, { projectId });
 }
 
 export function fetchProjectAdd(params: IAddProject) {
@@ -56,4 +69,8 @@ export function fetchProjectAdd(params: IAddProject) {
 
 export function fetchProjectDel(projectId: number) {
   return fetch.delete(`/project/${projectId}`);
+}
+
+export function fetchProjectUpdate(parmas: IUpdateProjectParam) {
+  return fetch.put(`/project`, parmas);
 }

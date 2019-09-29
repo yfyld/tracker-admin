@@ -5,13 +5,13 @@ import { FormComponentProps } from 'antd/lib/form';
 import { IAddProject } from '@/api';
 import { toastformError } from '@/utils';
 import { connect } from 'react-redux';
-import { Action } from '@/types';
+import { IAction } from '@/types';
 import { bindActionCreators, Dispatch } from 'redux';
 import { doAddProject } from '@/store/actions';
 interface Props extends FormComponentProps {
   visible: boolean;
   onClose: (param: boolean) => any;
-  handleAddProject: (param: IAddProject) => Action;
+  handleAddProject: (param: IAddProject) => IAction;
 }
 
 const ProjectAddModel = (props: Props) => {
@@ -43,7 +43,7 @@ const ProjectAddModel = (props: Props) => {
   );
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>) =>
+const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
       handleAddProject: params => {

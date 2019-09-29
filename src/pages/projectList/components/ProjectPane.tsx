@@ -6,7 +6,7 @@ import React from 'react';
 import style from './ProjectPane.module.less';
 import { IProjectListItem } from '@/api';
 import { connect } from 'react-redux';
-import { Action } from '@/types';
+import { IAction } from '@/types';
 import { bindActionCreators, Dispatch } from 'redux';
 import { doDeleteProject } from '@/store/actions';
 const { Meta } = Card;
@@ -14,7 +14,7 @@ const { confirm } = Modal;
 
 interface Props {
   projectInfo: IProjectListItem;
-  doDeleteProject: (id: number) => Action;
+  doDeleteProject: (id: number) => IAction;
 }
 
 const ProjectPane = ({ projectInfo, doDeleteProject }: Props) => {
@@ -81,7 +81,7 @@ const ProjectPane = ({ projectInfo, doDeleteProject }: Props) => {
   );
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>) =>
+const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
       doDeleteProject: (id: number) => {

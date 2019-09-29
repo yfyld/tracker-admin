@@ -1,15 +1,15 @@
 import { createBrowserHistory } from 'history';
 
 import { matchPath } from 'react-router-dom';
-import { RootState, Action } from '@/types';
+import { IStoreState, IAction } from '@/types';
 import * as localForage from 'localforage';
 import { message } from 'antd';
 
 export const mapLocationIntoActions = (
   { pathname, search }: any,
   handlers: any,
-  state: RootState
-): [{ action: [Action] | Action; disable: boolean }] =>
+  state: IStoreState
+): [{ action: [IAction] | IAction; disable: boolean }] =>
   (Object as any)
     .entries(handlers)
     .map(([expectedPath, handler]: [string, any]) => {
@@ -21,7 +21,7 @@ export const mapLocationIntoActions = (
 export const history = createBrowserHistory();
 
 // export function createReducer(initialState: object, handlers: object) {
-//     return function reducer(state = initialState, action: Action) {
+//     return function reducer(state = initialState, action: IAction) {
 //         if (handlers.hasOwnProperty(action.type)) {
 //             return handlers[action.type](state, action);
 //         } else {

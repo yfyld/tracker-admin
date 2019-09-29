@@ -1,9 +1,10 @@
+import { doGetProjectInfo } from './../store/actions/project.action';
 import { CACHE_TIME } from '@/constants';
-import { RootState, Handler } from '@/types';
+import { IStoreState, IHandler } from '@/types';
 import { doGetUserInfo, doGetMetadataList, doGetProjectList } from '@/store/actions';
 
 const handlers = {
-  '/*': ({ pathname, search }: any, state: RootState): Handler[] => {
+  '/*': ({ pathname, search }: any, state: IStoreState): IHandler[] => {
     return [
       {
         action: doGetUserInfo.request(),
@@ -12,7 +13,7 @@ const handlers = {
       }
     ];
   },
-  '/project-list': ({ pathname, search }: any, state: RootState): Handler[] => {
+  '/project-list': ({ pathname, search }: any, state: IStoreState): IHandler[] => {
     return [
       {
         action: doGetProjectList.request(state.project.projectListParams),
@@ -21,7 +22,16 @@ const handlers = {
       }
     ];
   },
-  '/project/:projectId/metadata-list': ({ pathname, search, projectId }: any, state: RootState): Handler[] => {
+  '/project/:projectId/*': ({ pathname, search, projectId }: any, state: IStoreState): IHandler[] => {
+    return [
+      {
+        action: doGetProjectInfo.request(projectId),
+        ttl: CACHE_TIME,
+        disable: !!state.project.projectInfo.id === projectId
+      }
+    ];
+  },
+  '/project/:projectId/metadata-list': ({ pathname, search, projectId }: any, state: IStoreState): IHandler[] => {
     return [
       {
         action: doGetMetadataList.request(state.metadata.getMetadataListParams),
