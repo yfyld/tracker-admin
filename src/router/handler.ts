@@ -34,10 +34,9 @@ const handlers = {
   '/project/:projectId/metadata-list': ({ pathname, search, projectId }: any, state: IStoreState): IHandler[] => {
     return [
       {
-        action: doGetMetadataList.request(state.metadata.getMetadataListParams),
+        action: doGetMetadataList.request({ ...state.metadata.metadataListParams, projectId }),
         ttl: CACHE_TIME,
-        disable:
-          !!state.metadata.metadataList.list.length && projectId === state.metadata.getMetadataListParams.projectId
+        disable: !!state.metadata.metadataList.list.length && projectId === state.metadata.metadataListParams.projectId
       }
     ];
   }

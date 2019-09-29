@@ -18,7 +18,10 @@ export interface AppState {
 
 const initialState = (): AppState => ({
   test: 22,
-  userInfo: {},
+  userInfo: {
+    id: null,
+    username: ''
+  },
   token: '',
   loading: false,
   loadingText: '加载中',

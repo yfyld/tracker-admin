@@ -39,7 +39,7 @@ export const menuDataSelector = createSelector(
         ]
       },
       {
-        key: `/project/${id}/event-list`,
+        key: `/project/${id}/metadata-list`,
         name: '元数据',
         icon: 'setting',
         auth: ['dev', 'admin']

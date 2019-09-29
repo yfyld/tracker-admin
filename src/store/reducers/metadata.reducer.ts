@@ -7,7 +7,7 @@ import { IMetadataInfo, IMetadataListParam } from '@/api';
 export interface MetadataState {
   metadataInfo: IMetadataInfo;
   metadataList: IPageData<IMetadataInfo>;
-  getMetadataListParams: IMetadataListParam;
+  metadataListParams: IMetadataListParam;
 }
 
 const initialState = (): MetadataState => ({
@@ -16,13 +16,13 @@ const initialState = (): MetadataState => ({
     name: null
   },
   metadataList: { totalCount: 0, list: [] },
-  getMetadataListParams: { page: 1, pageSize: 20, projectId: 1 }
+  metadataListParams: { page: 1, pageSize: 20, projectId: null }
 });
 
 export const metadataReducer = (state: MetadataState = initialState(), action: IAction): MetadataState => {
   switch (action.type) {
     case getType(doGetMetadataList.request):
-      return update(state, { getMetadataListParams: { $set: action.payload } });
+      return update(state, { metadataListParams: { $set: action.payload } });
     case getType(doGetMetadataList.success):
       return update(state, {
         metadataList: { $set: action.payload }
