@@ -4,12 +4,14 @@ import { IPageData } from '@/types';
 export interface IMetadataInfo {
   id: number;
   name: string;
+  code: string;
   tags?: string[];
 }
 
 export interface IMetadataListParam {
-  tag?: string;
+  tags?: string;
   status?: number;
+  name?: string;
   page: number;
   pageSize: number;
   projectId: number;
@@ -25,9 +27,20 @@ export interface IAddMetadataParam {
 export interface IUpdateMetadataParam {
   code: string;
   name?: string;
-  des?: string;
   projectId: number;
-  id: number;
+}
+
+export interface IFieldInfo {
+  code: string;
+  name?: string;
+  des?: string;
+}
+
+export interface IFieldListParam {
+  name?: string;
+  page: number;
+  pageSize: number;
+  projectId: number;
 }
 
 export function fetchMetadataList(params: IMetadataListParam) {
@@ -44,4 +57,12 @@ export function fetchMetadataDel(id: number) {
 
 export function fetchMetadataUpdate(params: IUpdateMetadataParam) {
   return fetch.put('/metadata/', params);
+}
+
+export function fetchFieldList(params: IFieldListParam) {
+  return fetch.get<IPageData<IFieldInfo>>('/metadata/fields', params);
+}
+
+export function fetchActiveFieldList(params: IFieldListParam) {
+  return fetch.get<IPageData<IFieldInfo>>('/metadata/active-fields', params);
 }

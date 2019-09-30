@@ -1,7 +1,7 @@
 import { doGetProjectInfo } from './../store/actions/project.action';
 import { CACHE_TIME } from '@/constants';
 import { IStoreState, IHandler } from '@/types';
-import { doGetUserInfo, doGetMetadataList, doGetProjectList } from '@/store/actions';
+import { doGetUserInfo, doGetMetadataList, doGetProjectList, doGetActiveMetadataList } from '@/store/actions';
 
 const handlers = {
   '/*': ({ pathname, search }: any, state: IStoreState): IHandler[] => {
@@ -37,6 +37,17 @@ const handlers = {
         action: doGetMetadataList.request({ ...state.metadata.metadataListParams, projectId }),
         ttl: CACHE_TIME,
         disable: !!state.metadata.metadataList.list.length && projectId === state.metadata.metadataListParams.projectId
+      }
+    ];
+  },
+  '/project/:projectId/analyse-event': ({ pathname, search, projectId }: any, state: IStoreState): IHandler[] => {
+    return [
+      {
+        action: doGetActiveMetadataList.request({ ...state.metadata.activeMetadataListParams, projectId }),
+        ttl: CACHE_TIME,
+        disable:
+          !!state.metadata.activeMetadataList.list.length &&
+          projectId === state.metadata.activeMetadataListParams.projectId
       }
     ];
   }

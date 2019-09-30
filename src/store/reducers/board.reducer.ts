@@ -12,6 +12,7 @@ const initialState = (): BoardState => ({
   boardInfo: {
     id: null,
     name: null,
+
     layout: [{ x: 0, y: 0, w: 8, h: 8, i: '1' }, { x: 0, y: 0, w: 8, h: 8, i: '2' }]
   },
   boardPaneList: [
