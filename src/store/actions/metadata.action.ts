@@ -2,7 +2,7 @@ import { IFieldListParam, IFieldInfo } from './../../api/metadata.api';
 import { createAsyncAction } from 'typesafe-actions';
 import { IPageData } from '@/types';
 import * as actionType from '@/constants/actionType';
-import { IMetadataListParam, IMetadataInfo, IAddMetadataParam } from '@/api';
+import { IMetadataListParam, IMetadataInfo, IMetadataAddParam } from '@/api';
 
 export const doGetMetadataList = createAsyncAction(
   actionType.GET_METADATA_LIST_REQUEST,
@@ -14,7 +14,7 @@ export const doAddMetadata = createAsyncAction(
   actionType.ADD_METADATA_REQUEST,
   actionType.ADD_METADATA_SUCCESS,
   actionType.ADD_METADATA_FAILURE
-)<IAddMetadataParam, undefined, Error>();
+)<IMetadataAddParam, undefined, Error>();
 
 export const doGetActiveMetadataList = createAsyncAction(
   actionType.GET_ACTIVE_METADATA_LIST_REQUEST,

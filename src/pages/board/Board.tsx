@@ -4,21 +4,21 @@ import * as React from 'react';
 import BoardPane from './components/BoardPane';
 import { connect } from 'react-redux';
 import style from './Board.module.less';
-import { IStoreState, IAction } from '@/types';
+import { IStoreState, IAction, IPageData } from '@/types';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Icon } from 'antd';
-import { IBoardPaneInfo, IBoardInfo } from '@/api';
+import { IReportInfo, IBoardInfo } from '@/api';
 
 const ReactGridLayout = RGL.WidthProvider(RGL);
 
 interface Props {
-  boardPaneList: IBoardPaneInfo[];
+  reportList: IPageData<IReportInfo>;
   boardInfo: IBoardInfo;
   onLayoutChange: (param: any) => {};
 }
 
-function generateDOM(boardPaneList: IBoardPaneInfo[]) {
-  return boardPaneList.map(item => (
+function generateDOM(reportList: IReportInfo[]) {
+  return reportList.map(item => (
     <div key={item.id}>
       <BoardPane info={item} />
     </div>
@@ -29,7 +29,7 @@ function onLayoutChange1(a: RGL.Layout[]) {
   console.log(a);
 }
 
-const BasicLayout = ({ boardPaneList, boardInfo, onLayoutChange }: Props) => {
+const BasicLayout = ({ reportList, boardInfo, onLayoutChange }: Props) => {
   return (
     <div className={style.wrapper}>
       <div className='app-title'>
@@ -47,7 +47,7 @@ const BasicLayout = ({ boardPaneList, boardInfo, onLayoutChange }: Props) => {
         cols={20}
         rowHeight={30}
       >
-        {generateDOM(boardPaneList)}
+        {generateDOM(reportList.list)}
       </ReactGridLayout>
     </div>
   );
@@ -56,9 +56,10 @@ const BasicLayout = ({ boardPaneList, boardInfo, onLayoutChange }: Props) => {
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) => bindActionCreators({}, dispatch);
 
 const mapStateToProps = (state: IStoreState) => {
-  const { boardInfo, boardPaneList } = state.board;
+  const { boardInfo } = state.board;
+  const { reportList } = state.report;
   return {
-    boardPaneList,
+    reportList,
     boardInfo
   };
 };

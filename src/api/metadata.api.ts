@@ -17,14 +17,14 @@ export interface IMetadataListParam {
   projectId: number;
 }
 
-export interface IAddMetadataParam {
+export interface IMetadataAddParam {
   code: string;
   name?: string;
   des?: string;
   projectId: number;
 }
 
-export interface IUpdateMetadataParam {
+export interface IMetadataUpdateParam {
   code: string;
   name?: string;
   projectId: number;
@@ -47,7 +47,7 @@ export function fetchMetadataList(params: IMetadataListParam) {
   return fetch.get<IPageData<IMetadataInfo>>('/metadata/', params);
 }
 
-export function fetchMetadataAdd(params: IAddMetadataParam) {
+export function fetchMetadataAdd(params: IMetadataAddParam) {
   return fetch.post('/metadata/', params);
 }
 
@@ -55,7 +55,7 @@ export function fetchMetadataDel(id: number) {
   return fetch.delete('/metadata/id');
 }
 
-export function fetchMetadataUpdate(params: IUpdateMetadataParam) {
+export function fetchMetadataUpdate(params: IMetadataUpdateParam) {
   return fetch.put('/metadata/', params);
 }
 

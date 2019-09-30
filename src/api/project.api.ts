@@ -29,11 +29,11 @@ export interface IMemberInfo {
 export interface IAddProject {
   name: string;
 }
-export interface IAddProjectRes {
+export interface IProjectAddRes {
   id: string;
 }
 
-export interface IUpdateProjectParam {
+export interface IProjectUpdateParam {
   id: number;
   name: string;
 }
@@ -64,13 +64,13 @@ export function fetchProjectInfo(projectId: number) {
 }
 
 export function fetchProjectAdd(params: IAddProject) {
-  return fetch.post<IAddProjectRes>('/project/', params);
+  return fetch.post<IProjectAddRes>('/project/', params);
 }
 
 export function fetchProjectDel(projectId: number) {
   return fetch.delete(`/project/${projectId}`);
 }
 
-export function fetchProjectUpdate(parmas: IUpdateProjectParam) {
+export function fetchProjectUpdate(parmas: IProjectUpdateParam) {
   return fetch.put(`/project`, parmas);
 }

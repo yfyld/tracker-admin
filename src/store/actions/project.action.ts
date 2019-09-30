@@ -2,7 +2,7 @@ import { IProjectListItem } from './../../api/project.api';
 import * as actionType from '@/constants/actionType';
 import { createAsyncAction } from 'typesafe-actions';
 import { IPageData } from '@/types';
-import { IProjectListParam, IAddProject, IAddProjectRes, IProjectInfo, IUpdateProjectParam } from '@/api';
+import { IProjectListParam, IAddProject, IProjectAddRes, IProjectInfo, IProjectUpdateParam } from '@/api';
 
 export const doGetProjectList = createAsyncAction(
   actionType.GET_PROJECT_LIST_REQUEST,
@@ -14,7 +14,7 @@ export const doAddProject = createAsyncAction(
   actionType.ADD_PROJECT_REQUEST,
   actionType.ADD_PROJECT_SUCCESS,
   actionType.ADD_PROJECT_FAILURE
-)<IAddProject, IAddProjectRes, Error>();
+)<IAddProject, IProjectAddRes, Error>();
 
 export const doDeleteProject = createAsyncAction(
   actionType.DELETE_PROJECT_REQUEST,
@@ -32,4 +32,4 @@ export const doUpdateProject = createAsyncAction(
   actionType.UPDATE_PROJECT_REQUEST,
   actionType.UPDATE_PROJECT_SUCCESS,
   actionType.UPDATE_PROJECT_FAILURE
-)<IUpdateProjectParam, undefined, Error>();
+)<IProjectUpdateParam, undefined, Error>();

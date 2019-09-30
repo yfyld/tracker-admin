@@ -2,7 +2,7 @@ import { Modal, Form, Input } from 'antd';
 import * as React from 'react';
 import { formItemLayout } from '@/constants';
 import { FormComponentProps } from 'antd/lib/form';
-import { IAddProject, IAddMetadataParam } from '@/api';
+import { IAddProject, IMetadataAddParam } from '@/api';
 import { toastformError } from '@/utils';
 import { connect } from 'react-redux';
 import { IAction, IStoreState } from '@/types';
@@ -12,7 +12,7 @@ interface Props extends FormComponentProps {
   visible: boolean;
   onClose: (param: boolean) => any;
   projectId: number;
-  handleAddMetadata: (param: IAddMetadataParam) => IAction;
+  handleAddMetadata: (param: IMetadataAddParam) => IAction;
 }
 
 const MetadataAddModel = (props: Props) => {
@@ -66,7 +66,7 @@ const mapStateToProps = (state: IStoreState) => {
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
-      handleAddMetadata: (params: IAddMetadataParam) => {
+      handleAddMetadata: (params: IMetadataAddParam) => {
         return doAddMetadata.request(params);
       }
     },

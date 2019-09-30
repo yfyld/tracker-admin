@@ -6,11 +6,11 @@ import { connect } from 'react-redux';
 import { IAction, IStoreState } from '@/types';
 import { bindActionCreators, Dispatch } from 'redux';
 import { doUpdateProject } from '@/store/actions';
-import { IUpdateProjectParam, IProjectInfo } from '@/api';
+import { IProjectUpdateParam, IProjectInfo } from '@/api';
 import { toastformError } from '@/utils';
 
 interface Props extends FormComponentProps {
-  handleUpdateProject: (params: IUpdateProjectParam) => IAction;
+  handleUpdateProject: (params: IProjectUpdateParam) => IAction;
   projectInfo: IProjectInfo;
 }
 

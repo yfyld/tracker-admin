@@ -1,40 +1,40 @@
-// import update from 'immutability-helper'
-// import { getType } from 'typesafe-actions'
-import { IAction } from '@/types';
-import { IBoardInfo, IBoardPaneInfo } from '@/api';
+import { doGetBoardList } from './../actions/board.action';
+import update from 'immutability-helper';
+import { getType } from 'typesafe-actions';
+import { IAction, IPageData } from '@/types';
+import { IBoardInfo, IReportInfo, IBoardListParam } from '@/api';
 
 export interface BoardState {
   boardInfo: IBoardInfo;
-  boardPaneList: IBoardPaneInfo[];
+  boardListParams: IBoardListParam;
+  boardList: IPageData<IBoardInfo>;
 }
 
 const initialState = (): BoardState => ({
   boardInfo: {
     id: null,
     name: null,
-
-    layout: [{ x: 0, y: 0, w: 8, h: 8, i: '1' }, { x: 0, y: 0, w: 8, h: 8, i: '2' }]
+    // reports: [],
+    layout: []
   },
-  boardPaneList: [
-    {
-      id: 1,
-      name: 'app访问量'
-    },
-    {
-      id: 2,
-      name: '活动访问量'
-    }
-  ]
+  boardListParams: {
+    page: 1,
+    pageSize: 20
+  },
+  boardList: {
+    list: [],
+    totalCount: 0
+  }
 });
 
 export const boardReducer = (state: BoardState = initialState(), action: IAction): BoardState => {
   switch (action.type) {
-    // case getType(doGetBoardList.request):
-    //   return update(state, {getBoardListParams:{ $set: action.payload} })
-    // case getType(doGetBoardList.success):
-    //   return update(state, {
-    //     BoardList: { $set: action.payload }
-    //   })
+    case getType(doGetBoardList.request):
+      return update(state, { boardListParams: { $set: action.payload } });
+    case getType(doGetBoardList.success):
+      return update(state, {
+        boardList: { $set: action.payload }
+      });
     default:
       return state;
   }
