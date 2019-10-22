@@ -25,8 +25,8 @@ const ProjectListForm = (props: Props) => {
   return (
     <Form onSubmit={handleSubmit} layout='inline' {...formItemLayout}>
       <Form.Item label='项目名称'>
-        {getFieldDecorator('name', {
-          initialValue: props.defaultValue.name
+        {getFieldDecorator('projectName', {
+          initialValue: props.defaultValue.projectName
         })(<Input placeholder='请输入项目名称' />)}
       </Form.Item>
       <Form.Item>

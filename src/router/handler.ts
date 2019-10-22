@@ -1,7 +1,14 @@
+import { doResetReportInfo } from './../store/actions/report.action';
 import { doGetProjectInfo } from './../store/actions/project.action';
 import { CACHE_TIME } from '@/constants';
 import { IStoreState, IHandler } from '@/types';
-import { doGetUserInfo, doGetMetadataList, doGetProjectList, doGetActiveMetadataList } from '@/store/actions';
+import {
+  doGetUserInfo,
+  doGetMetadataList,
+  doGetProjectList,
+  doGetActiveMetadataList,
+  doGetReportList
+} from '@/store/actions';
 
 const handlers = {
   '/*': ({ pathname, search }: any, state: IStoreState): IHandler[] => {
@@ -27,16 +34,26 @@ const handlers = {
       {
         action: doGetProjectInfo.request(projectId),
         ttl: CACHE_TIME,
-        disable: !!state.project.projectInfo.id === projectId
+        disable: state.project.projectInfo.id === Number(projectId)
       }
     ];
   },
   '/project/:projectId/metadata-list': ({ pathname, search, projectId }: any, state: IStoreState): IHandler[] => {
     return [
       {
-        action: doGetMetadataList.request({ ...state.metadata.metadataListParams, projectId }),
+        action: doGetMetadataList.request({ ...state.metadata.metadataListParams, projectId: Number(projectId) }),
         ttl: CACHE_TIME,
-        disable: !!state.metadata.metadataList.list.length && projectId === state.metadata.metadataListParams.projectId
+        disable:
+          !!state.metadata.metadataList.list.length && Number(projectId) === state.metadata.metadataListParams.projectId
+      }
+    ];
+  },
+  '/project/:projectId/report-list': ({ pathname, search, projectId }: any, state: IStoreState): IHandler[] => {
+    return [
+      {
+        action: doGetReportList.request({ ...state.report.reportListParams, projectId }),
+        ttl: CACHE_TIME,
+        disable: state.report.reportList.list.length && projectId === state.report.reportListParams.projectId
       }
     ];
   },
@@ -48,6 +65,11 @@ const handlers = {
         disable:
           !!state.metadata.activeMetadataList.list.length &&
           projectId === state.metadata.activeMetadataListParams.projectId
+      },
+      {
+        action: doResetReportInfo('EVENT'),
+        ttl: CACHE_TIME,
+        disable: false
       }
     ];
   }

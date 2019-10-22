@@ -4,10 +4,12 @@ import { connect } from 'react-redux';
 import { IStoreState, IAction, IPageData } from '@/types';
 import { doGetMetadataList } from '@/store/actions';
 import { bindActionCreators, Dispatch } from 'redux';
-import { Table, Button } from 'antd';
+import { Table, Button, Modal, Drawer, Icon, Dropdown, Menu } from 'antd';
 import { PaginationConfig, SorterResult, ColumnProps, TableRowSelection } from 'antd/lib/table';
 import { IMetadataListParam, IMetadataInfo } from '@/api';
 import MetadataAddModal from './components/MetadataAddModal';
+import TagManagement from './components/TagManagement';
+const { confirm } = Modal;
 
 interface Props {
   doGetMetadataList: (params: IMetadataListParam) => IAction;
@@ -17,7 +19,9 @@ interface Props {
 
 const MetadataList = ({ metadataList, doGetMetadataList, metadataListParams }: Props) => {
   const [addMetadataVisible, setAddMetadataVisible] = React.useState(false);
+  const [tagDrawerVisible, settagDrawerVisible] = React.useState(false);
   const [selectedRows, setSelectedRows] = React.useState([]);
+
   const columns: ColumnProps<IMetadataInfo>[] = [
     {
       key: 'code',
@@ -33,7 +37,12 @@ const MetadataList = ({ metadataList, doGetMetadataList, metadataListParams }: P
     },
     {
       key: 'tag',
-      title: '标签',
+      title: (
+        <span>
+          标签
+          <Icon key='3' type='question-circle' onClick={() => settagDrawerVisible(true)} />
+        </span>
+      ),
       dataIndex: 'tag',
       filters: [
         {
@@ -60,9 +69,9 @@ const MetadataList = ({ metadataList, doGetMetadataList, metadataListParams }: P
       filterMultiple: false
     },
     {
-      key: 'desc',
+      key: 'description',
       title: '描述',
-      dataIndex: 'desc'
+      dataIndex: 'description'
     },
     {
       title: '操作',
@@ -110,13 +119,54 @@ const MetadataList = ({ metadataList, doGetMetadataList, metadataListParams }: P
     }
   };
 
+  const handleDeleteMetadata = () => {
+    confirm({
+      title: '提示',
+      content: '确定要删除选中的元数据',
+      okText: '删除',
+      okType: 'danger',
+      cancelText: '取消',
+      onOk() {
+        console.log('OK');
+      }
+    });
+  };
+
+  const handleMetadata = () => {};
+
+  const batchMenu = (
+    <Menu>
+      <Menu.Item key='1'>删除</Menu.Item>
+      <Menu.Item key='2'>添加标签</Menu.Item>
+      <Menu.Item key='4'>启用</Menu.Item>
+      <Menu.Item key='5'>禁用</Menu.Item>
+    </Menu>
+  );
+
   return (
     <div className={style.wrapper}>
       <MetadataAddModal visible={addMetadataVisible} onClose={setAddMetadataVisible}></MetadataAddModal>
+      <Drawer
+        width={640}
+        title='标签管理'
+        placement='right'
+        closable={false}
+        onClose={() => settagDrawerVisible(false)}
+        visible={tagDrawerVisible}
+      >
+        <TagManagement></TagManagement>
+      </Drawer>
       <div>
         <Button onClick={() => setAddMetadataVisible(true)}>新增元数据</Button>
+        <Button>导入</Button>
 
-        {!!selectedRows.length && [<Button key='1'>批量删除</Button>, <Button key='2'>批量添加标签</Button>]}
+        {!!selectedRows.length && (
+          <Dropdown overlay={batchMenu}>
+            <Button>
+              批量操作 <Icon type='down' />
+            </Button>
+          </Dropdown>
+        )}
       </div>
       <Table
         rowSelection={rowSelection}

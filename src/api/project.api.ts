@@ -3,7 +3,7 @@ import { IPageData } from '@/types';
 
 export interface IProjectListParam {
   role?: string;
-  name?: string;
+  projectName?: string;
   page: number;
   pageSize: number;
 }

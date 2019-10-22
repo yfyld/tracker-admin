@@ -1,5 +1,5 @@
 import { Icon, Collapse, Divider, Select, Input } from 'antd';
-import * as React from 'react';
+import React from 'react';
 import AnalyseRangePicker from '@/components/AnalyseRangePicker';
 import moment from 'moment';
 import style from './AnalyseEvent.module.less';
@@ -7,11 +7,17 @@ import ReactEcharts from 'echarts-for-react';
 import Indicator from '@/components/Indicator';
 import Dimension from '@/components/Dimension';
 import Filter from '@/components/Filter';
+import AnalyseHeader from './components/AnalyseHeader';
+import { IReportInfo } from '@/api';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
+import { doAddReport, doUpdateReport } from '@/store/actions';
+import { IAction, IStoreState } from '@/types';
 const { Option } = Select;
 const { Panel } = Collapse;
 const { Group } = Input;
 interface Props {
-  analyseInfo: any;
+  reportInfo: IReportInfo;
 }
 
 const options = {
@@ -32,18 +38,11 @@ const options = {
 
 const onChange = (dates: [moment.Moment, moment.Moment], type: string) => {};
 
-const AnalyseEvent = ({ analyseInfo }: Props) => {
+const AnalyseEvent = ({ reportInfo }: Props) => {
+  const [newInfo, setNewInfo] = React.useState(reportInfo);
   return (
     <div>
-      <div className='app-title'>
-        <h2>
-          事件分析 <Icon type='edit' />
-        </h2>
-        <div>
-          <Icon type='save' />
-        </div>
-      </div>
-
+      <AnalyseHeader reportInfo={newInfo}></AnalyseHeader>
       <Collapse defaultActiveKey={['1']}>
         <Panel header='添加分析规则' key='1'>
           <div>
@@ -105,6 +104,12 @@ const AnalyseEvent = ({ analyseInfo }: Props) => {
           </Group>
         </div>
         <div>
+          <h4>临时使用</h4>
+          <pre>
+            <code></code>
+          </pre>
+        </div>
+        <div>
           <ReactEcharts option={options} notMerge={true} lazyUpdate={true} />
         </div>
       </div>
@@ -112,4 +117,16 @@ const AnalyseEvent = ({ analyseInfo }: Props) => {
   );
 };
 
-export default AnalyseEvent;
+const mapStateToProps = (state: IStoreState) => {
+  const { reportInfo } = state.report;
+  return {
+    reportInfo
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<IAction>) => bindActionCreators({}, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AnalyseEvent);

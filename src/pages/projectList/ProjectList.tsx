@@ -33,9 +33,11 @@ const ProjectList = ({ projectList, handleSubmit, projectListParams }: Props) =>
           新建项目
         </Button>
       </div>
-      {projectList.list.map(project => (
-        <ProjectPane key={project.id} projectInfo={project} />
-      ))}
+      <div className={style.listBox}>
+        {projectList.list.map(project => (
+          <ProjectPane key={project.id} projectInfo={project} />
+        ))}
+      </div>
       <Pagination
         onChange={(page, pageSize) => handleSubmit({ ...projectListParams, page, pageSize })}
         pageSize={projectListParams.pageSize}

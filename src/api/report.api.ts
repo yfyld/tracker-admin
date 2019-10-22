@@ -2,9 +2,12 @@ import { IPageData } from './../types/index';
 import fetch from './http';
 
 export interface IReportInfo {
-  id: number;
+  id?: number;
   name: string;
   projectId: number;
+  description: string;
+  type: string;
+  data: Object;
 }
 
 export interface IReportListParam {
@@ -17,16 +20,16 @@ export interface IReportListParam {
 export interface IReportAddParam {
   name: string;
   projectId: number;
-  description: '';
-  type: 'EVENT';
+  description: string;
+  type: string;
   data: Object;
 }
 
 export interface IReportUpdateParam {
   name: string;
   projectId: number;
-  description: '';
-  type: 'EVENT';
+  description: string;
+  type: string;
   data: Object;
   id: number;
 }

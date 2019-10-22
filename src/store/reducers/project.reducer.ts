@@ -24,7 +24,7 @@ const initialState = (): ProjectState => ({
     description: ''
   },
   projectList: { totalCount: 0, list: [] },
-  projectListParams: { page: 1, pageSize: 20, name: '' }
+  projectListParams: { page: 1, pageSize: 20, projectName: '' }
 });
 
 export const projectReducer = (state: ProjectState = initialState(), action: IAction): ProjectState => {

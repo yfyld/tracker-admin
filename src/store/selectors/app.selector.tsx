@@ -46,7 +46,7 @@ export const menuDataSelector = createSelector(
       },
       {
         key: `/project/${id}/report-list`,
-        name: '草稿箱',
+        name: '报表',
         icon: 'setting',
         auth: ['dev', 'admin']
       }

@@ -1,3 +1,4 @@
+import { doResetReportInfo } from './../actions/report.action';
 import { doGetReportList } from '../actions/report.action';
 import update from 'immutability-helper';
 import { getType } from 'typesafe-actions';
@@ -10,12 +11,28 @@ export interface ReportState {
   reportList: IPageData<IReportInfo>;
 }
 
+const eventAnalyseInital = (type?: string): IReportInfo => {
+  if (type === 'EVENT') {
+    return {
+      name: '事件分析',
+      projectId: null,
+      description: '描述',
+      type: 'EVENT',
+      data: {}
+    };
+  } else {
+    return {
+      name: '事件分析',
+      projectId: null,
+      description: '描述',
+      type: 'EVENT',
+      data: {}
+    };
+  }
+};
+
 const initialState = (): ReportState => ({
-  reportInfo: {
-    id: null,
-    name: null,
-    projectId: null
-  },
+  reportInfo: eventAnalyseInital(),
   reportListParams: {
     page: 1,
     pageSize: 20
@@ -34,6 +51,11 @@ export const reportReducer = (state: ReportState = initialState(), action: IActi
       return update(state, {
         reportList: { $set: action.payload }
       });
+    case getType(doResetReportInfo):
+      return update(state, {
+        reportInfo: { $set: eventAnalyseInital(action.payload) }
+      });
+
     default:
       return state;
   }
