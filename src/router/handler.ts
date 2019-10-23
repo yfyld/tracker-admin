@@ -1,3 +1,4 @@
+import { doGetTagList } from './../store/actions/metadata.action';
 import { doResetReportInfo } from './../store/actions/report.action';
 import { doGetProjectInfo } from './../store/actions/project.action';
 import { CACHE_TIME } from '@/constants';
@@ -45,6 +46,11 @@ const handlers = {
         ttl: CACHE_TIME,
         disable:
           !!state.metadata.metadataList.list.length && Number(projectId) === state.metadata.metadataListParams.projectId
+      },
+      {
+        action: doGetTagList.request({ page: 1, pageSize: 1000, projectId: Number(projectId) }),
+        ttl: CACHE_TIME,
+        disable: state.metadata.tagList.list.length && Number(projectId) === state.metadata.tagList.list[0].projectId
       }
     ];
   },

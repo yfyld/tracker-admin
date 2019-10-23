@@ -15,7 +15,7 @@ export interface AxiosInstance {
   };
   request<T = any>(config: AxiosRequestConfig): AxiosPromise<T>;
   get<T = any>(url: string, data?: object, config?: AxiosRequestConfig): AxiosPromise<T>;
-  delete(url: string, config?: AxiosRequestConfig): AxiosPromise;
+  delete(url: string, data?: object, config?: AxiosRequestConfig): AxiosPromise;
   head(url: string, config?: AxiosRequestConfig): AxiosPromise;
   post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>;
   put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>;
@@ -110,6 +110,13 @@ const getFn = instance.get;
 instance.get = (url: string, data?: object, config: AxiosRequestConfig = {}): AxiosPromise => {
   config.params = data;
   return getFn(url, config);
+};
+
+// 重写instance.delete
+const deleteFn = instance.delete;
+instance.delete = (url: string, data?: object, config: AxiosRequestConfig = {}): AxiosPromise => {
+  config.params = data;
+  return deleteFn(url, config);
 };
 
 export function updateToken(token?: string) {

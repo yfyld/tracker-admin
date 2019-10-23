@@ -1,3 +1,4 @@
+import { doGetTagList, doUpdateTag, doAddTag, doDelTag } from './../actions/metadata.action';
 import { put, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
 import {
@@ -7,7 +8,16 @@ import {
   doGetFieldList,
   doGetActiveFieldList
 } from '@/store/actions';
-import { fetchMetadataList, fetchMetadataAdd, fetchFieldList, fetchActiveFieldList } from '@/api';
+import {
+  fetchMetadataList,
+  fetchMetadataAdd,
+  fetchFieldList,
+  fetchActiveFieldList,
+  fetchTagList,
+  fetchTagAdd,
+  fetchTagDel,
+  fetchTagUpdate
+} from '@/api';
 import { select, call } from '@/utils';
 
 function* getMetadataList(action: ReturnType<typeof doGetMetadataList.request>): Generator {
@@ -57,6 +67,54 @@ function* getActiveFieldList(action: ReturnType<typeof doGetActiveFieldList.requ
   }
 }
 
+function* getTagList(action: ReturnType<typeof doGetTagList.request>): Generator {
+  try {
+    const response = yield* call(fetchTagList, action.payload);
+    yield put(doGetTagList.success(response.data));
+  } catch (error) {
+    yield put(doGetTagList.failure(error));
+  }
+}
+
+function* addTag(action: ReturnType<typeof doAddTag.request>): Generator {
+  try {
+    const projectId = yield* select(state => state.project.projectInfo.id);
+    yield call(fetchTagAdd, action.payload);
+    yield put(doAddTag.success());
+    yield put(doGetTagList.request({ projectId, page: 1, pageSize: 1000 }));
+    const metadataListParams = yield* select(state => state.metadata.metadataListParams);
+    yield put(doGetMetadataList.request(metadataListParams));
+  } catch (error) {
+    yield put(doAddTag.failure(error));
+  }
+}
+
+function* deleteTag(action: ReturnType<typeof doDelTag.request>): Generator {
+  try {
+    const projectId = yield* select(state => state.project.projectInfo.id);
+    yield call(fetchTagDel, action.payload);
+    yield put(doDelTag.success());
+    yield put(doGetTagList.request({ projectId, page: 1, pageSize: 1000 }));
+    const metadataListParams = yield* select(state => state.metadata.metadataListParams);
+    yield put(doGetMetadataList.request(metadataListParams));
+  } catch (error) {
+    yield put(doDelTag.failure(error));
+  }
+}
+
+function* updateTag(action: ReturnType<typeof doUpdateTag.request>): Generator {
+  try {
+    const projectId = yield* select(state => state.project.projectInfo.id);
+    yield call(fetchTagUpdate, action.payload);
+    yield put(doUpdateTag.success());
+    yield put(doGetTagList.request({ projectId, page: 1, pageSize: 1000 }));
+    const metadataListParams = yield* select(state => state.metadata.metadataListParams);
+    yield put(doGetMetadataList.request(metadataListParams));
+  } catch (error) {
+    yield put(doUpdateTag.failure(error));
+  }
+}
+
 export default function* watchMetadata() {
   yield takeEvery(getType(doGetMetadataList.request), getMetadataList);
   yield takeEvery(getType(doGetActiveMetadataList.request), getActiveMetadataList);
@@ -64,4 +122,9 @@ export default function* watchMetadata() {
 
   yield takeEvery(getType(doGetFieldList.request), getFieldList);
   yield takeEvery(getType(doGetActiveFieldList.request), getActiveFieldList);
+
+  yield takeEvery(getType(doGetTagList.request), getTagList);
+  yield takeEvery(getType(doUpdateTag.request), updateTag);
+  yield takeEvery(getType(doAddTag.request), addTag);
+  yield takeEvery(getType(doDelTag.request), deleteTag);
 }

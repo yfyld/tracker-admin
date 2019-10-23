@@ -5,19 +5,22 @@ import { IStoreState, IAction, IPageData } from '@/types';
 import { doGetMetadataList } from '@/store/actions';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Table, Button, Modal, Drawer, Icon, Dropdown, Menu } from 'antd';
-import { PaginationConfig, SorterResult, ColumnProps, TableRowSelection } from 'antd/lib/table';
+import { PaginationConfig, SorterResult, ColumnProps, TableRowSelection, ColumnFilterItem } from 'antd/lib/table';
 import { IMetadataListParam, IMetadataInfo } from '@/api';
 import MetadataAddModal from './components/MetadataAddModal';
 import TagManagement from './components/TagManagement';
+import MetadataListForm from './components/MetadataListForm';
+import { tagListFiltersSelector } from '@/store/selectors';
 const { confirm } = Modal;
 
 interface Props {
   doGetMetadataList: (params: IMetadataListParam) => IAction;
   metadataList: IPageData<IMetadataInfo>;
   metadataListParams: IMetadataListParam;
+  tagListFilters: ColumnFilterItem[];
 }
 
-const MetadataList = ({ metadataList, doGetMetadataList, metadataListParams }: Props) => {
+const MetadataList = ({ metadataList, doGetMetadataList, metadataListParams, tagListFilters }: Props) => {
   const [addMetadataVisible, setAddMetadataVisible] = React.useState(false);
   const [tagDrawerVisible, settagDrawerVisible] = React.useState(false);
   const [selectedRows, setSelectedRows] = React.useState([]);
@@ -44,12 +47,7 @@ const MetadataList = ({ metadataList, doGetMetadataList, metadataListParams }: P
         </span>
       ),
       dataIndex: 'tag',
-      filters: [
-        {
-          text: '前端埋点',
-          value: 'aaa'
-        }
-      ],
+      filters: tagListFilters,
       filterMultiple: true
     },
     {
@@ -78,7 +76,7 @@ const MetadataList = ({ metadataList, doGetMetadataList, metadataListParams }: P
       key: 'action',
       render: (text: any, record: any) => (
         <span>
-          <button>编辑</button>
+          <Button size='small'>编辑</Button>
         </span>
       )
     }
@@ -156,25 +154,33 @@ const MetadataList = ({ metadataList, doGetMetadataList, metadataListParams }: P
       >
         <TagManagement></TagManagement>
       </Drawer>
-      <div>
-        <Button onClick={() => setAddMetadataVisible(true)}>新增元数据</Button>
-        <Button>导入</Button>
-
-        {!!selectedRows.length && (
-          <Dropdown overlay={batchMenu}>
-            <Button>
-              批量操作 <Icon type='down' />
-            </Button>
-          </Dropdown>
-        )}
+      <div className='app-card'>
+        <div className='fl'>
+          <MetadataListForm defaultValue={metadataListParams} onSubmit={doGetMetadataList}></MetadataListForm>
+        </div>
+        <div className='fr'>
+          <Button onClick={() => setAddMetadataVisible(true)}>新增元数据</Button>
+          &nbsp;
+          <Button>导入</Button>
+          &nbsp;
+          {!!selectedRows.length && (
+            <Dropdown overlay={batchMenu}>
+              <Button>
+                批量操作 <Icon type='down' />
+              </Button>
+            </Dropdown>
+          )}
+        </div>
       </div>
-      <Table
-        rowSelection={rowSelection}
-        rowKey='id'
-        columns={columns}
-        dataSource={metadataList.list}
-        onChange={handleChange}
-      />
+      <div className='app-card'>
+        <Table
+          rowSelection={rowSelection}
+          rowKey='id'
+          columns={columns}
+          dataSource={metadataList.list}
+          onChange={handleChange}
+        />
+      </div>
     </div>
   );
 };
@@ -190,10 +196,13 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   );
 
 const mapStateToProps = (state: IStoreState) => {
-  const { metadataList, metadataListParams } = state.metadata;
+  const { metadataList, metadataListParams, tagList } = state.metadata;
+  const tagListFilters = tagListFiltersSelector(state);
   return {
     metadataList,
-    metadataListParams
+    metadataListParams,
+    tagList,
+    tagListFilters
   };
 };
 

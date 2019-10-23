@@ -1,5 +1,11 @@
-import { IFieldInfo, IFieldListParam } from './../../api/metadata.api';
-import { doGetActiveMetadataList, doGetFieldList, doGetActiveFieldList } from './../actions/metadata.action';
+import { IFieldInfo, IFieldListParam, ITagList } from './../../api/metadata.api';
+import {
+  doGetActiveMetadataList,
+  doGetFieldList,
+  doGetActiveFieldList,
+  doGetTagList,
+  doAddTag
+} from './../actions/metadata.action';
 import update from 'immutability-helper';
 import { getType } from 'typesafe-actions';
 import { IAction, IPageData } from '@/types';
@@ -19,6 +25,8 @@ export interface MetadataState {
   fieldListParams: IFieldListParam;
   //用于分析数据(多个推荐字段)
   activeFieldList: IPageData<IFieldInfo>;
+
+  tagList: ITagList;
 }
 
 const initialState = (): MetadataState => ({
@@ -35,7 +43,8 @@ const initialState = (): MetadataState => ({
 
   fieldList: { totalCount: 0, list: [] },
   fieldListParams: { page: 1, pageSize: 20, projectId: null },
-  activeFieldList: { totalCount: 0, list: [] }
+  activeFieldList: { totalCount: 0, list: [] },
+  tagList: { totalCount: 0, list: [] }
 });
 
 export const metadataReducer = (state: MetadataState = initialState(), action: IAction): MetadataState => {
@@ -63,6 +72,11 @@ export const metadataReducer = (state: MetadataState = initialState(), action: I
     case getType(doGetActiveFieldList.success):
       return update(state, {
         activeFieldList: { $set: action.payload }
+      });
+
+    case getType(doGetTagList.success):
+      return update(state, {
+        tagList: { $set: action.payload }
       });
     default:
       return state;

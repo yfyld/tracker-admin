@@ -2,20 +2,23 @@ import * as React from 'react';
 import style from './ReportList.module.less';
 import { connect } from 'react-redux';
 import { IStoreState, IAction, IPageData } from '@/types';
-import { doGetReportList } from '@/store/actions';
+import { doGetReportList, doAddReport, doDeleteReport } from '@/store/actions';
 import { bindActionCreators, Dispatch } from 'redux';
-import { Table, Button, Icon, Tooltip } from 'antd';
+import { Table, Button, Icon, Tooltip, Modal, Popover, Select } from 'antd';
 import { PaginationConfig, SorterResult, ColumnProps } from 'antd/lib/table';
-import { IReportListParam, IReportInfo } from '@/api';
+import { IReportListParam, IReportInfo, IReportAddParam } from '@/api';
 import ReportAddModal from './components/ReportAddModal';
-
+import ReportListForm from './components/ReportListForm';
+const { confirm } = Modal;
 interface Props {
   doGetReportList: (params: IReportListParam) => IAction;
+  doAddReport: (params: IReportAddParam) => IAction;
+  doDeleteReport: (param: number) => IAction;
   reportList: IPageData<IReportInfo>;
   reportListParams: IReportListParam;
 }
 
-const ReportList = ({ reportList, doGetReportList, reportListParams }: Props) => {
+const ReportList = ({ reportList, doGetReportList, reportListParams, doAddReport, doDeleteReport }: Props) => {
   const [addReportVisible, setAddReportVisible] = React.useState(false);
 
   const columns: ColumnProps<IReportInfo>[] = [
@@ -30,6 +33,12 @@ const ReportList = ({ reportList, doGetReportList, reportListParams }: Props) =>
       key: 'name',
       title: '名称',
       dataIndex: 'name'
+    },
+
+    {
+      key: 'type',
+      title: '类型',
+      dataIndex: 'type'
     },
 
     {
@@ -73,27 +82,69 @@ const ReportList = ({ reportList, doGetReportList, reportListParams }: Props) =>
     {
       title: '操作',
       key: 'action',
-      render: (text: any, record: any) => (
+      render: (text: string, record) => (
         <span>
           <Tooltip title='编辑'>
             <Icon type='edit' />
           </Tooltip>
           &nbsp;
           <Tooltip title='拷贝'>
-            <Icon type='copy' />
+            <Icon onClick={() => handleReportCopy(record)} type='copy' />
           </Tooltip>
           &nbsp;
           <Tooltip title='添加副本到看板'>
-            <Icon type='plus-square' />
+            <Popover
+              placement='bottom'
+              content={
+                <div>
+                  <Select style={{ width: 120 }}>
+                    <Select.Option value={1}>显示</Select.Option>
+                    <Select.Option value={0}>不显示</Select.Option>
+                  </Select>
+                  <Button size='small' onClick={() => handleReportAppendBoard(record)}>
+                    确定
+                  </Button>
+                </div>
+              }
+              title='选择看板'
+              trigger='click'
+            >
+              <Icon type='plus-square' />
+            </Popover>
           </Tooltip>
           &nbsp;
           <Tooltip title='删除'>
-            <Icon type='delete' />
+            <Icon onClick={() => handleReportDelete(record)} type='delete' />
           </Tooltip>
         </span>
       )
     }
   ];
+
+  function handleReportCopy(record: IReportInfo) {
+    record.id = null;
+    record.name = record.name + '-copy';
+    doAddReport(record);
+  }
+
+  function handleReportAppendBoard(record: IReportInfo) {
+    record.id = null;
+    record.name = record.name + '-copy';
+    doAddReport(record);
+  }
+
+  function handleReportDelete(record: IReportInfo) {
+    confirm({
+      title: '提示',
+      content: `确定要删除"${record.name}"`,
+      okText: '删除',
+      okType: 'danger',
+      cancelText: '取消',
+      onOk() {
+        doDeleteReport(record.id);
+      }
+    });
+  }
 
   function handleChange(
     pagination: PaginationConfig,
@@ -124,10 +175,17 @@ const ReportList = ({ reportList, doGetReportList, reportListParams }: Props) =>
   return (
     <div className={style.wrapper}>
       <ReportAddModal visible={addReportVisible} onClose={setAddReportVisible}></ReportAddModal>
-      <div>
-        <Button onClick={() => setAddReportVisible(true)}>新增报表</Button>
+      <div className='app-card'>
+        <div className='fl'>
+          <ReportListForm onSubmit={doGetReportList} defaultValue={reportListParams}></ReportListForm>
+        </div>
+        <div className='fr'>
+          <Button onClick={() => setAddReportVisible(true)}>新增报表</Button>
+        </div>
       </div>
-      <Table rowKey='id' columns={columns} dataSource={reportList.list} onChange={handleChange} />
+      <div className='app-card'>
+        <Table rowKey='id' columns={columns} dataSource={reportList.list} onChange={handleChange} />
+      </div>
     </div>
   );
 };
@@ -137,6 +195,12 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
     {
       doGetReportList: params => {
         return doGetReportList.request(params);
+      },
+      doAddReport: (params: IReportAddParam) => {
+        return doAddReport.request(params);
+      },
+      doDeleteReport: (params: number) => {
+        return doDeleteReport.request(params);
       }
     },
     dispatch

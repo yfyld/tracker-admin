@@ -1,3 +1,4 @@
+import { IDeleteParam, IPageQuery } from './../types/index';
 import fetch from './http';
 import { IPageData } from '@/types';
 
@@ -8,12 +9,11 @@ export interface IMetadataInfo {
   tags?: string[];
 }
 
-export interface IMetadataListParam {
+export interface IMetadataListParam extends IPageQuery {
   tags?: string;
   status?: number;
   name?: string;
-  page: number;
-  pageSize: number;
+  code?: string;
   projectId: number;
 }
 
@@ -27,6 +27,32 @@ export interface IMetadataAddParam {
 export interface IMetadataUpdateParam {
   code: string;
   name?: string;
+  projectId: number;
+}
+
+export interface ITagListParam extends IPageQuery {
+  projectId: number;
+}
+
+export interface ITagInfo {
+  id: number;
+  name: string;
+  description: string;
+  projectId: number;
+}
+
+export type ITagList = IPageData<ITagInfo>;
+
+export interface ITagAddParam {
+  name: string;
+  description?: string;
+  projectId: number;
+}
+
+export interface ITagUpdateParam {
+  id: number;
+  description: string;
+  name: string;
   projectId: number;
 }
 
@@ -51,12 +77,28 @@ export function fetchMetadataAdd(params: IMetadataAddParam) {
   return fetch.post('/metadata/', params);
 }
 
-export function fetchMetadataDel(id: number) {
-  return fetch.delete('/metadata/id');
+export function fetchMetadataDel(params: IDeleteParam) {
+  return fetch.delete('/metadata/', params);
 }
 
 export function fetchMetadataUpdate(params: IMetadataUpdateParam) {
   return fetch.put('/metadata/', params);
+}
+
+export function fetchTagList(params: ITagListParam) {
+  return fetch.get<ITagList>('/metadata/tag', params);
+}
+
+export function fetchTagAdd(params: ITagAddParam) {
+  return fetch.post('/metadata/tag', params);
+}
+
+export function fetchTagDel(params: IDeleteParam) {
+  return fetch.delete('/metadata/tag', params);
+}
+
+export function fetchTagUpdate(params: ITagUpdateParam) {
+  return fetch.put('/metadata/tag', params);
 }
 
 export function fetchFieldList(params: IFieldListParam) {

@@ -25,6 +25,11 @@ export interface IPageData<T> {
   list: T[];
 }
 
+export interface IPageQuery {
+  page: number;
+  pageSize: number;
+}
+
 export interface IHandler {
   action: IAction;
   ttl: number;
@@ -39,6 +44,11 @@ export interface IMenuItem {
   auth?: string[];
   children?: IMenuItem[];
   action?: string;
+}
+
+export interface IDeleteParam {
+  projectId: number;
+  id: number;
 }
 
 // //project

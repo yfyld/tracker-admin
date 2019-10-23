@@ -13,8 +13,12 @@ export interface IReportInfo {
 export interface IReportListParam {
   page: number;
   pageSize: number;
+  projectId: number;
   name?: string;
-  projectId?: number;
+  inBoard?: number;
+  status?: number;
+  sortKey?: string;
+  sortType?: string;
 }
 
 export interface IReportAddParam {

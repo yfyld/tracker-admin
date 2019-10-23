@@ -35,7 +35,9 @@ const initialState = (): ReportState => ({
   reportInfo: eventAnalyseInital(),
   reportListParams: {
     page: 1,
-    pageSize: 20
+    pageSize: 20,
+    projectId: null,
+    inBoard: 0
   },
   reportList: {
     list: [],
