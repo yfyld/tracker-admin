@@ -85,7 +85,7 @@ const AnalyseEvent = ({ reportInfo }: Props) => {
 
       <div>
         <div>
-          <AnalyseRangePicker onChange={onChange} dates={[moment(), moment()]} />
+          <AnalyseRangePicker onChange={onChange} value={[moment(), moment()]} />
           |本月
         </div>
         <div>

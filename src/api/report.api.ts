@@ -8,6 +8,9 @@ export interface IReportInfo {
   description: string;
   type: string;
   data: Object;
+  showType?: string;
+  fixedTime?: boolean;
+  rangeTime?: [];
 }
 
 export interface IReportListParam {

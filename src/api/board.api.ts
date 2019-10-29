@@ -1,3 +1,4 @@
+import { IPageQuery } from './../types/index';
 import { IReportInfo } from './report.api';
 import fetch from './http';
 import { IPageData } from '@/types';
@@ -13,12 +14,16 @@ export interface IGridLayout {
 export interface IBoardInfo {
   id: number;
   name: string;
+  projectId: number;
   layout: IGridLayout[];
 }
 
-export interface IBoardListParam {
-  page: 1;
-  pageSize: 20;
+export interface IBoardInfoParam {
+  projectId: number;
+  boardId: number;
+}
+
+export interface IBoardListParam extends IPageQuery {
   projectId?: number;
   status?: number;
   isPublic?: boolean;
@@ -45,17 +50,21 @@ export interface IBoardUpdateParam {
 }
 
 export function fetchBoardList(params: IBoardListParam) {
-  return fetch.get<IPageData<IBoardInfo>>('/booard/', params);
+  return fetch.get<IPageData<IBoardInfo>>('/board/', params);
+}
+
+export function fetchBoardInfo(params: IBoardInfoParam) {
+  return fetch.get<IBoardInfo>('/board/info', params);
 }
 
 export function fetchBoardAdd(params: IBoardAddParam) {
-  return fetch.post('/booard/', params);
+  return fetch.post('/board/', params);
 }
 
 export function fetchBoardUpdate(params: IBoardUpdateParam) {
-  return fetch.put('/booard/', params);
+  return fetch.put('/board/', params);
 }
 
 export function fetchBoardDel(id: number) {
-  return fetch.delete(`/booard/${id}`);
+  return fetch.delete(`/board/${id}`);
 }

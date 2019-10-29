@@ -2,10 +2,12 @@ import { createSelector } from 'reselect';
 import { IStoreState } from '@/types';
 
 const projectIdSelector = (state: IStoreState) => state.project.projectInfo.id;
+const boardListSelector = (state: IStoreState) => state.board.boardList.list;
 
 export const menuDataSelector = createSelector(
   projectIdSelector,
-  id => {
+  boardListSelector,
+  (id, boardList) => {
     return [
       {
         key: `/project/${id}/info`,
@@ -17,13 +19,11 @@ export const menuDataSelector = createSelector(
         key: 'broad',
         name: '数据看板',
         icon: 'setting',
-        children: [
-          {
-            key: `/project/${id}/board/1`,
-            icon: 'setting',
-            name: '老板看板'
-          }
-        ]
+        children: boardList.map(item => ({
+          key: `/project/${id}/board/${item.id}`,
+          icon: 'setting',
+          name: item.name
+        }))
       },
       {
         key: 'analyse',

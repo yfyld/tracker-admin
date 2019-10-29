@@ -1,4 +1,4 @@
-import { createAsyncAction } from 'typesafe-actions';
+import { createAsyncAction, createAction } from 'typesafe-actions';
 import { IPageData } from '@/types';
 import * as actionType from '@/constants/actionType';
 import { IBoardListParam, IBoardInfo, IBoardUpdateParam, IBoardAddParam } from '@/api';
@@ -8,6 +8,12 @@ export const doGetBoardList = createAsyncAction(
   actionType.GET_BOARD_LIST_SUCCESS,
   actionType.GET_BOARD_LIST_FAILURE
 )<IBoardListParam, IPageData<IBoardInfo>, Error>();
+
+export const doGetBoardInfo = createAsyncAction(
+  actionType.GET_BOARD_INFO_REQUEST,
+  actionType.GET_BOARD_INFO_SUCCESS,
+  actionType.GET_BOARD_INFO_FAILURE
+)<number, IBoardInfo, Error>();
 
 export const doAddBoard = createAsyncAction(
   actionType.ADD_BOARD_REQUEST,

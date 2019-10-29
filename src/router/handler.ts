@@ -1,3 +1,4 @@
+import { doGetBoardList, doGetBoardInfo } from './../store/actions/board.action';
 import { doGetTagList } from './../store/actions/metadata.action';
 import { doResetReportInfo } from './../store/actions/report.action';
 import { doGetProjectInfo } from './../store/actions/project.action';
@@ -36,6 +37,11 @@ const handlers = {
         action: doGetProjectInfo.request(projectId),
         ttl: CACHE_TIME,
         disable: state.project.projectInfo.id === Number(projectId)
+      },
+      {
+        action: doGetBoardList.request({ projectId, page: 1, pageSize: 1000 }),
+        ttl: CACHE_TIME,
+        disable: state.board.boardList.list.length && projectId === state.board.boardListParams.projectId
       }
     ];
   },
@@ -76,6 +82,18 @@ const handlers = {
         action: doResetReportInfo('EVENT'),
         ttl: CACHE_TIME,
         disable: false
+      }
+    ];
+  },
+  '/project/:projectId/board/:boardId': (
+    { pathname, search, projectId, boardId }: any,
+    state: IStoreState
+  ): IHandler[] => {
+    return [
+      {
+        action: doGetBoardInfo.request(boardId),
+        ttl: CACHE_TIME,
+        disable: state.board.boardInfo.id === Number(boardId)
       }
     ];
   }

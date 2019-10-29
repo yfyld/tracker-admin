@@ -9,6 +9,7 @@ import { PaginationConfig, SorterResult, ColumnProps } from 'antd/lib/table';
 import { IReportListParam, IReportInfo, IReportAddParam } from '@/api';
 import ReportAddModal from './components/ReportAddModal';
 import ReportListForm from './components/ReportListForm';
+import BoardAppendReportModal from '@/components/BoardAppendReportModal';
 const { confirm } = Modal;
 interface Props {
   doGetReportList: (params: IReportListParam) => IAction;
@@ -20,6 +21,15 @@ interface Props {
 
 const ReportList = ({ reportList, doGetReportList, reportListParams, doAddReport, doDeleteReport }: Props) => {
   const [addReportVisible, setAddReportVisible] = React.useState(false);
+  const [appendBoardVisible, setappendBoardVisible] = React.useState(false);
+  const [curReportInfo, setcurReportInfo] = React.useState<IReportInfo>({
+    id: null,
+    name: '',
+    description: '',
+    projectId: null,
+    type: '',
+    data: {}
+  });
 
   const columns: ColumnProps<IReportInfo>[] = [
     {
@@ -122,15 +132,15 @@ const ReportList = ({ reportList, doGetReportList, reportListParams, doAddReport
   ];
 
   function handleReportCopy(record: IReportInfo) {
-    record.id = null;
-    record.name = record.name + '-copy';
-    doAddReport(record);
+    const newRecord = { ...record };
+    newRecord.id = null;
+    newRecord.name = newRecord.name + '-copy';
+    doAddReport(newRecord);
   }
 
   function handleReportAppendBoard(record: IReportInfo) {
-    record.id = null;
-    record.name = record.name + '-copy';
-    doAddReport(record);
+    setcurReportInfo(record);
+    setappendBoardVisible(true);
   }
 
   function handleReportDelete(record: IReportInfo) {
@@ -175,6 +185,12 @@ const ReportList = ({ reportList, doGetReportList, reportListParams, doAddReport
   return (
     <div className={style.wrapper}>
       <ReportAddModal visible={addReportVisible} onClose={setAddReportVisible}></ReportAddModal>
+      <BoardAppendReportModal
+        defaultValue={curReportInfo}
+        visible={appendBoardVisible}
+        onClose={setappendBoardVisible}
+        onSubmit={doAddReport}
+      />
       <div className='app-card'>
         <div className='fl'>
           <ReportListForm onSubmit={doGetReportList} defaultValue={reportListParams}></ReportListForm>

@@ -1,4 +1,4 @@
-import { doGetBoardList } from './../actions/board.action';
+import { doGetBoardList, doGetBoardInfo } from './../actions/board.action';
 import update from 'immutability-helper';
 import { getType } from 'typesafe-actions';
 import { IAction, IPageData } from '@/types';
@@ -14,6 +14,7 @@ const initialState = (): BoardState => ({
   boardInfo: {
     id: null,
     name: null,
+    projectId: null,
     // reports: [],
     layout: []
   },
@@ -34,6 +35,11 @@ export const boardReducer = (state: BoardState = initialState(), action: IAction
     case getType(doGetBoardList.success):
       return update(state, {
         boardList: { $set: action.payload }
+      });
+
+    case getType(doGetBoardInfo.success):
+      return update(state, {
+        boardInfo: { $set: action.payload }
       });
     default:
       return state;
