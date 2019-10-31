@@ -1,13 +1,14 @@
 import { put, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
-import { doGetReportList, doAddReport, doUpdateReport, doDeleteReport } from '@/store/actions';
+import { doGetReportList, doAddReport, doUpdateReport, doDeleteReport, doGetReportInfo } from '@/store/actions';
 import {
   fetchReportList,
   fetchReportAdd,
   fetchFieldList,
   fetchActiveFieldList,
   fetchReportUpdate,
-  fetchReportDel
+  fetchReportDel,
+  fetchReportInfo
 } from '@/api';
 import { select, call } from '@/utils';
 
@@ -17,6 +18,15 @@ function* getReportList(action: ReturnType<typeof doGetReportList.request>): Gen
     yield put(doGetReportList.success(response.data));
   } catch (error) {
     yield put(doGetReportList.failure(error));
+  }
+}
+
+function* getReportInfo(action: ReturnType<typeof doGetReportInfo.request>): Generator {
+  try {
+    const response = yield* call(fetchReportInfo, action.payload);
+    yield put(doGetReportInfo.success(response.data));
+  } catch (error) {
+    yield put(doGetReportInfo.failure(error));
   }
 }
 
@@ -59,4 +69,5 @@ export default function* watchReport() {
   yield takeEvery(getType(doAddReport.request), addReport);
   yield takeEvery(getType(doUpdateReport.request), updateReport);
   yield takeEvery(getType(doDeleteReport.request), deleteReport);
+  yield takeEvery(getType(doGetReportInfo.request), getReportInfo);
 }

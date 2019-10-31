@@ -1,16 +1,19 @@
-import { IPageData } from './../types/index';
+import { IPageData, IInfoParam } from './../types/index';
 import fetch from './http';
 
 export interface IReportInfo {
   id?: number;
   name: string;
   projectId: number;
+  boardId?: number;
   description: string;
   type: string;
   data: Object;
   showType?: string;
-  fixedTime?: boolean;
-  rangeTime?: [];
+
+  dateStart?: number;
+  dateEnd?: number;
+  dateType: string;
 }
 
 export interface IReportListParam {
@@ -27,6 +30,7 @@ export interface IReportListParam {
 export interface IReportAddParam {
   name: string;
   projectId: number;
+  boardId?: number;
   description: string;
   type: string;
   data: Object;
@@ -42,6 +46,10 @@ export interface IReportUpdateParam {
 }
 export function fetchReportList(params: IReportListParam) {
   return fetch.get<IPageData<IReportInfo>>('/report', params);
+}
+
+export function fetchReportInfo(params: IInfoParam) {
+  return fetch.get<IReportInfo>('/report/info', params);
 }
 
 export function fetchReportAdd(params: IReportAddParam) {

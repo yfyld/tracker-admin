@@ -1,21 +1,15 @@
+import RGL from 'react-grid-layout';
 import { IPageQuery } from './../types/index';
 import { IReportInfo } from './report.api';
 import fetch from './http';
 import { IPageData } from '@/types';
 
-export interface IGridLayout {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  i: string;
-}
-
 export interface IBoardInfo {
   id: number;
   name: string;
   projectId: number;
-  layout: IGridLayout[];
+  layout: RGL.Layout[];
+  reportList: IReportInfo[];
 }
 
 export interface IBoardInfoParam {
@@ -35,18 +29,17 @@ export interface IBoardAddParam {
   isPublic: boolean;
   name: string;
   description: '';
-  layout: IGridLayout[];
+  layout: RGL.Layout[];
   reports: IReportInfo[];
 }
 
 export interface IBoardUpdateParam {
   id: number;
   projectId: number;
-  isPublic: boolean;
-  name: string;
-  description: '';
-  layout: IGridLayout[];
-  reports: IReportInfo[];
+  isPublic?: boolean;
+  name?: string;
+  description?: '';
+  layout?: RGL.Layout[];
 }
 
 export function fetchBoardList(params: IBoardListParam) {

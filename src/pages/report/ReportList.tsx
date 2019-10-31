@@ -4,23 +4,37 @@ import { connect } from 'react-redux';
 import { IStoreState, IAction, IPageData } from '@/types';
 import { doGetReportList, doAddReport, doDeleteReport } from '@/store/actions';
 import { bindActionCreators, Dispatch } from 'redux';
-import { Table, Button, Icon, Tooltip, Modal, Popover, Select } from 'antd';
-import { PaginationConfig, SorterResult, ColumnProps } from 'antd/lib/table';
-import { IReportListParam, IReportInfo, IReportAddParam } from '@/api';
+import { Table, Button, Icon, Tooltip, Modal, Popover, Select, message } from 'antd';
+import { PaginationConfig, SorterResult, ColumnProps, ColumnFilterItem } from 'antd/lib/table';
+import { IReportListParam, IReportInfo, IReportAddParam, IBoardInfo } from '@/api';
 import ReportAddModal from './components/ReportAddModal';
 import ReportListForm from './components/ReportListForm';
 import BoardAppendReportModal from '@/components/BoardAppendReportModal';
+import { boardListFiltersSelector, boardListMapSelector } from '@/store/selectors';
 const { confirm } = Modal;
 interface Props {
   doGetReportList: (params: IReportListParam) => IAction;
   doAddReport: (params: IReportAddParam) => IAction;
   doDeleteReport: (param: number) => IAction;
   reportList: IPageData<IReportInfo>;
+  boardList: IPageData<IBoardInfo>;
   reportListParams: IReportListParam;
+  boardListFilters: ColumnFilterItem[];
+  boardListMap: { [prop: string]: IBoardInfo };
 }
 
-const ReportList = ({ reportList, doGetReportList, reportListParams, doAddReport, doDeleteReport }: Props) => {
+const ReportList = ({
+  reportList,
+  doGetReportList,
+  reportListParams,
+  doAddReport,
+  doDeleteReport,
+  boardList,
+  boardListFilters,
+  boardListMap
+}: Props) => {
   const [addReportVisible, setAddReportVisible] = React.useState(false);
+  const [appendedBoardId, setappendedBoardId] = React.useState(null);
   const [appendBoardVisible, setappendBoardVisible] = React.useState(false);
   const [curReportInfo, setcurReportInfo] = React.useState<IReportInfo>({
     id: null,
@@ -28,7 +42,10 @@ const ReportList = ({ reportList, doGetReportList, reportListParams, doAddReport
     description: '',
     projectId: null,
     type: '',
-    data: {}
+    data: {},
+    dateStart: null,
+    dateEnd: null,
+    dateType: null
   });
 
   const columns: ColumnProps<IReportInfo>[] = [
@@ -73,22 +90,7 @@ const ReportList = ({ reportList, doGetReportList, reportListParams, doAddReport
       ],
       filterMultiple: false
     },
-    {
-      key: 'board',
-      title: '所属看板',
-      dataIndex: 'board',
-      filters: [
-        {
-          text: '启用',
-          value: '1'
-        },
-        {
-          text: '停用',
-          value: '0'
-        }
-      ],
-      filterMultiple: false
-    },
+
     {
       title: '操作',
       key: 'action',
@@ -107,9 +109,14 @@ const ReportList = ({ reportList, doGetReportList, reportListParams, doAddReport
               placement='bottom'
               content={
                 <div>
-                  <Select style={{ width: 120 }}>
-                    <Select.Option value={1}>显示</Select.Option>
-                    <Select.Option value={0}>不显示</Select.Option>
+                  <Select
+                    onChange={(e: number) => setappendedBoardId(e)}
+                    value={appendedBoardId}
+                    style={{ width: 120 }}
+                  >
+                    {boardList.list.map(item => (
+                      <Select.Option value={item.id}>{item.name}</Select.Option>
+                    ))}
                   </Select>
                   <Button size='small' onClick={() => handleReportAppendBoard(record)}>
                     确定
@@ -117,7 +124,7 @@ const ReportList = ({ reportList, doGetReportList, reportListParams, doAddReport
                 </div>
               }
               title='选择看板'
-              trigger='click'
+              trigger='hover'
             >
               <Icon type='plus-square' />
             </Popover>
@@ -131,6 +138,24 @@ const ReportList = ({ reportList, doGetReportList, reportListParams, doAddReport
     }
   ];
 
+  if (reportListParams.inBoard) {
+    columns.splice(-1, 0, {
+      key: 'boardId',
+      title: '所属看板',
+      dataIndex: 'boardId',
+      filters: boardListFilters,
+      filterMultiple: false,
+      render: text => {
+        if (!text) {
+          return '';
+        } else if (boardListMap[text]) {
+          return boardListMap[text].name;
+        }
+        return '所属看板已被删除';
+      }
+    });
+  }
+
   function handleReportCopy(record: IReportInfo) {
     const newRecord = { ...record };
     newRecord.id = null;
@@ -139,7 +164,11 @@ const ReportList = ({ reportList, doGetReportList, reportListParams, doAddReport
   }
 
   function handleReportAppendBoard(record: IReportInfo) {
-    setcurReportInfo(record);
+    if (!appendedBoardId) {
+      message.info('请选择看板');
+      return;
+    }
+    setcurReportInfo({ ...record, boardId: appendedBoardId, id: null });
     setappendBoardVisible(true);
   }
 
@@ -224,9 +253,15 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
 
 const mapStateToProps = (state: IStoreState) => {
   const { reportList, reportListParams } = state.report;
+  const { boardList } = state.board;
+  const boardListFilters = boardListFiltersSelector(state);
+  const boardListMap = boardListMapSelector(state);
   return {
     reportList,
-    reportListParams
+    reportListParams,
+    boardList,
+    boardListFilters,
+    boardListMap
   };
 };
 

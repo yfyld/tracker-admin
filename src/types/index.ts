@@ -50,6 +50,10 @@ export interface IDeleteParam {
   projectId: number;
   id: number;
 }
+export interface IInfoParam {
+  projectId: number;
+  id: number;
+}
 
 // //project
 

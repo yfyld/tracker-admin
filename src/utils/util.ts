@@ -3,6 +3,7 @@ import { createBrowserHistory } from 'history';
 import { matchPath } from 'react-router-dom';
 import { IStoreState, IAction } from '@/types';
 import * as localForage from 'localforage';
+
 import { message } from 'antd';
 
 export const mapLocationIntoActions = (
