@@ -6,12 +6,10 @@ import { connect } from 'react-redux';
 import style from './Board.module.less';
 import { IStoreState, IAction, IPageData } from '@/types';
 import { bindActionCreators, Dispatch } from 'redux';
-import { Icon, Button, Popover, Divider, Drawer, List, Input } from 'antd';
-import { IReportInfo, IBoardInfo, IBoardUpdateParam } from '@/api';
-import { doUpdateBoard } from '@/store/actions';
+import { Icon, Button, Popover, Drawer } from 'antd';
+import { IReportInfo, IBoardInfo, IBoardUpdateParam, IReportListParam } from '@/api';
+import { doUpdateBoard, doGetReportList } from '@/store/actions';
 import ReportDrawerContent from './components/ReportDrawerContent';
-
-const { Search } = Input;
 
 const ButtonGroup = Button.Group;
 
@@ -21,6 +19,8 @@ interface Props {
   reportList: IPageData<IReportInfo>;
   boardInfo: IBoardInfo;
   handleSave: (params: IBoardUpdateParam) => IAction;
+  reportListParams: IReportListParam;
+  getReportList: (params: IReportListParam) => IAction;
 }
 
 function generateDOM(reportList: IReportInfo[]) {
@@ -31,7 +31,7 @@ function generateDOM(reportList: IReportInfo[]) {
   ));
 }
 
-const BasicLayout = ({ reportList, boardInfo, handleSave }: Props) => {
+const BasicLayout = ({ reportList, boardInfo, handleSave, reportListParams, getReportList }: Props) => {
   const [addReportDrawerVisible, setaddReportDrawerVisible] = React.useState(false);
   function onLayoutChange(layout: RGL.Layout[]) {
     console.log(layout);
@@ -39,9 +39,16 @@ const BasicLayout = ({ reportList, boardInfo, handleSave }: Props) => {
     handleSave({ id, projectId, layout });
   }
 
+  function handleOpenReportDrawer() {
+    if (reportList.list.length === 0) {
+      getReportList({ page: 1, pageSize: 100, projectId: boardInfo.projectId });
+    }
+    setaddReportDrawerVisible(true);
+  }
+
   const content = (
     <div>
-      <div onClick={() => setaddReportDrawerVisible(true)}>添加已有报表</div>
+      <div onClick={handleOpenReportDrawer}>添加已有报表</div>
       <hr />
       <div>
         <Icon type='plus-circle' />
@@ -59,7 +66,11 @@ const BasicLayout = ({ reportList, boardInfo, handleSave }: Props) => {
         onClose={() => setaddReportDrawerVisible(false)}
         visible={addReportDrawerVisible}
       >
-        <ReportDrawerContent reportList={reportList}></ReportDrawerContent>
+        <ReportDrawerContent
+          onSearch={name => getReportList({ page: 1, pageSize: 100, projectId: boardInfo.projectId, name })}
+          reportList={reportList}
+          name={reportListParams.name}
+        ></ReportDrawerContent>
       </Drawer>
 
       <div className='app-title'>
@@ -94,17 +105,19 @@ const BasicLayout = ({ reportList, boardInfo, handleSave }: Props) => {
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
-      handleSave: params => doUpdateBoard.request(params)
+      handleSave: params => doUpdateBoard.request(params),
+      getReportList: (params: IReportListParam) => doGetReportList.request(params)
     },
     dispatch
   );
 
 const mapStateToProps = (state: IStoreState) => {
   const { boardInfo } = state.board;
-  const { reportList } = state.report;
+  const { reportList, reportListParams } = state.report;
   return {
     reportList,
-    boardInfo
+    boardInfo,
+    reportListParams
   };
 };
 

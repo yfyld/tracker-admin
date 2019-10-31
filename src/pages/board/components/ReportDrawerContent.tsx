@@ -8,15 +8,17 @@ const { Search } = Input;
 
 interface Props {
   reportList: IPageData<IReportInfo>;
+  onSearch: (param: string) => any;
+  name?: string;
 }
 
-const ReportDrawerContent = ({ reportList }: Props) => {
+const ReportDrawerContent = ({ reportList, onSearch, name }: Props) => {
   return (
     <div className={style.wrapper}>
-      <Search placeholder='输入报表名称' onSearch={value => console.log(value)} style={{ width: 200 }} />
+      <Search placeholder='输入报表名称' defaultValue={name} onSearch={onSearch} style={{ width: 200 }} />
       <List
         itemLayout='horizontal'
-        dataSource={reportList.list}
+        dataSource={reportList.list.filter(item => !item.boardId)}
         renderItem={item => (
           <List.Item>
             <List.Item.Meta title={item.name} description={item.description} />

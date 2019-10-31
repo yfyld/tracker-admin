@@ -159,6 +159,7 @@ const ReportList = ({
   function handleReportCopy(record: IReportInfo) {
     const newRecord = { ...record };
     newRecord.id = null;
+    newRecord.boardId = null;
     newRecord.name = newRecord.name + '-copy';
     doAddReport(newRecord);
   }

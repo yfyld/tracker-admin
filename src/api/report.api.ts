@@ -10,7 +10,6 @@ export interface IReportInfo {
   type: string;
   data: Object;
   showType?: string;
-
   dateStart?: number;
   dateEnd?: number;
   dateType: string;
