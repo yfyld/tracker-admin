@@ -33,6 +33,9 @@ export interface IReportAddParam {
   description: string;
   type: string;
   data: Object;
+  dateStart?: number;
+  dateEnd?: number;
+  dateType: string;
 }
 
 export interface IReportUpdateParam {

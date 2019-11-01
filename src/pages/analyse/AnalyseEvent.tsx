@@ -53,8 +53,14 @@ const AnalyseEvent = ({ reportInfo }: Props) => {
                 添加指标
               </span>
             </div>
-            <Indicator />
-            <Divider />
+            <div>
+              <Indicator />
+              <div className='link'>
+                <Icon type='plus' />
+                添加筛选
+              </div>
+              <Filter />
+            </div>
           </div>
 
           <div>
@@ -66,7 +72,6 @@ const AnalyseEvent = ({ reportInfo }: Props) => {
               </span>
             </div>
             <Dimension />
-            <Divider />
           </div>
 
           <div>
@@ -78,7 +83,6 @@ const AnalyseEvent = ({ reportInfo }: Props) => {
               </span>
             </div>
             <Filter />
-            <Divider />
           </div>
         </Panel>
       </Collapse>

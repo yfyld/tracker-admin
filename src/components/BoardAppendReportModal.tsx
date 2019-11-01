@@ -1,7 +1,7 @@
 import { Form, Input, Modal, Radio } from 'antd';
 import * as React from 'react';
 import { FormComponentProps } from 'antd/lib/form';
-import { IReportUpdateParam, IReportInfo } from '@/api';
+import { IReportUpdateParam, IReportInfo, IReportAddParam } from '@/api';
 import { toastformError } from '@/utils';
 import { formItemLayout } from '@/constants';
 import moment from 'moment';
@@ -9,7 +9,7 @@ import AnalyseRangePicker from './AnalyseRangePicker';
 const { TextArea } = Input;
 interface Props extends FormComponentProps {
   visible: boolean;
-  onSubmit: (param: IReportUpdateParam) => any;
+  onSubmit: (param: IReportAddParam) => any;
   onClose: (param: boolean) => any;
   defaultValue: IReportInfo;
 }

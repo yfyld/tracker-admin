@@ -1,6 +1,13 @@
 import { put, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
-import { doGetReportList, doAddReport, doUpdateReport, doDeleteReport, doGetReportInfo } from '@/store/actions';
+import {
+  doGetReportList,
+  doAddReport,
+  doUpdateReport,
+  doDeleteReport,
+  doGetReportInfo,
+  doGetBoardInfo
+} from '@/store/actions';
 import {
   fetchReportList,
   fetchReportAdd,
@@ -32,11 +39,15 @@ function* getReportInfo(action: ReturnType<typeof doGetReportInfo.request>): Gen
 
 function* addReport(action: ReturnType<typeof doAddReport.request>): Generator {
   try {
-    const metadataListParams = yield* select(state => state.metadata.metadataListParams);
+    const reportListParams = yield* select(state => state.report.reportListParams);
+    const boardId = yield* select(state => state.board.boardInfo.id);
     const projectId = yield* select(state => state.project.projectInfo.id);
     yield call(fetchReportAdd, { ...action.payload, projectId });
     yield put(doAddReport.success());
-    yield put(doGetReportList.request(metadataListParams));
+    yield put(doGetReportList.request(reportListParams));
+    if (action.payload.boardId && boardId) {
+      yield put(doGetBoardInfo.request({ projectId, id: boardId }));
+    }
   } catch (error) {
     yield put(doAddReport.failure(error));
   }
@@ -44,10 +55,10 @@ function* addReport(action: ReturnType<typeof doAddReport.request>): Generator {
 
 function* updateReport(action: ReturnType<typeof doUpdateReport.request>): Generator {
   try {
-    const metadataListParams = yield* select(state => state.metadata.metadataListParams);
+    const reportListParams = yield* select(state => state.report.reportListParams);
     yield call(fetchReportUpdate, action.payload);
     yield put(doUpdateReport.success());
-    yield put(doGetReportList.request(metadataListParams));
+    yield put(doGetReportList.request(reportListParams));
   } catch (error) {
     yield put(doUpdateReport.failure(error));
   }
@@ -55,10 +66,10 @@ function* updateReport(action: ReturnType<typeof doUpdateReport.request>): Gener
 
 function* deleteReport(action: ReturnType<typeof doDeleteReport.request>): Generator {
   try {
-    const metadataListParams = yield* select(state => state.metadata.metadataListParams);
+    const reportListParams = yield* select(state => state.report.reportListParams);
     yield call(fetchReportDel, action.payload);
     yield put(doDeleteReport.success());
-    yield put(doGetReportList.request(metadataListParams));
+    yield put(doGetReportList.request(reportListParams));
   } catch (error) {
     yield put(doDeleteReport.failure(error));
   }

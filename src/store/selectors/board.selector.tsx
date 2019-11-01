@@ -6,7 +6,7 @@ const boardListSelector = (state: IStoreState) => state.board.boardList.list;
 
 export const boardListFiltersSelector = createSelector(
   boardListSelector,
-  list => list.map(item => ({ text: item.name, value: item.name }))
+  list => list.map(item => ({ text: item.name, value: String(item.id) }))
 );
 
 export const boardListMapSelector = createSelector(

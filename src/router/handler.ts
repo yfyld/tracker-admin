@@ -91,7 +91,7 @@ const handlers = {
   ): IHandler[] => {
     return [
       {
-        action: doGetBoardInfo.request({ projectId, boardId }),
+        action: doGetBoardInfo.request({ projectId, id: boardId }),
         ttl: CACHE_TIME,
         disable: state.board.boardInfo.id === Number(boardId)
       }

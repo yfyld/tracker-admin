@@ -1,5 +1,5 @@
 import RGL from 'react-grid-layout';
-import { IPageQuery } from './../types/index';
+import { IPageQuery, IInfoParam } from './../types/index';
 import { IReportInfo } from './report.api';
 import fetch from './http';
 import { IPageData } from '@/types';
@@ -10,11 +10,6 @@ export interface IBoardInfo {
   projectId: number;
   layout: RGL.Layout[];
   reportList: IReportInfo[];
-}
-
-export interface IBoardInfoParam {
-  projectId: number;
-  boardId: number;
 }
 
 export interface IBoardListParam extends IPageQuery {
@@ -46,7 +41,7 @@ export function fetchBoardList(params: IBoardListParam) {
   return fetch.get<IPageData<IBoardInfo>>('/board/', params);
 }
 
-export function fetchBoardInfo(params: IBoardInfoParam) {
+export function fetchBoardInfo(params: IInfoParam) {
   return fetch.get<IBoardInfo>('/board/info', params);
 }
 

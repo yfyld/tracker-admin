@@ -209,6 +209,10 @@ const ReportList = ({
       params.status = filters.status[0];
     }
 
+    if (filters.boardId) {
+      params.boardId = filters.boardId[0];
+    }
+
     doGetReportList({ ...reportListParams, ...params });
   }
 
