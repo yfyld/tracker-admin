@@ -40,14 +40,11 @@ function* getReportInfo(action: ReturnType<typeof doGetReportInfo.request>): Gen
 function* addReport(action: ReturnType<typeof doAddReport.request>): Generator {
   try {
     const reportListParams = yield* select(state => state.report.reportListParams);
-    const boardId = yield* select(state => state.board.boardInfo.id);
+
     const projectId = yield* select(state => state.project.projectInfo.id);
     yield call(fetchReportAdd, { ...action.payload, projectId });
     yield put(doAddReport.success());
     yield put(doGetReportList.request(reportListParams));
-    if (action.payload.boardId && boardId) {
-      yield put(doGetBoardInfo.request({ projectId, id: boardId }));
-    }
   } catch (error) {
     yield put(doAddReport.failure(error));
   }

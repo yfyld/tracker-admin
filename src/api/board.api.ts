@@ -37,6 +37,12 @@ export interface IBoardUpdateParam {
   layout?: RGL.Layout[];
 }
 
+export interface IReportAppendToBoard {
+  reportId: number;
+  projectId: number;
+  boardIds: number[];
+}
+
 export function fetchBoardList(params: IBoardListParam) {
   return fetch.get<IPageData<IBoardInfo>>('/board/', params);
 }
@@ -55,4 +61,8 @@ export function fetchBoardUpdate(params: IBoardUpdateParam) {
 
 export function fetchBoardDel(id: number) {
   return fetch.delete(`/board/${id}`);
+}
+
+export function fetchReportAppendToBoard(params: IReportAppendToBoard) {
+  return fetch.post(`/board/append`, params);
 }

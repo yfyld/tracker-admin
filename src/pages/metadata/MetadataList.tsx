@@ -2,11 +2,11 @@ import * as React from 'react';
 import style from './MetadataList.module.less';
 import { connect } from 'react-redux';
 import { IStoreState, IAction, IPageData } from '@/types';
-import { doGetMetadataList } from '@/store/actions';
+import { doGetMetadataList, doAddMetadata } from '@/store/actions';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Table, Button, Modal, Drawer, Icon, Dropdown, Menu } from 'antd';
 import { PaginationConfig, SorterResult, ColumnProps, TableRowSelection, ColumnFilterItem } from 'antd/lib/table';
-import { IMetadataListParam, IMetadataInfo } from '@/api';
+import { IMetadataListParam, IMetadataInfo, IMetadataAddParam } from '@/api';
 import MetadataAddModal from './components/MetadataAddModal';
 import TagManagement from './components/TagManagement';
 import MetadataListForm from './components/MetadataListForm';
@@ -14,13 +14,22 @@ import { tagListFiltersSelector } from '@/store/selectors';
 const { confirm } = Modal;
 
 interface Props {
-  doGetMetadataList: (params: IMetadataListParam) => IAction;
+  getMetadataList: (params: IMetadataListParam) => IAction;
+  addMetadata: (params: IMetadataAddParam) => IAction;
   metadataList: IPageData<IMetadataInfo>;
   metadataListParams: IMetadataListParam;
   tagListFilters: ColumnFilterItem[];
+  projectId: number;
 }
 
-const MetadataList = ({ metadataList, doGetMetadataList, metadataListParams, tagListFilters }: Props) => {
+const MetadataList = ({
+  metadataList,
+  getMetadataList,
+  metadataListParams,
+  tagListFilters,
+  addMetadata,
+  projectId
+}: Props) => {
   const [addMetadataVisible, setAddMetadataVisible] = React.useState(false);
   const [tagDrawerVisible, settagDrawerVisible] = React.useState(false);
   const [selectedRows, setSelectedRows] = React.useState([]);
@@ -107,7 +116,7 @@ const MetadataList = ({ metadataList, doGetMetadataList, metadataListParams, tag
       params.status = filters.status[0];
     }
 
-    doGetMetadataList({ ...metadataListParams, ...params });
+    getMetadataList({ ...metadataListParams, ...params });
   }
 
   const rowSelection: TableRowSelection<IMetadataInfo> = {
@@ -143,7 +152,12 @@ const MetadataList = ({ metadataList, doGetMetadataList, metadataListParams, tag
 
   return (
     <div className={style.wrapper}>
-      <MetadataAddModal visible={addMetadataVisible} onClose={setAddMetadataVisible}></MetadataAddModal>
+      <MetadataAddModal
+        onSubmit={addMetadata}
+        projectId={projectId}
+        visible={addMetadataVisible}
+        onClose={setAddMetadataVisible}
+      ></MetadataAddModal>
       <Drawer
         width={640}
         title='标签管理'
@@ -156,7 +170,7 @@ const MetadataList = ({ metadataList, doGetMetadataList, metadataListParams, tag
       </Drawer>
       <div className='app-card'>
         <div className='fl'>
-          <MetadataListForm defaultValue={metadataListParams} onSubmit={doGetMetadataList}></MetadataListForm>
+          <MetadataListForm defaultValue={metadataListParams} onSubmit={getMetadataList}></MetadataListForm>
         </div>
         <div className='fr'>
           <Button onClick={() => setAddMetadataVisible(true)}>新增元数据</Button>
@@ -188,21 +202,27 @@ const MetadataList = ({ metadataList, doGetMetadataList, metadataListParams, tag
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
-      doGetMetadataList: params => {
+      getMetadataList: params => {
         return doGetMetadataList.request(params);
+      },
+      addMetadata: (params: IMetadataAddParam) => {
+        return doAddMetadata.request(params);
       }
     },
+
     dispatch
   );
 
 const mapStateToProps = (state: IStoreState) => {
   const { metadataList, metadataListParams, tagList } = state.metadata;
+  const projectId = state.project.projectInfo.id;
   const tagListFilters = tagListFiltersSelector(state);
   return {
     metadataList,
     metadataListParams,
     tagList,
-    tagListFilters
+    tagListFilters,
+    projectId
   };
 };
 

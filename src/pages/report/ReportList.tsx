@@ -21,6 +21,7 @@ interface Props {
   reportListParams: IReportListParam;
   boardListFilters: ColumnFilterItem[];
   boardListMap: { [prop: string]: IBoardInfo };
+  projectId: number;
 }
 
 const ReportList = ({
@@ -31,10 +32,11 @@ const ReportList = ({
   doDeleteReport,
   boardList,
   boardListFilters,
-  boardListMap
+  boardListMap,
+  projectId
 }: Props) => {
   const [addReportVisible, setAddReportVisible] = React.useState(false);
-  const [appendedBoardId, setappendedBoardId] = React.useState(null);
+  const [appendedBoardIds, setappendedBoardIds] = React.useState<number[]>([]);
   const [appendBoardVisible, setappendBoardVisible] = React.useState(false);
   const [curReportInfo, setcurReportInfo] = React.useState<IReportInfo>({
     id: null,
@@ -110,9 +112,10 @@ const ReportList = ({
               content={
                 <div>
                   <Select
-                    onChange={(e: number) => setappendedBoardId(e)}
-                    value={appendedBoardId}
+                    onChange={(e: number[]) => setappendedBoardIds(e)}
+                    value={appendedBoardIds}
                     style={{ width: 120 }}
+                    mode='multiple'
                   >
                     {boardList.list.map(item => (
                       <Select.Option value={item.id}>{item.name}</Select.Option>
@@ -165,11 +168,11 @@ const ReportList = ({
   }
 
   function handleReportAppendBoard(record: IReportInfo) {
-    if (!appendedBoardId) {
+    if (!appendedBoardIds.length) {
       message.info('请选择看板');
       return;
     }
-    setcurReportInfo({ ...record, boardId: appendedBoardId, id: null });
+    //setcurReportInfo({ ...record, boardIds: appendedBoardIds, id: null });
     setappendBoardVisible(true);
   }
 
@@ -218,7 +221,7 @@ const ReportList = ({
 
   return (
     <div className={style.wrapper}>
-      <ReportAddModal visible={addReportVisible} onClose={setAddReportVisible}></ReportAddModal>
+      <ReportAddModal projectId={projectId} visible={addReportVisible} onClose={setAddReportVisible}></ReportAddModal>
       <BoardAppendReportModal
         defaultValue={curReportInfo}
         visible={appendBoardVisible}
@@ -259,6 +262,7 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
 const mapStateToProps = (state: IStoreState) => {
   const { reportList, reportListParams } = state.report;
   const { boardList } = state.board;
+  const projectId = state.project.projectInfo.id;
   const boardListFilters = boardListFiltersSelector(state);
   const boardListMap = boardListMapSelector(state);
   return {
@@ -266,7 +270,8 @@ const mapStateToProps = (state: IStoreState) => {
     reportListParams,
     boardList,
     boardListFilters,
-    boardListMap
+    boardListMap,
+    projectId
   };
 };
 
