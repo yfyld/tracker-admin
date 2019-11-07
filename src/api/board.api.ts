@@ -9,7 +9,7 @@ export interface IBoardInfo {
   name: string;
   projectId: number;
   layout: RGL.Layout[];
-  reportList: IReportInfo[];
+  reports: IReportInfo[];
 }
 
 export interface IBoardListParam extends IPageQuery {

@@ -15,7 +15,7 @@ const initialState = (): BoardState => ({
     id: null,
     name: null,
     projectId: null,
-    reportList: [],
+    reports: [],
     layout: []
   },
   boardListParams: {

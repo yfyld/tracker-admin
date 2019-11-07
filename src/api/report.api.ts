@@ -1,3 +1,4 @@
+import { IBoardInfo } from './board.api';
 import { IPageData, IInfoParam } from './../types/index';
 import fetch from './http';
 
@@ -5,7 +6,7 @@ export interface IReportInfo {
   id?: number;
   name: string;
   projectId: number;
-  boardId?: number;
+  boards?: IBoardInfo[];
   description: string;
   type: string;
   data: Object;

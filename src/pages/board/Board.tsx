@@ -105,7 +105,7 @@ const BasicLayout = ({ reportList, boardInfo, handleSave, reportListParams, getR
         cols={24}
         rowHeight={30}
       >
-        {generateDOM(boardInfo.reportList)}
+        {generateDOM(boardInfo.reports)}
       </ReactGridLayout>
     </div>
   );

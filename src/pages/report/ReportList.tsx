@@ -2,11 +2,11 @@ import * as React from 'react';
 import style from './ReportList.module.less';
 import { connect } from 'react-redux';
 import { IStoreState, IAction, IPageData } from '@/types';
-import { doGetReportList, doAddReport, doDeleteReport } from '@/store/actions';
+import { doGetReportList, doAddReport, doDeleteReport, doAppendReportToBoard } from '@/store/actions';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Table, Button, Icon, Tooltip, Modal, Popover, Select, message } from 'antd';
 import { PaginationConfig, SorterResult, ColumnProps, ColumnFilterItem } from 'antd/lib/table';
-import { IReportListParam, IReportInfo, IReportAddParam, IBoardInfo } from '@/api';
+import { IReportListParam, IReportInfo, IReportAddParam, IBoardInfo, IReportAppendToBoard } from '@/api';
 import ReportAddModal from './components/ReportAddModal';
 import ReportListForm from './components/ReportListForm';
 import BoardAppendReportModal from '@/components/BoardAppendReportModal';
@@ -22,6 +22,7 @@ interface Props {
   boardListFilters: ColumnFilterItem[];
   boardListMap: { [prop: string]: IBoardInfo };
   projectId: number;
+  onAppendReportToBoard: (params: IReportAppendToBoard) => any;
 }
 
 const ReportList = ({
@@ -32,7 +33,7 @@ const ReportList = ({
   doDeleteReport,
   boardList,
   boardListFilters,
-  boardListMap,
+  onAppendReportToBoard,
   projectId
 }: Props) => {
   const [addReportVisible, setAddReportVisible] = React.useState(false);
@@ -92,6 +93,19 @@ const ReportList = ({
       ],
       filterMultiple: false
     },
+    {
+      key: 'boards',
+      title: '所属看板',
+      dataIndex: 'boards',
+      filters: boardListFilters,
+      filterMultiple: false,
+      render: (text, record) => {
+        if (!record.boards) {
+          return '';
+        }
+        return record.boards.map(item => item.name).join(',');
+      }
+    },
 
     {
       title: '操作',
@@ -106,28 +120,33 @@ const ReportList = ({
             <Icon onClick={() => handleReportCopy(record)} type='copy' />
           </Tooltip>
           &nbsp;
-          <Tooltip title='添加副本到看板'>
+          <Tooltip title='添加到看板'>
             <Popover
               placement='bottom'
+              onVisibleChange={value => value && setappendedBoardIds([])}
               content={
                 <div>
                   <Select
+                    size='small'
                     onChange={(e: number[]) => setappendedBoardIds(e)}
                     value={appendedBoardIds}
-                    style={{ width: 120 }}
+                    style={{ width: 240 }}
                     mode='multiple'
                   >
-                    {boardList.list.map(item => (
-                      <Select.Option value={item.id}>{item.name}</Select.Option>
-                    ))}
+                    {boardList.list
+                      .filter(item => !record.boards.find(val => val.id === item.id))
+                      .map(item => (
+                        <Select.Option value={item.id}>{item.name}</Select.Option>
+                      ))}
                   </Select>
+                  &nbsp;
                   <Button size='small' onClick={() => handleReportAppendBoard(record)}>
                     确定
                   </Button>
                 </div>
               }
               title='选择看板'
-              trigger='hover'
+              trigger='click'
             >
               <Icon type='plus-square' />
             </Popover>
@@ -141,28 +160,10 @@ const ReportList = ({
     }
   ];
 
-  if (reportListParams.inBoard) {
-    columns.splice(-1, 0, {
-      key: 'boardId',
-      title: '所属看板',
-      dataIndex: 'boardId',
-      filters: boardListFilters,
-      filterMultiple: false,
-      render: text => {
-        if (!text) {
-          return '';
-        } else if (boardListMap[text]) {
-          return boardListMap[text].name;
-        }
-        return '所属看板已被删除';
-      }
-    });
-  }
-
   function handleReportCopy(record: IReportInfo) {
     const newRecord = { ...record };
     newRecord.id = null;
-    newRecord.boardId = null;
+    newRecord.boards = null;
     newRecord.name = newRecord.name + '-copy';
     doAddReport(newRecord);
   }
@@ -172,8 +173,13 @@ const ReportList = ({
       message.info('请选择看板');
       return;
     }
-    //setcurReportInfo({ ...record, boardIds: appendedBoardIds, id: null });
-    setappendBoardVisible(true);
+    onAppendReportToBoard({ reportId: record.id, boardIds: appendedBoardIds, projectId });
+    // if (!record.boards.length) {
+    //   setcurReportInfo(record);
+    //   setappendBoardVisible(true);
+    // } else {
+    //   onAppendReportToBoard({ reportId: record.id, boardIds: appendedBoardIds,projectId });
+    // }
   }
 
   function handleReportDelete(record: IReportInfo) {
@@ -254,6 +260,9 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
       },
       doDeleteReport: (params: number) => {
         return doDeleteReport.request(params);
+      },
+      onAppendReportToBoard: (params: IReportAppendToBoard) => {
+        return doAppendReportToBoard.request(params);
       }
     },
     dispatch

@@ -44,7 +44,7 @@ const ReportDrawerContent = ({ reportList, onSearch, name, onSubmit, boardId }: 
       <Search placeholder='输入报表名称' defaultValue={name} onSearch={onSearch} style={{ width: 200 }} />
       <List
         itemLayout='horizontal'
-        dataSource={reportList.list.filter(item => !item.boardId)}
+        dataSource={reportList.list.filter(item => !item.boards.find(item => item.id === boardId))}
         renderItem={item => (
           <List.Item
             actions={[
