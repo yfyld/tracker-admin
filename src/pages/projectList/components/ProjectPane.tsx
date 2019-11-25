@@ -47,12 +47,7 @@ const ProjectPane = ({ projectInfo, doDeleteProject }: Props) => {
     });
   };
   return (
-    <Link
-      className={style.wrapper}
-      to={{
-        pathname: `/project/${projectInfo.id}/analyse-event`
-      }}
-    >
+    <Link className={style.wrapper} to={`/project/analyse-event?projectId=${projectInfo.id}`}>
       <div>
         <Card
           style={{ width: 300 }}
@@ -91,7 +86,4 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
     dispatch
   );
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(ProjectPane);
+export default connect(null, mapDispatchToProps)(ProjectPane);

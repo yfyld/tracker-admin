@@ -13,7 +13,7 @@ import {
 } from '@/store/actions';
 
 const handlers = {
-  '/*': ({ pathname, search }: any, state: IStoreState): IHandler[] => {
+  '/*': ({ pathname }: any, state: IStoreState): IHandler[] => {
     return [
       {
         action: doGetUserInfo.request(),
@@ -22,7 +22,7 @@ const handlers = {
       }
     ];
   },
-  '/project-list': ({ pathname, search }: any, state: IStoreState): IHandler[] => {
+  '/project-list': ({}: any, state: IStoreState): IHandler[] => {
     return [
       {
         action: doGetProjectList.request(state.project.projectListParams),
@@ -31,12 +31,12 @@ const handlers = {
       }
     ];
   },
-  '/project/:projectId/*': ({ pathname, search, projectId }: any, state: IStoreState): IHandler[] => {
+  '/project/*': ({ search: { projectId } }: any, state: IStoreState): IHandler[] => {
     return [
       {
         action: doGetProjectInfo.request(projectId),
         ttl: CACHE_TIME,
-        disable: state.project.projectInfo.id === Number(projectId)
+        disable: state.project.projectInfo.id === projectId
       },
       {
         action: doGetBoardList.request({ projectId, page: 1, pageSize: 1000 }),
@@ -45,22 +45,21 @@ const handlers = {
       }
     ];
   },
-  '/project/:projectId/metadata-list': ({ pathname, search, projectId }: any, state: IStoreState): IHandler[] => {
+  '/project/metadata-list': ({ search: { projectId } }: any, state: IStoreState): IHandler[] => {
     return [
       {
-        action: doGetMetadataList.request({ ...state.metadata.metadataListParams, projectId: Number(projectId) }),
+        action: doGetMetadataList.request({ ...state.metadata.metadataListParams, projectId: projectId }),
         ttl: CACHE_TIME,
-        disable:
-          !!state.metadata.metadataList.list.length && Number(projectId) === state.metadata.metadataListParams.projectId
+        disable: !!state.metadata.metadataList.list.length && projectId === state.metadata.metadataListParams.projectId
       },
       {
-        action: doGetTagList.request({ page: 1, pageSize: 1000, projectId: Number(projectId) }),
+        action: doGetTagList.request({ page: 1, pageSize: 1000, projectId: projectId }),
         ttl: CACHE_TIME,
-        disable: state.metadata.tagList.list.length && Number(projectId) === state.metadata.tagList.list[0].projectId
+        disable: state.metadata.tagList.list.length && projectId === state.metadata.tagList.list[0].projectId
       }
     ];
   },
-  '/project/:projectId/report-list': ({ pathname, search, projectId }: any, state: IStoreState): IHandler[] => {
+  '/project/report-list': ({ search: { projectId } }: any, state: IStoreState): IHandler[] => {
     return [
       {
         action: doGetReportList.request({ ...state.report.reportListParams, projectId }),
@@ -69,7 +68,7 @@ const handlers = {
       }
     ];
   },
-  '/project/:projectId/analyse-event': ({ pathname, search, projectId }: any, state: IStoreState): IHandler[] => {
+  '/project/analyse-event': ({ search: { projectId } }: any, state: IStoreState): IHandler[] => {
     return [
       {
         action: doGetActiveMetadataList.request({ ...state.metadata.activeMetadataListParams, projectId }),
@@ -85,10 +84,7 @@ const handlers = {
       }
     ];
   },
-  '/project/:projectId/board/:boardId': (
-    { pathname, search, projectId, boardId }: any,
-    state: IStoreState
-  ): IHandler[] => {
+  '/project/board': ({ search: { projectId, boardId } }: any, state: IStoreState): IHandler[] => {
     return [
       {
         action: doGetBoardInfo.request({ projectId, id: boardId }),

@@ -4,9 +4,9 @@ import projectSagas from './project.saga';
 import metadataSagas from './metadata.saga';
 import reportSagas from './report.saga';
 import boardSagas from './board.saga';
-
+import teamSagas from './team.saga';
 function* sagas() {
-  yield all([appSagas, projectSagas, metadataSagas, reportSagas, boardSagas].map(effect => fork(effect)));
+  yield all([appSagas, projectSagas, metadataSagas, reportSagas, boardSagas, teamSagas].map(effect => fork(effect)));
 }
 
 export default sagas;

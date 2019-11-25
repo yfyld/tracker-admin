@@ -25,3 +25,18 @@ export const tailFormItemLayout = {
     }
   }
 };
+
+export const ROUTE_PATH = {
+  projectList: '/project-list',
+  projectInfo: '/project/info',
+  metadataList: '/project/metadata-list',
+  analyseEvent: '/project/analyse-event',
+  board: '/project/board',
+  reportList: '/project/report-list',
+  draft: '/project/draft',
+  teamList: '/team-list',
+  login: '/login',
+  teamInfo: '/team-info',
+  signup: '/signup',
+  home: '/home'
+};

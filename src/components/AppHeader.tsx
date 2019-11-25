@@ -40,6 +40,8 @@ const AppHeader = ({ collapsed, doChangeCollapsed, userInfo, alone = false }: Pr
       <div className={style.navRight}>
         <Link to='/project-list'>我的看板</Link>
 
+        <Link to='/team-list'>团队</Link>
+
         <Link to='/project-list'>项目列表</Link>
         {userInfo.id ? (
           <Dropdown overlay={menu}>
@@ -80,7 +82,4 @@ const mapStateToProps = (state: IStoreState) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AppHeader);
+export default connect(mapStateToProps, mapDispatchToProps)(AppHeader);

@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import CoreLayout from '@/components/CoreLayout';
 import { Spin } from 'antd';
 import ProgressBar from '@/components/ProgressBar';
+import { ROUTE_PATH } from '@/constants';
 
 const MetadataList = React.lazy(() => import('@/pages/metadata/MetadataList'));
 const AnalyseEvent = React.lazy(() => import('@/pages/analyse/AnalyseEvent'));
@@ -24,13 +25,12 @@ export default class Routes extends React.Component {
           }
         >
           <Switch>
-            <Route path='/project/:projectId/metadata-list' component={MetadataList} />
-            <Route path='/project/:projectId/analyse-event' component={AnalyseEvent} />
-            <Route path='/project/:projectId/analyse-event/:reportId' component={AnalyseEvent} />
-            <Route path='/project/:projectId/board/:boardId' component={Board} />
-            <Route path='/project/:projectId/info' component={Project} />
-            <Route path='/project/:projectId/report-list' component={ReportList} />
-            <Route path='/project/:projectId/draft' component={DraftList} />
+            <Route exact path={ROUTE_PATH.metadataList} component={MetadataList} />
+            <Route exact path={ROUTE_PATH.analyseEvent} component={AnalyseEvent} />
+            <Route exact path={ROUTE_PATH.board} component={Board} />
+            <Route exact path={ROUTE_PATH.projectInfo} component={Project} />
+            <Route exact path={ROUTE_PATH.reportList} component={ReportList} />
+            <Route exact path={ROUTE_PATH.draft} component={DraftList} />
           </Switch>
         </React.Suspense>
       </CoreLayout>

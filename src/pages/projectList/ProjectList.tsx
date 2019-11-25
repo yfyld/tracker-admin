@@ -26,7 +26,7 @@ const ProjectList = ({ projectList, handleSubmit, projectListParams }: Props) =>
   return (
     <div className={style.wrapper}>
       <ProjectAddModel visible={addProjectVisible} onClose={setAddProjectVisible}></ProjectAddModel>
-      <AppHeader alone />
+
       <div>
         <ProjectListForm defaultValue={projectListParams} onSubmit={handleSubmit}></ProjectListForm>
         <Button onClick={() => setAddProjectVisible(true)} size='small'>
@@ -66,7 +66,4 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
     dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ProjectList);
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectList);

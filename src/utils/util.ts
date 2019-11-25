@@ -6,6 +6,35 @@ import * as localForage from 'localforage';
 
 import { message } from 'antd';
 
+export const parseSearch = (str: string) => {
+  if (typeof str != 'string') {
+    return {};
+  }
+  const paramObj: { [prop: string]: any } = {},
+    _str = str.substr(str.indexOf('?') + 1);
+
+  const paraArr = decodeURI(_str).split('&');
+
+  let tmp, key, value, newValue;
+  for (var i = 0, len = paraArr.length; i < len; i++) {
+    tmp = paraArr[i].split('=');
+    key = tmp[0];
+    value = tmp[1] || true;
+    if (typeof value === 'string' && isNaN(Number(value)) === false) {
+      value = Number(value);
+    }
+    if (typeof paramObj[key] === 'undefined') {
+      paramObj[key] = value;
+    } else {
+      newValue = Array.isArray(paramObj[key]) ? paramObj[key] : [paramObj[key]];
+      newValue.push(value);
+      paramObj[key] = newValue;
+    }
+  }
+
+  return paramObj;
+};
+
 export const mapLocationIntoActions = (
   { pathname, search }: any,
   handlers: any,
@@ -15,7 +44,7 @@ export const mapLocationIntoActions = (
     .entries(handlers)
     .map(([expectedPath, handler]: [string, any]) => {
       const match = matchPath(pathname, { path: expectedPath, exact: true });
-      return match ? handler({ pathname, search, ...match.params }, state) : [];
+      return match ? handler({ pathname, search: parseSearch(search), ...match.params }, state) : [];
     })
     .reduce((a: any, b: any) => a.concat(b), []);
 
