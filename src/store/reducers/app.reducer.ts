@@ -1,3 +1,5 @@
+import { doGetUserList } from './../actions/app.action';
+import { IUserList } from './../../api/app.api';
 import update from 'immutability-helper';
 import { getType } from 'typesafe-actions';
 import { IAction, IMenuItem } from '@/types';
@@ -10,6 +12,7 @@ import { IUserInfo } from '@/api';
 export interface AppState {
   test: number;
   userInfo: IUserInfo;
+  userList: IUserList;
   token: string;
   loading: boolean;
   loadingText: string;
@@ -21,6 +24,10 @@ const initialState = (): AppState => ({
   userInfo: {
     id: null,
     username: ''
+  },
+  userList: {
+    totalCount: 0,
+    list: []
   },
   token: '',
   loading: false,
@@ -47,6 +54,11 @@ export const appReducer = (state: AppState = initialState(), action: IAction): A
     case getType(doGetUserInfo.success):
       return update(state, {
         userInfo: { $set: action.payload }
+      });
+
+    case getType(doGetUserList.success):
+      return update(state, {
+        userList: { $set: action.payload }
       });
     case getType(doChangeLoadingStatus):
       return update(state, {

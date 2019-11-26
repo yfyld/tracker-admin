@@ -8,6 +8,7 @@ import { ITeamInfo, ITeamListParam, ITeamList } from '@/api';
 export interface TeamState {
   teamInfo: ITeamInfo;
   teamList: ITeamList;
+  teamListLoading: boolean;
   teamListParam: ITeamListParam;
 }
 
@@ -15,6 +16,7 @@ const initialState = (): TeamState => ({
   teamInfo: {
     id: null,
     name: '',
+    public: true,
     creator: {
       nickname: '',
       username: '',
@@ -23,17 +25,19 @@ const initialState = (): TeamState => ({
     members: [],
     description: ''
   },
+  teamListLoading: true,
   teamList: { totalCount: 0, list: [] },
-  teamListParam: { page: 1, pageSize: 20, teamName: '' }
+  teamListParam: { page: 1, pageSize: 20, name: '', relevance: 1 }
 });
 
 export const teamReducer = (state: TeamState = initialState(), action: IAction): TeamState => {
   switch (action.type) {
     case getType(doGetTeamList.request):
-      return update(state, { teamListParam: { $set: action.payload } });
+      return update(state, { teamListParam: { $set: action.payload }, teamListLoading: { $set: true } });
     case getType(doGetTeamList.success):
       return update(state, {
-        teamList: { $set: action.payload }
+        teamList: { $set: action.payload },
+        teamListLoading: { $set: false }
       });
     case getType(doGetTeamInfo.success):
       return update(state, {

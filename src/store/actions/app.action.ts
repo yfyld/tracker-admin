@@ -1,4 +1,6 @@
-import { IUserInfo, ILoginRes, ILoginParam, ISignupParam } from '@/api';
+import { GET_USER_LIST_REQUEST, GET_USER_LIST_SUCCESS, GET_USER_LIST_FAILURE } from './../../constants/actionType';
+import { IUserList } from './../../api/app.api';
+import { IUserInfo, ILoginRes, ILoginParam, ISignupParam, IUserListParam } from '@/api';
 import {
   LOGIN_FAILURE,
   LOGIN_SUCCESS,
@@ -41,5 +43,11 @@ export const doChangeLoadingStatus = createAction(CHANGE_LOADING_STATUS, action 
 export const doResetStore = createAction(RESET_STORE);
 
 export const doChangeCollapsed = createAction(CHANGE_COLLAPSED, action => (collapsed: boolean) => action(collapsed));
+
+export const doGetUserList = createAsyncAction(GET_USER_LIST_REQUEST, GET_USER_LIST_SUCCESS, GET_USER_LIST_FAILURE)<
+  IUserListParam,
+  IUserList,
+  Error
+>();
 
 //export const doRouterPush=createAction(CHANGE_COLLAPSED,action=>(path:string)=>action(path))

@@ -28,7 +28,7 @@ const Dimension = () => {
             <div className={style.center}>查看</div>
           </Col>
           <Col span={1}>
-            <div className={'link ' + style.center}>
+            <div className={'app-link ' + style.center}>
               <Icon type='close' />
             </div>
           </Col>

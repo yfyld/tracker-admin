@@ -1,0 +1,46 @@
+.memberBox {
+  display: flex;
+  max-width: 60%;
+  padding-top: 10px;
+}
+
+.itemList {
+  :global {
+    .ant-list-item-action {
+      position: absolute;
+      right: 0;
+      top: 0;
+      display: none;
+      a {
+        font-size: 12px;
+      }
+    }
+    .ant-list-item {
+      &:hover,
+      &:focus,
+      &:active {
+        box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.1);
+        .ant-list-item-action {
+          display: block;
+        }
+      }
+      position: relative;
+      background: #fff;
+      margin-bottom: 15px;
+      box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+      padding: 10px;
+      border: 0;
+    }
+  }
+}
+
+.header {
+  .clearfix();
+  padding: 10px;
+  border-bottom: 1px solid @border-color;
+  margin-bottom: 20px;
+  > button {
+    margin-top: 5px;
+  }
+}

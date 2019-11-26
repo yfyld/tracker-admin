@@ -66,7 +66,7 @@ const ProjectPane = ({ projectInfo, doDeleteProject }: Props) => {
           ]}
         >
           <Meta
-            avatar={<AvatarText name={projectInfo.creator.nickname} />}
+            avatar={<AvatarText info={projectInfo.creator} />}
             title={projectInfo.name}
             description={projectInfo.description || '这人太懒了,没写描述'}
           />

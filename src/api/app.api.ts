@@ -1,3 +1,5 @@
+import { IPageQuery } from './../types/index';
+import { IPageData } from '@/types';
 import fetch from './http';
 
 export interface IUserInfoParam {}
@@ -23,6 +25,12 @@ export interface IUserInfo {
   nickname?: string;
   type?: 'ADMIN';
 }
+export interface IUserListParam extends IPageQuery {
+  nickname?: string;
+  username?: string;
+}
+
+export type IUserList = IPageData<IUserInfo>;
 
 export function fetchUserInfo() {
   return fetch.get<IUserInfo>('/user/info');
@@ -32,4 +40,8 @@ export function fetchLogin(params: ILoginParam) {
 }
 export function fetchSignup(params: ISignupParam) {
   return fetch.post('/user/signup', params);
+}
+
+export function fetchUserList(param: IUserListParam) {
+  return fetch.get<IUserList>('/user', param);
 }

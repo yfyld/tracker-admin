@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { ADD_BROAD } from '@/constants';
 import { menuDataSelector } from '@/store/selectors';
-
+import logo from '@/assets/imgs/logo.png';
 const SubMenu = Menu.SubMenu;
 
 interface Props extends RouteComponentProps {
@@ -56,8 +56,10 @@ const renderMenuItem = (data: IMenuItem) => {
 
 const AppSidebar = ({ collapsed, menuData, history }: Props) => {
   return (
-    <div className={style.wrapper}>
-      <div className={style.logo}>logo</div>
+    <div className={style.wrapper + ' ' + (collapsed ? style.collapsed : '')}>
+      <div className={style.logo}>
+        <img src={logo} alt='' />
+      </div>
       <Menu
         onClick={({ key }) => {
           if (/http/.test(key)) {

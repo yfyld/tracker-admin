@@ -6,16 +6,19 @@ import { IStoreState, IAction } from '@/types';
 import { doChangeCollapsed } from '@/store/actions';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Icon, Dropdown, Menu } from 'antd';
-import { IUserInfo } from '@/api';
+import { IUserInfo, IProjectInfo } from '@/api';
+import logo2 from '@/assets/imgs/logo2.png';
+import ProjectInfo from '@/pages/project/components/ProjectInfo';
 
 interface Props {
   doChangeCollapsed: (collapsed: boolean) => IAction;
+  projectInfo: IProjectInfo;
   collapsed: boolean;
   userInfo: IUserInfo;
   alone?: boolean;
 }
 
-const AppHeader = ({ collapsed, doChangeCollapsed, userInfo, alone = false }: Props) => {
+const AppHeader = ({ collapsed, doChangeCollapsed, userInfo, alone = false, projectInfo }: Props) => {
   const menu = (
     <Menu>
       <Menu.Item>
@@ -29,12 +32,16 @@ const AppHeader = ({ collapsed, doChangeCollapsed, userInfo, alone = false }: Pr
 
   return (
     <div className={style.wrapper}>
-      {!alone && (
+      {alone ? (
+        <div className={style.logo}>
+          <img src={logo2} alt='' />
+        </div>
+      ) : (
         <div className={style.headerLeft}>
           <button className={style.collapsedBtn} onClick={() => doChangeCollapsed(!collapsed)}>
             <Icon type={collapsed ? 'menu-unfold' : 'menu-fold'} />
           </button>
-          <span className={style.title}>埋点管理平台</span>
+          <span className={style.title}>{projectInfo.name}</span>
         </div>
       )}
       <div className={style.navRight}>
@@ -76,8 +83,10 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
 
 const mapStateToProps = (state: IStoreState) => {
   const { collapsed, userInfo } = state.app;
+  const { projectInfo } = state.project;
   return {
     collapsed,
+    projectInfo,
     userInfo
   };
 };

@@ -235,10 +235,10 @@ const ReportList = ({
         onSubmit={doAddReport}
       />
       <div className='app-card'>
-        <div className='fl'>
+        <div className='app-fl'>
           <ReportListForm onSubmit={doGetReportList} defaultValue={reportListParams}></ReportListForm>
         </div>
-        <div className='fr'>
+        <div className='app-fr'>
           <Button onClick={() => setAddReportVisible(true)}>新增报表</Button>
         </div>
       </div>
@@ -284,7 +284,4 @@ const mapStateToProps = (state: IStoreState) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ReportList);
+export default connect(mapStateToProps, mapDispatchToProps)(ReportList);

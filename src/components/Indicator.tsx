@@ -57,7 +57,7 @@ const Indicator = ({ indicators, activeMetadataList, activeMetadataListParams, i
 
       <div className={style.metadataBox}>
         {activeMetadataList.list.map(item => (
-          <span onClick={() => handleSelectMetadata(item)} className='pointer' key={item.code}>
+          <span onClick={() => handleSelectMetadata(item)} className='app-pointer' key={item.code}>
             {item.name}
           </span>
         ))}
@@ -91,7 +91,7 @@ const Indicator = ({ indicators, activeMetadataList, activeMetadataListParams, i
 
         {!!index && (
           <Col span={1}>
-            <div className={'link ' + style.center}>
+            <div className={'app-link ' + style.center}>
               <Icon type='close' />
             </div>
           </Col>
@@ -111,7 +111,4 @@ const mapStateToProps = (state: IStoreState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) => bindActionCreators({}, dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Indicator);
+export default connect(mapStateToProps, mapDispatchToProps)(Indicator);

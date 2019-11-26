@@ -11,6 +11,7 @@ export interface ITeamInfo {
   id: number;
   name: string;
   description: string;
+  public: boolean;
   creator: ITeamMemberInfo;
   members: ITeamMemberInfo[];
 }
@@ -18,22 +19,24 @@ export interface ITeamInfo {
 export interface ITeamListParam {
   page: number;
   pageSize: number;
-  teamName?: string;
-  relevance?: boolean;
+  name?: string;
+  relevance?: number;
 }
 
 export interface ITeamAddParam {
   name: string;
   description: string;
+  public: boolean;
   members: ITeamMemberInfo[];
 }
 
 export interface ITeamUpdateParam {
   name: string;
   description: string;
-  members: ITeamMemberInfo[];
+  public: boolean;
+  members: number[];
   id: number;
-  creator: ITeamMemberInfo;
+  creatorId: number;
 }
 export interface ITeamInfoParam {
   id: number;

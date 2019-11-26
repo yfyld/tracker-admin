@@ -24,9 +24,9 @@ export interface AxiosInstance {
 
 const Loading = {
   loadingNum: 0,
-  add(type: string): void {
+  add(config: AxiosRequestConfig): void {
     if (this.loadingNum === 0) {
-      this.dispatch(true, type);
+      this.dispatch(true, config.method.toUpperCase());
     }
     this.loadingNum++;
   },
@@ -66,8 +66,9 @@ const instance: AxiosInstance = axios.create({
 
 instance.interceptors.request.use(
   (config: AxiosRequestConfig) => {
+    console.log(config);
     if ((config as any).showLoading !== false) {
-      Loading.add(config.method.toUpperCase());
+      Loading.add(config);
     }
     return config;
   },
@@ -78,9 +79,7 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (response: AxiosResponse) => {
-    if ((response as any).config.showLoading !== false) {
-      Loading.remove();
-    }
+    Loading.remove();
 
     if (response.data.status === 200) {
       response.data = response.data.result;
@@ -91,9 +90,7 @@ instance.interceptors.response.use(
     }
   },
   (error: AxiosError) => {
-    if ((error as any).config.showLoading !== false) {
-      Loading.remove();
-    }
+    Loading.remove();
 
     if (error.code === 'ECONNABORTED') {
       errorMessage('网络连接超时');

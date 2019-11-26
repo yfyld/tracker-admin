@@ -42,9 +42,7 @@ export interface IProjectListItem {
   id: number;
   name: string;
   image: string;
-  creator: {
-    nickname: string;
-  };
+  creator: IMemberInfo;
   description: string;
 }
 

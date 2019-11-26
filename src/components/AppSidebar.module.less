@@ -1,10 +1,17 @@
 .logo {
   background-color: #000;
-  color: #fff;
-  text-align: center;
   width: 100%;
   height: @header-height;
-  line-height: @header-height;
+  padding: 3px 20px;
+  > img {
+    width: 190px;
+  }
+}
+.collapsed {
+  .logo {
+    width: 66px;
+    overflow: hidden;
+  }
 }
 .wrapper {
   height: 100%;

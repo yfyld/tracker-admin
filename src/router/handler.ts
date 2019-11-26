@@ -1,3 +1,4 @@
+import { doGetTeamList } from './../store/actions/team.action';
 import { doGetBoardList, doGetBoardInfo } from './../store/actions/board.action';
 import { doGetTagList } from './../store/actions/metadata.action';
 import { doResetReportInfo } from './../store/actions/report.action';
@@ -19,6 +20,15 @@ const handlers = {
         action: doGetUserInfo.request(),
         ttl: CACHE_TIME,
         disable: pathname === '/signup' || pathname === '/login' || !!state.app.userInfo.id
+      }
+    ];
+  },
+  '/team-list': ({}: any, state: IStoreState): IHandler[] => {
+    return [
+      {
+        action: doGetTeamList.request(state.team.teamListParam),
+        ttl: CACHE_TIME,
+        disable: !!state.team.teamList.list.length
       }
     ];
   },

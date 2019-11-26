@@ -1,10 +1,11 @@
+import { doGetUserList } from './../actions/app.action';
 import { put, takeEvery, delay } from 'redux-saga/effects';
 
 import { getType } from 'typesafe-actions';
 import { mapLocationIntoActions, call, select } from '@/utils';
 
 import { doLogin, doGetUserInfo } from '@/store/actions';
-import { fetchLogin, fetchUserInfo } from '@/api';
+import { fetchLogin, fetchUserInfo, fetchUserList } from '@/api';
 
 import { message } from 'antd';
 import { push } from 'connected-react-router';
@@ -46,15 +47,25 @@ function* login(action: ReturnType<typeof doLogin.request>): Generator {
 
 function* getUserInfo(action: ReturnType<typeof doGetUserInfo.request>): Generator {
   try {
-    const response: any = yield call(fetchUserInfo);
+    const response = yield* call(fetchUserInfo);
     yield put(doGetUserInfo.success(response.data));
   } catch (error) {
     yield put(doGetUserInfo.failure(error));
   }
 }
 
+function* getUserList(action: ReturnType<typeof doGetUserList.request>): Generator {
+  try {
+    const response = yield* call(fetchUserList, action.payload);
+    yield put(doGetUserList.success(response.data));
+  } catch (error) {
+    yield put(doGetUserList.failure(error));
+  }
+}
+
 export default function* watchApp() {
   yield takeEvery(getType(doLogin.request), login);
   yield takeEvery(getType(doGetUserInfo.request), getUserInfo);
+  yield takeEvery(getType(doGetUserList.request), getUserList);
   yield takeEvery('@@router/LOCATION_CHANGE', triggerFetchOnLocation);
 }

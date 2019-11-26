@@ -48,14 +48,14 @@ const AnalyseEvent = ({ reportInfo }: Props) => {
           <div>
             <div className={style.ruleTitle}>
               <span>指标:</span>
-              <span className='link'>
+              <span className='app-link'>
                 <Icon type='plus' />
                 添加指标
               </span>
             </div>
             <div>
               <Indicator />
-              <div className='link'>
+              <div className='app-link'>
                 <Icon type='plus' />
                 添加筛选
               </div>
@@ -66,7 +66,7 @@ const AnalyseEvent = ({ reportInfo }: Props) => {
           <div>
             <div className={style.ruleTitle}>
               <span>维度:</span>
-              <span className='link'>
+              <span className='app-link'>
                 <Icon type='plus' />
                 添加维度
               </span>
@@ -77,7 +77,7 @@ const AnalyseEvent = ({ reportInfo }: Props) => {
           <div>
             <div className={style.ruleTitle}>
               <span>筛选:</span>
-              <span className='link'>
+              <span className='app-link'>
                 <Icon type='plus' />
                 添加筛选
               </span>
@@ -130,7 +130,4 @@ const mapStateToProps = (state: IStoreState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) => bindActionCreators({}, dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AnalyseEvent);
+export default connect(mapStateToProps, mapDispatchToProps)(AnalyseEvent);

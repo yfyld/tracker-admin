@@ -169,10 +169,10 @@ const MetadataList = ({
         <TagManagement></TagManagement>
       </Drawer>
       <div className='app-card'>
-        <div className='fl'>
+        <div className='app-fl'>
           <MetadataListForm defaultValue={metadataListParams} onSubmit={getMetadataList}></MetadataListForm>
         </div>
-        <div className='fr'>
+        <div className='app-fr'>
           <Button onClick={() => setAddMetadataVisible(true)}>新增元数据</Button>
           &nbsp;
           <Button>导入</Button>
@@ -226,7 +226,4 @@ const mapStateToProps = (state: IStoreState) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MetadataList);
+export default connect(mapStateToProps, mapDispatchToProps)(MetadataList);

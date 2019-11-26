@@ -59,7 +59,7 @@ const Filter = () => {
           </Select>
         </Col>
         <Col span={1}>
-          <div className={'link ' + style.center}>
+          <div className={'app-link ' + style.center}>
             <Icon type='close' />
           </div>
         </Col>
