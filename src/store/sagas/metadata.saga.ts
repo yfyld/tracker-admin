@@ -4,6 +4,10 @@ import { getType } from 'typesafe-actions';
 import {
   doGetMetadataList,
   doAddMetadata,
+  doUpdateMetadata,
+  doDeleteMetadata,
+  doEnableMetadata,
+  doDisableMetadata,
   doGetActiveMetadataList,
   doGetFieldList,
   doGetActiveFieldList
@@ -11,6 +15,10 @@ import {
 import {
   fetchMetadataList,
   fetchMetadataAdd,
+  fetchMetadataUpdate,
+  fetchMetadataDelete,
+  fetchMetadataEnable,
+  fetchMetadataDisable,
   fetchFieldList,
   fetchActiveFieldList,
   fetchTagList,
@@ -44,8 +52,58 @@ function* addMetadata(action: ReturnType<typeof doAddMetadata.request>): Generat
     yield call(fetchMetadataAdd, action.payload);
     yield put(doAddMetadata.success());
     yield put(doGetMetadataList.request(metadataListParams));
+    // 因为可能会新增标签，所以需要重新获取一下
+    const projectId = yield* select(state => state.project.projectInfo.id);
+    yield put(doGetTagList.request({ projectId, page: 1, pageSize: 1000 }));
   } catch (error) {
     yield put(doAddMetadata.failure(error));
+  }
+}
+
+function* updateMetadata(action: ReturnType<typeof doUpdateMetadata.request>): Generator {
+  try {
+    const metadataListParams = yield* select(state => state.metadata.metadataListParams);
+    yield call(fetchMetadataUpdate, action.payload);
+    yield put(doUpdateMetadata.success());
+    yield put(doGetMetadataList.request(metadataListParams));
+    // 因为可能会新增标签，所以需要重新获取一下
+    const projectId = yield* select(state => state.project.projectInfo.id);
+    yield put(doGetTagList.request({ projectId, page: 1, pageSize: 1000 }));
+  } catch (error) {
+    yield put(doUpdateMetadata.failure(error));
+  }
+}
+
+function* deleteMetadata(action: ReturnType<typeof doDeleteMetadata.request>): Generator {
+  try {
+    const metadataListParams = yield* select(state => state.metadata.metadataListParams);
+    yield call(fetchMetadataDelete, action.payload);
+    yield put(doDeleteMetadata.success());
+    yield put(doGetMetadataList.request(metadataListParams));
+  } catch (error) {
+    yield put(doDeleteMetadata.failure(error));
+  }
+}
+
+function* enableMetadata(action: ReturnType<typeof doEnableMetadata.request>): Generator {
+  try {
+    const metadataListParams = yield* select(state => state.metadata.metadataListParams);
+    yield call(fetchMetadataEnable, action.payload);
+    yield put(doEnableMetadata.success());
+    yield put(doGetMetadataList.request(metadataListParams));
+  } catch (error) {
+    yield put(doEnableMetadata.failure(error));
+  }
+}
+
+function* disableMetadata(action: ReturnType<typeof doDisableMetadata.request>): Generator {
+  try {
+    const metadataListParams = yield* select(state => state.metadata.metadataListParams);
+    yield call(fetchMetadataDisable, action.payload);
+    yield put(doDisableMetadata.success());
+    yield put(doGetMetadataList.request(metadataListParams));
+  } catch (error) {
+    yield put(doDisableMetadata.failure(error));
   }
 }
 
@@ -119,6 +177,10 @@ export default function* watchMetadata() {
   yield takeEvery(getType(doGetMetadataList.request), getMetadataList);
   yield takeEvery(getType(doGetActiveMetadataList.request), getActiveMetadataList);
   yield takeEvery(getType(doAddMetadata.request), addMetadata);
+  yield takeEvery(getType(doUpdateMetadata.request), updateMetadata);
+  yield takeEvery(getType(doDeleteMetadata.request), deleteMetadata);
+  yield takeEvery(getType(doEnableMetadata.request), enableMetadata);
+  yield takeEvery(getType(doDisableMetadata.request), disableMetadata);
 
   yield takeEvery(getType(doGetFieldList.request), getFieldList);
   yield takeEvery(getType(doGetActiveFieldList.request), getActiveFieldList);
