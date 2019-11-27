@@ -26,7 +26,12 @@ const Indicator = ({ indicators, activeMetadataList, activeMetadataListParams, i
     metadata: {
       id: null,
       name: null,
-      code: null
+      code: null,
+      type: null,
+      description: null,
+      status: null,
+      projectId: null,
+      tags: []
     },
     target: '1'
   });

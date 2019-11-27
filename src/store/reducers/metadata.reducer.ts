@@ -3,8 +3,7 @@ import {
   doGetActiveMetadataList,
   doGetFieldList,
   doGetActiveFieldList,
-  doGetTagList,
-  doAddTag
+  doGetTagList
 } from './../actions/metadata.action';
 import update from 'immutability-helper';
 import { getType } from 'typesafe-actions';
@@ -33,7 +32,12 @@ const initialState = (): MetadataState => ({
   metadataInfo: {
     id: null,
     name: null,
-    code: null
+    code: null,
+    type: null,
+    description: null,
+    status: null,
+    projectId: null,
+    tags: []
   },
   metadataList: { totalCount: 0, list: [] },
   metadataListParams: { page: 1, pageSize: 20, projectId: null },

@@ -2,12 +2,13 @@ import * as React from 'react';
 import style from './MetadataList.module.less';
 import { connect } from 'react-redux';
 import { IStoreState, IAction, IPageData } from '@/types';
-import { doGetMetadataList, doAddMetadata } from '@/store/actions';
+import { doGetMetadataList, doDeleteMetadata, doEnableMetadata, doDisableMetadata } from '@/store/actions';
 import { bindActionCreators, Dispatch } from 'redux';
-import { Table, Button, Modal, Drawer, Icon, Dropdown, Menu } from 'antd';
-import { PaginationConfig, SorterResult, ColumnProps, TableRowSelection, ColumnFilterItem } from 'antd/lib/table';
-import { IMetadataListParam, IMetadataInfo, IMetadataAddParam } from '@/api';
+import { Table, Button, Modal, Drawer, Tag } from 'antd';
+import { PaginationConfig, SorterResult, ColumnProps, ColumnFilterItem } from 'antd/lib/table';
+import { IMetadataListParam, IMetadataInfo, ITagInfo, IMetadataType } from '@/api';
 import MetadataAddModal from './components/MetadataAddModal';
+import MetadataEditModal from './components/MetadataEditModal';
 import TagManagement from './components/TagManagement';
 import MetadataListForm from './components/MetadataListForm';
 import { tagListFiltersSelector } from '@/store/selectors';
@@ -15,7 +16,9 @@ const { confirm } = Modal;
 
 interface Props {
   getMetadataList: (params: IMetadataListParam) => IAction;
-  addMetadata: (params: IMetadataAddParam) => IAction;
+  doDeleteMetadata: (params: number) => IAction;
+  doEnableMetadata: (params: number) => IAction;
+  doDisableMetadata: (params: number) => IAction;
   metadataList: IPageData<IMetadataInfo>;
   metadataListParams: IMetadataListParam;
   tagListFilters: ColumnFilterItem[];
@@ -25,16 +28,32 @@ interface Props {
 const MetadataList = ({
   metadataList,
   getMetadataList,
+  doDeleteMetadata,
+  doEnableMetadata,
+  doDisableMetadata,
   metadataListParams,
-  tagListFilters,
-  addMetadata,
-  projectId
+  tagListFilters
 }: Props) => {
   const [addMetadataVisible, setAddMetadataVisible] = React.useState(false);
-  const [tagDrawerVisible, settagDrawerVisible] = React.useState(false);
-  const [selectedRows, setSelectedRows] = React.useState([]);
+  const [editMetadataVisible, setEditMetadataVisible] = React.useState(false);
+  const [curMetadataInfo, setCurMetadataInfo] = React.useState<IMetadataInfo>({
+    id: null,
+    code: '',
+    name: '',
+    type: null,
+    description: '',
+    projectId: null,
+    status: null,
+    tags: []
+  });
+  const [tagDrawerVisible, setTagDrawerVisible] = React.useState(false);
 
   const columns: ColumnProps<IMetadataInfo>[] = [
+    {
+      key: 'name',
+      title: '名称',
+      dataIndex: 'name'
+    },
     {
       key: 'code',
       title: 'Code',
@@ -43,21 +62,21 @@ const MetadataList = ({
       sortDirections: ['descend', 'ascend']
     },
     {
-      key: 'name',
-      title: '名称',
-      dataIndex: 'name'
-    },
-    {
-      key: 'tag',
-      title: (
-        <span>
-          标签
-          <Icon key='3' type='question-circle' onClick={() => settagDrawerVisible(true)} />
-        </span>
-      ),
-      dataIndex: 'tag',
-      filters: tagListFilters,
-      filterMultiple: true
+      key: 'type',
+      title: '类型',
+      dataIndex: 'type',
+      filters: [
+        {
+          text: '页面',
+          value: '' + IMetadataType.page
+        },
+        {
+          text: '事件',
+          value: '' + IMetadataType.event
+        }
+      ],
+      filterMultiple: false,
+      render: (text: number) => <span>{filterMetadataType(text)}</span>
     },
     {
       key: 'status',
@@ -65,68 +84,130 @@ const MetadataList = ({
       dataIndex: 'status',
       filters: [
         {
-          text: '启用',
+          text: '是',
           value: '1'
         },
         {
-          text: '停用',
+          text: '否',
           value: '0'
         }
       ],
-      filterMultiple: false
+      filterMultiple: false,
+      render: (text: number) => <span>{text === 1 ? '是' : '否'}</span>
+    },
+    {
+      key: 'log',
+      title: '产生日志',
+      dataIndex: 'log',
+      filters: [
+        {
+          text: '是',
+          value: '1'
+        },
+        {
+          text: '否',
+          value: '0'
+        }
+      ],
+      filterMultiple: false,
+      render: (text: number) => <span>{text === 1 ? '是' : '否'}</span>
+    },
+    {
+      key: 'tags',
+      title: '标签',
+      dataIndex: 'tags',
+      filters: tagListFilters,
+      filterMultiple: true,
+      render: (tags: ITagInfo[], record: any) => {
+        return (
+          <div>
+            {tags.map(item => (
+              <Tag color='#1890ff' key={item.id}>
+                {item.name}
+              </Tag>
+            ))}
+          </div>
+        );
+      }
     },
     {
       key: 'description',
-      title: '描述',
+      title: '备注',
       dataIndex: 'description'
     },
     {
       title: '操作',
       key: 'action',
+      width: 180,
       render: (text: any, record: any) => (
         <span>
-          <Button size='small'>编辑</Button>
+          <Button type='link' size='small' onClick={() => handleUpdateMetadata(record)}>
+            编辑
+          </Button>
+          {record.status === 1 && (
+            <Button type='link' size='small' onClick={() => handleDisableMetadata(record.id)}>
+              禁用
+            </Button>
+          )}
+          {record.status === 0 && (
+            <Button type='link' size='small' onClick={() => handleEnableMetadata(record.id)}>
+              启用
+            </Button>
+          )}
+          <Button type='link' size='small' onClick={() => handleDeleteMetadata(record.id)}>
+            删除
+          </Button>
         </span>
       )
     }
   ];
+
+  const filterMetadataType = (type: number) => {
+    switch (type) {
+      case IMetadataType.page:
+        return '页面';
+      case IMetadataType.event:
+        return '事件';
+      default:
+        return '';
+    }
+  };
 
   function handleChange(
     pagination: PaginationConfig,
     filters: Record<string | number | symbol, string[]>,
     sorter: SorterResult<any>
   ) {
-    console.log('params', pagination, filters, sorter);
     const params: any = {
       page: pagination.current,
       pageSize: pagination.pageSize,
       sortKey: null,
       sortType: null,
       tags: null,
+      type: null,
       status: null
     };
     if (sorter.field) {
       params.sortKey = sorter.field;
       params.sortType = sorter.order;
     }
-    if (filters.tag) {
-      params.tags = filters.tag.join(',');
+    if (filters.tags) {
+      params.tags = filters.tags.join(',');
     }
     if (filters.status) {
       params.status = filters.status[0];
+    }
+    if (filters.type) {
+      params.type = filters.type[0];
+    }
+    if (filters.log) {
+      params.log = filters.log[0];
     }
 
     getMetadataList({ ...metadataListParams, ...params });
   }
 
-  const rowSelection: TableRowSelection<IMetadataInfo> = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-      setSelectedRows(selectedRows);
-    }
-  };
-
-  const handleDeleteMetadata = () => {
+  const handleDeleteMetadata = (metadataId: number) => {
     confirm({
       title: '提示',
       content: '确定要删除选中的元数据',
@@ -134,36 +215,37 @@ const MetadataList = ({
       okType: 'danger',
       cancelText: '取消',
       onOk() {
-        console.log('OK');
+        doDeleteMetadata(metadataId);
       }
     });
   };
 
-  const handleMetadata = () => {};
+  const handleUpdateMetadata = (record: IMetadataInfo) => {
+    setCurMetadataInfo(record);
+    setEditMetadataVisible(true);
+  };
 
-  const batchMenu = (
-    <Menu>
-      <Menu.Item key='1'>删除</Menu.Item>
-      <Menu.Item key='2'>添加标签</Menu.Item>
-      <Menu.Item key='4'>启用</Menu.Item>
-      <Menu.Item key='5'>禁用</Menu.Item>
-    </Menu>
-  );
+  const handleDisableMetadata = (id: number) => {
+    doDisableMetadata(id);
+  };
+  const handleEnableMetadata = (id: number) => {
+    doEnableMetadata(id);
+  };
 
   return (
     <div className={style.wrapper}>
-      <MetadataAddModal
-        onSubmit={addMetadata}
-        projectId={projectId}
-        visible={addMetadataVisible}
-        onClose={setAddMetadataVisible}
-      ></MetadataAddModal>
+      <MetadataAddModal visible={addMetadataVisible} onClose={setAddMetadataVisible}></MetadataAddModal>
+      <MetadataEditModal
+        defaultValue={curMetadataInfo}
+        visible={editMetadataVisible}
+        onClose={setEditMetadataVisible}
+      ></MetadataEditModal>
       <Drawer
         width={640}
         title='标签管理'
         placement='right'
         closable={false}
-        onClose={() => settagDrawerVisible(false)}
+        onClose={() => setTagDrawerVisible(false)}
         visible={tagDrawerVisible}
       >
         <TagManagement></TagManagement>
@@ -175,25 +257,11 @@ const MetadataList = ({
         <div className='app-fr'>
           <Button onClick={() => setAddMetadataVisible(true)}>新增元数据</Button>
           &nbsp;
-          <Button>导入</Button>
-          &nbsp;
-          {!!selectedRows.length && (
-            <Dropdown overlay={batchMenu}>
-              <Button>
-                批量操作 <Icon type='down' />
-              </Button>
-            </Dropdown>
-          )}
+          <Button onClick={() => setTagDrawerVisible(true)}>标签管理</Button>
         </div>
       </div>
       <div className='app-card'>
-        <Table
-          rowSelection={rowSelection}
-          rowKey='id'
-          columns={columns}
-          dataSource={metadataList.list}
-          onChange={handleChange}
-        />
+        <Table rowKey='id' columns={columns} dataSource={metadataList.list} onChange={handleChange} />
       </div>
     </div>
   );
@@ -205,8 +273,14 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
       getMetadataList: params => {
         return doGetMetadataList.request(params);
       },
-      addMetadata: (params: IMetadataAddParam) => {
-        return doAddMetadata.request(params);
+      doDeleteMetadata: params => {
+        return doDeleteMetadata.request(params);
+      },
+      doEnableMetadata: params => {
+        return doEnableMetadata.request(params);
+      },
+      doDisableMetadata: params => {
+        return doDisableMetadata.request(params);
       }
     },
 
