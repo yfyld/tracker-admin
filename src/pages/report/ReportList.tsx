@@ -136,7 +136,9 @@ const ReportList = ({
                     {boardList.list
                       .filter(item => !record.boards.find(val => val.id === item.id))
                       .map(item => (
-                        <Select.Option value={item.id}>{item.name}</Select.Option>
+                        <Select.Option key={item.id} value={item.id}>
+                          {item.name}
+                        </Select.Option>
                       ))}
                   </Select>
                   &nbsp;

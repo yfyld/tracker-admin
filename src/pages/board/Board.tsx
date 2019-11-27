@@ -82,11 +82,11 @@ const BasicLayout = ({ reportList, boardInfo, handleSave, reportListParams, getR
         ></ReportDrawerContent>
       </Drawer>
 
-      <div className='app-title'>
-        <h2>
+      <div className={style.header}>
+        <h2 className={style.title}>
           {boardInfo.name} <Icon type='edit' />
         </h2>
-        <div>
+        <div className={style.btnBox}>
           <ButtonGroup>
             <Button icon='save'></Button>
             <Button icon='calendar'></Button>
@@ -97,16 +97,18 @@ const BasicLayout = ({ reportList, boardInfo, handleSave, reportListParams, getR
           </ButtonGroup>
         </div>
       </div>
-      <ReactGridLayout
-        key={boardInfo.id}
-        className='layout'
-        layout={boardInfo.layout}
-        onLayoutChange={onLayoutChange}
-        cols={24}
-        rowHeight={30}
-      >
-        {generateDOM(boardInfo.reports)}
-      </ReactGridLayout>
+      <div className={style.main}>
+        <ReactGridLayout
+          key={boardInfo.id}
+          className='layout'
+          layout={boardInfo.layout}
+          onLayoutChange={onLayoutChange}
+          cols={24}
+          rowHeight={30}
+        >
+          {generateDOM(boardInfo.reports)}
+        </ReactGridLayout>
+      </div>
     </div>
   );
 };
@@ -133,7 +135,4 @@ const mapStateToProps = (state: IStoreState) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(BasicLayout);
+export default connect(mapStateToProps, mapDispatchToProps)(BasicLayout);

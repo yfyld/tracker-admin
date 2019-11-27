@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { IStoreState } from '@/types';
+import { ADD_BROAD } from '@/constants';
 
 const projectIdSelector = (state: IStoreState) => state.project.projectInfo.id;
 const boardListSelector = (state: IStoreState) => state.board.boardList.list;
@@ -16,6 +17,7 @@ export const menuDataSelector = createSelector(projectIdSelector, boardListSelec
       key: 'broad',
       name: '数据看板',
       icon: 'setting',
+      action: ADD_BROAD,
       children: boardList.map(item => ({
         key: `/project/board?projectId=${id}&boardId=${item.id}`,
         icon: 'setting',
