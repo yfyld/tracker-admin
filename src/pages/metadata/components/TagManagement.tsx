@@ -22,9 +22,9 @@ interface Props {
 }
 
 const TagManagement = (props: Props) => {
-  const [addTagVisible, setaddTagVisible] = React.useState(false);
-  const [editTagVisible, seteditTagVisible] = React.useState(false);
-  const [curTagInfo, setcurTagInfo] = React.useState<ITagInfo>({
+  const [addTagVisible, setAddTagVisible] = React.useState(false);
+  const [editTagVisible, setEditTagVisible] = React.useState(false);
+  const [curTagInfo, setCurTagInfo] = React.useState<ITagInfo>({
     id: null,
     name: '',
     description: '',
@@ -46,10 +46,10 @@ const TagManagement = (props: Props) => {
       key: 'action',
       render: (text: any, record: any) => (
         <span>
-          <Button size='small' onClick={() => handleUpdateMetadata(record)}>
+          <Button type='link' size='small' onClick={() => handleUpdateMetadata(record)}>
             编辑
           </Button>
-          <Button size='small' onClick={() => handleDeleteMetadata(record)}>
+          <Button type='link' size='small' onClick={() => handleDeleteMetadata(record)}>
             删除
           </Button>
         </span>
@@ -58,14 +58,14 @@ const TagManagement = (props: Props) => {
   ];
 
   const handleUpdateMetadata = (record: ITagInfo) => {
-    setcurTagInfo(record);
-    seteditTagVisible(true);
+    setCurTagInfo(record);
+    setEditTagVisible(true);
   };
 
   const handleDeleteMetadata = (record: ITagInfo) => {
     confirm({
       title: '提示',
-      content: '确定要删除选中的元数据',
+      content: '确定要删除选中的标签',
       okText: '删除',
       okType: 'danger',
       cancelText: '取消',
@@ -79,17 +79,17 @@ const TagManagement = (props: Props) => {
     <div className={style.wrapper}>
       <TagAddModal
         visible={addTagVisible}
-        onClose={setaddTagVisible}
+        onClose={setAddTagVisible}
         onSubmit={values => props.doAddTag({ projectId: props.projectId, ...values })}
       ></TagAddModal>
       <TagEditModal
         defaultValue={curTagInfo}
         visible={editTagVisible}
-        onClose={seteditTagVisible}
+        onClose={setEditTagVisible}
         onSubmit={props.doUpdateTag}
       ></TagEditModal>
       <div className={style.btnBox}>
-        <Button onClick={() => setaddTagVisible(true)}>新增标签</Button>
+        <Button onClick={() => setAddTagVisible(true)}>新增标签</Button>
       </div>
       <Table rowKey='id' pagination={false} columns={columns} dataSource={props.tagList.list} />
     </div>
