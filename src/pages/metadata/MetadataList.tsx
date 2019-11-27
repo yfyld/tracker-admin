@@ -15,7 +15,7 @@ import { tagListFiltersSelector } from '@/store/selectors';
 const { confirm } = Modal;
 
 interface Props {
-  doGetMetadataList: (params: IMetadataListParam) => IAction;
+  getMetadataList: (params: IMetadataListParam) => IAction;
   doDeleteMetadata: (params: number) => IAction;
   doEnableMetadata: (params: number) => IAction;
   doDisableMetadata: (params: number) => IAction;
@@ -27,7 +27,7 @@ interface Props {
 
 const MetadataList = ({
   metadataList,
-  doGetMetadataList,
+  getMetadataList,
   doDeleteMetadata,
   doEnableMetadata,
   doDisableMetadata,
