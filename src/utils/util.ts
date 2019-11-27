@@ -6,6 +6,15 @@ import * as localForage from 'localforage';
 
 import { message } from 'antd';
 
+export const getBaseURL = () => {
+  const host = window.location.host;
+  if (/\.\d+\.|localhost/.test(host)) {
+    return 'http://127.0.0.1:7009';
+  } else {
+    return window.location.origin + '/api';
+  }
+};
+
 export const parseSearch = (str: string) => {
   if (typeof str != 'string') {
     return {};
