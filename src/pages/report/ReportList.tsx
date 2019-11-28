@@ -231,10 +231,11 @@ const ReportList = ({
     <div className={style.wrapper}>
       <ReportAddModal projectId={projectId} visible={addReportVisible} onClose={setAddReportVisible}></ReportAddModal>
       <BoardAppendReportModal
-        defaultValue={curReportInfo}
+        reportInfo={curReportInfo}
         visible={appendBoardVisible}
         onClose={setappendBoardVisible}
-        onSubmit={doAddReport}
+        boardIds={[1]}
+        onSubmit={onAppendReportToBoard}
       />
       <div className='app-card'>
         <div className='app-fl'>

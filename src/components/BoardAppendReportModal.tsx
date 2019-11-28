@@ -1,7 +1,7 @@
 import { Form, Input, Modal, Radio } from 'antd';
 import * as React from 'react';
 import { FormComponentProps } from 'antd/lib/form';
-import { IReportUpdateParam, IReportInfo, IReportAddParam } from '@/api';
+import { IReportUpdateParam, IReportInfo, IReportAddParam, IReportAppendToBoard } from '@/api';
 import { toastformError } from '@/utils';
 import { formItemLayout } from '@/constants';
 import moment from 'moment';
@@ -9,9 +9,10 @@ import AnalyseRangePicker from './AnalyseRangePicker';
 const { TextArea } = Input;
 interface Props extends FormComponentProps {
   visible: boolean;
-  onSubmit: (param: IReportAddParam) => any;
+  onSubmit: (param: IReportAppendToBoard) => any;
   onClose: (param: boolean) => any;
-  defaultValue: IReportInfo;
+  reportInfo: IReportInfo;
+  boardIds: number[];
 }
 
 const BoardAppendReportModal = (props: Props) => {
@@ -23,7 +24,11 @@ const BoardAppendReportModal = (props: Props) => {
         toastformError(err);
         return;
       }
-      props.onSubmit({ ...props.defaultValue, ...values });
+      props.onSubmit({
+        projectId: props.reportInfo.projectId,
+        boardIds: props.boardIds,
+        reportId: props.reportInfo.id
+      });
       props.onClose(false);
     });
   };
@@ -32,13 +37,13 @@ const BoardAppendReportModal = (props: Props) => {
       <Form onSubmit={handleSubmit} {...formItemLayout}>
         <Form.Item label='名称'>
           {getFieldDecorator('name', {
-            initialValue: props.defaultValue.name
+            initialValue: props.reportInfo.name
           })(<Input placeholder='名称' />)}
         </Form.Item>
         <Form.Item label='时间范围'>{getFieldDecorator('rangeTime', {})(<AnalyseRangePicker />)}</Form.Item>
         <Form.Item label='展现方式'>
           {getFieldDecorator('type', {
-            initialValue: props.defaultValue.type
+            initialValue: props.reportInfo.type
           })(
             <Radio.Group size='large'>
               <Radio.Button value='a'>折线图</Radio.Button>
@@ -48,9 +53,9 @@ const BoardAppendReportModal = (props: Props) => {
             </Radio.Group>
           )}
         </Form.Item>
-        <Form.Item label='描述'>
+        <Form.Item label='副标题'>
           {getFieldDecorator('description', {
-            initialValue: props.defaultValue.description
+            initialValue: props.reportInfo.description
           })(<TextArea placeholder='description' />)}
         </Form.Item>
       </Form>

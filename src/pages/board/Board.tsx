@@ -7,8 +7,15 @@ import style from './Board.module.less';
 import { IStoreState, IAction, IPageData } from '@/types';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Icon, Button, Popover, Drawer } from 'antd';
-import { IReportInfo, IBoardInfo, IBoardUpdateParam, IReportListParam, IReportAddParam } from '@/api';
-import { doUpdateBoard, doGetReportList, doAddReport } from '@/store/actions';
+import {
+  IReportInfo,
+  IBoardInfo,
+  IBoardUpdateParam,
+  IReportListParam,
+  IReportAddParam,
+  IReportAppendToBoard
+} from '@/api';
+import { doUpdateBoard, doGetReportList, doAddReport, doAppendReportToBoard } from '@/store/actions';
 import ReportDrawerContent from './components/ReportDrawerContent';
 
 const ButtonGroup = Button.Group;
@@ -21,6 +28,7 @@ interface Props {
   addReport: (params: IReportAddParam) => IAction;
   handleSave: (params: IBoardUpdateParam) => IAction;
   reportListParams: IReportListParam;
+  onAppendReportToBoard: (params: IReportAppendToBoard) => IAction;
   getReportList: (params: IReportListParam) => IAction;
 }
 
@@ -32,11 +40,22 @@ function generateDOM(reportList: IReportInfo[]) {
   ));
 }
 
-const BasicLayout = ({ reportList, boardInfo, handleSave, reportListParams, getReportList, addReport }: Props) => {
+const BasicLayout = ({
+  reportList,
+  boardInfo,
+  handleSave,
+  reportListParams,
+  getReportList,
+  addReport,
+  onAppendReportToBoard
+}: Props) => {
   const [addReportDrawerVisible, setaddReportDrawerVisible] = React.useState(false);
   function onLayoutChange(layout: RGL.Layout[]) {
     console.log(layout);
     const { id, projectId } = boardInfo;
+    if (JSON.stringify(layout) === JSON.stringify(boardInfo.layout)) {
+      return;
+    }
     handleSave({ id, projectId, layout });
   }
 
@@ -47,8 +66,8 @@ const BasicLayout = ({ reportList, boardInfo, handleSave, reportListParams, getR
     setaddReportDrawerVisible(true);
   }
 
-  function handleAppendSubmit(info: IReportAddParam) {
-    addReport(info);
+  function handleAppendSubmit(info: IReportAppendToBoard) {
+    onAppendReportToBoard(info);
     setaddReportDrawerVisible(false);
   }
 
@@ -88,7 +107,7 @@ const BasicLayout = ({ reportList, boardInfo, handleSave, reportListParams, getR
         </h2>
         <div className={style.btnBox}>
           <ButtonGroup>
-            <Button icon='save'></Button>
+            {/* <Button icon='save'></Button> */}
             <Button icon='calendar'></Button>
 
             <Popover placement='bottom' content={content} title='添加报表'>
@@ -119,6 +138,9 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
       handleSave: params => doUpdateBoard.request(params),
       addReport: (params: IReportAddParam) => {
         return doAddReport.request(params);
+      },
+      onAppendReportToBoard: (params: IReportAppendToBoard) => {
+        return doAppendReportToBoard.request(params);
       },
       getReportList: (params: IReportListParam) => doGetReportList.request(params)
     },

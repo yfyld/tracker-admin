@@ -1,6 +1,9 @@
 .logo {
   background-color: #000;
   width: 100%;
+  position: absolute;
+  top: 0px;
+  left: 0px;
   height: @header-height;
   padding: 3px 20px;
   > img {
@@ -15,5 +18,18 @@
 }
 .wrapper {
   height: 100%;
+  padding-bottom: 50px;
+  padding-top: 50px;
   background-color: #000;
+  :global {
+    .ant-menu {
+      height: 100%;
+      overflow: auto;
+    }
+  }
+}
+.footer {
+  position: absolute;
+  bottom: 10px;
+  left: 60px;
 }

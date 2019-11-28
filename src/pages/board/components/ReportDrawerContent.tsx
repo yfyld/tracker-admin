@@ -1,7 +1,7 @@
 import * as React from 'react';
 import style from './ReportDrawerContent.module.less';
 import { IPageData } from '@/types';
-import { IReportInfo, IReportAddParam } from '@/api';
+import { IReportInfo, IReportAddParam, IReportAppendToBoard } from '@/api';
 import { List, Input } from 'antd';
 import { Link } from 'react-router-dom';
 import BoardAppendReportModal from '@/components/BoardAppendReportModal';
@@ -11,18 +11,17 @@ const { Search } = Input;
 interface Props {
   reportList: IPageData<IReportInfo>;
   onSearch: (param: string) => any;
-  onSubmit: (param: IReportAddParam) => any;
+  onSubmit: (param: IReportAppendToBoard) => any;
   name?: string;
   boardId: number;
 }
 
 const ReportDrawerContent = ({ reportList, onSearch, name, onSubmit, boardId }: Props) => {
-  const [curReportInfo, setcurReportInfo] = React.useState({
+  const [curReportInfo, setcurReportInfo] = React.useState<IReportInfo>({
     id: null,
     name: '',
     description: '',
     projectId: null,
-    boardId: null,
     type: '',
     data: {},
     dateType: null
@@ -30,13 +29,14 @@ const ReportDrawerContent = ({ reportList, onSearch, name, onSubmit, boardId }: 
   const [appendBoardVisible, setappendBoardVisible] = React.useState(false);
 
   function handleAdd(info: IReportAddParam) {
-    setcurReportInfo({ ...info, boardId, id: null });
+    setcurReportInfo(info);
     setappendBoardVisible(true);
   }
   return (
     <div className={style.wrapper}>
       <BoardAppendReportModal
-        defaultValue={curReportInfo}
+        reportInfo={curReportInfo}
+        boardIds={[boardId]}
         visible={appendBoardVisible}
         onClose={setappendBoardVisible}
         onSubmit={onSubmit}

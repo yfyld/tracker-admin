@@ -12,7 +12,7 @@ import ProjectInfo from '@/pages/project/components/ProjectInfo';
 import { ClickParam } from 'antd/lib/menu';
 
 interface Props {
-  doChangeCollapsed: (collapsed: boolean) => IAction;
+  onChangeCollapsed: (collapsed: boolean) => IAction;
   onResetStore: () => IAction;
   projectInfo: IProjectInfo;
   collapsed: boolean;
@@ -20,7 +20,7 @@ interface Props {
   alone?: boolean;
 }
 
-const AppHeader = ({ collapsed, doChangeCollapsed, userInfo, alone = false, projectInfo, onResetStore }: Props) => {
+const AppHeader = ({ collapsed, onChangeCollapsed, userInfo, alone = false, projectInfo, onResetStore }: Props) => {
   const handleMenuClick = ({ key }: ClickParam) => {
     if (key === 'SINGOUT') {
       onResetStore();
@@ -45,7 +45,7 @@ const AppHeader = ({ collapsed, doChangeCollapsed, userInfo, alone = false, proj
         </div>
       ) : (
         <div className={style.headerLeft}>
-          <button className={style.collapsedBtn} onClick={() => doChangeCollapsed(!collapsed)}>
+          <button className={style.collapsedBtn} onClick={() => onChangeCollapsed(!collapsed)}>
             <Icon type={collapsed ? 'menu-unfold' : 'menu-fold'} />
           </button>
           <span className={style.title}>{projectInfo.name}</span>
@@ -87,7 +87,7 @@ const AppHeader = ({ collapsed, doChangeCollapsed, userInfo, alone = false, proj
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
-      doChangeCollapsed: (collapsed: boolean) => {
+      onChangeCollapsed: (collapsed: boolean) => {
         return doChangeCollapsed(collapsed);
       },
       onResetStore: () => {
