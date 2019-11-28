@@ -10,10 +10,40 @@ export const getBaseURL = () => {
   const host = window.location.host;
   if (/\.\d+\.|localhost/.test(host)) {
     return 'http://127.0.0.1:7009';
+  } else if (/test/.test(host)) {
+    return 'http://test.qa.91jkys.com:7009';
   } else {
     return window.location.origin + '/api';
   }
 };
+
+export function getCookie(name: string) {
+  const cookies = document.cookie.split('; ');
+  // tslint:disable-next-line: forin
+  for (const i in cookies) {
+    const arr = cookies[i].split('=');
+    if (name === arr[0]) {
+      return unescape(arr[1]);
+    }
+  }
+  return null;
+}
+
+export function setCookie(name: string, value: string, expires?: number, path?: string, domain?: string) {
+  document.cookie =
+    name +
+    '=' +
+    value +
+    (expires ? '; expires=' + getExpires(expires) : '') +
+    (path ? '; path=' + path : '') +
+    (domain ? '; domain=' + domain : '');
+
+  function getExpires(hours: number) {
+    const date = new Date();
+    date.setTime(date.getTime() + hours * 60 * 60 * 1000);
+    return date.toUTCString();
+  }
+}
 
 export const parseSearch = (str: string) => {
   if (typeof str != 'string') {

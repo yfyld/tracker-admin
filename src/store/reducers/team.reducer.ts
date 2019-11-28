@@ -1,7 +1,7 @@
 import update from 'immutability-helper';
 import { getType } from 'typesafe-actions';
 import { IAction } from '@/types';
-import { doGetTeamList, doGetTeamInfo } from '@/store/actions';
+import { doGetTeamList, doGetTeamInfo, doResetStore } from '@/store/actions';
 import { ITeamInfo, ITeamListParam, ITeamList } from '@/api';
 //import * as Api from "@/api"
 
@@ -32,6 +32,8 @@ const initialState = (): TeamState => ({
 
 export const teamReducer = (state: TeamState = initialState(), action: IAction): TeamState => {
   switch (action.type) {
+    case getType(doResetStore):
+      return update(state, { $set: initialState() });
     case getType(doGetTeamList.request):
       return update(state, { teamListParam: { $set: action.payload }, teamListLoading: { $set: true } });
     case getType(doGetTeamList.success):

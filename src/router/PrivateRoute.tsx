@@ -1,20 +1,28 @@
-import * as React from 'react'
-import { Route, Redirect, RouteProps } from 'react-router-dom'
-import {  localStore } from '@/utils'
+import * as React from 'react';
+import { Route, Redirect, RouteProps } from 'react-router-dom';
+import { localStore } from '@/utils';
+import config from '@/config/config';
 
+const PrivateRoute = ({ component: Component, ...rest }: RouteProps) => (
+  <Route
+    {...rest}
+    render={props =>
+      localStore.getSyncItem('token') ? (
+        <Component {...props} />
+      ) : (
+        <Redirect
+          to={
+            config.signonAble
+              ? {
+                  pathname: '/login',
+                  state: { from: props.location }
+                }
+              : config.singelLoginURL
+          }
+        />
+      )
+    }
+  />
+);
 
-
-const PrivateRoute = ({ component: Component, ...rest }:RouteProps) => (
-  <Route {...rest} render={props => (
-    localStore.getSyncItem("token")? (
-      <Component {...props}/>
-    ) : (
-      <Redirect to={{
-        pathname: '/login',
-        state: { from: props.location }
-      }}/>
-    )
-  )}/>
-)
-
-export default PrivateRoute
+export default PrivateRoute;

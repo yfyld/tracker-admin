@@ -24,12 +24,12 @@ const ReportListForm = (props: Props) => {
   };
   return (
     <Form onSubmit={handleSubmit} layout='inline'>
-      <Form.Item label='报表名称'>
+      <Form.Item>
         {getFieldDecorator('name', {
           initialValue: props.defaultValue.name
         })(<Input placeholder='报表名称' />)}
       </Form.Item>
-      <Form.Item label='看板报表'>
+      {/* <Form.Item >
         {getFieldDecorator('inBoard', {
           initialValue: props.defaultValue.inBoard
         })(
@@ -38,7 +38,7 @@ const ReportListForm = (props: Props) => {
             <Select.Option value={0}>不显示</Select.Option>
           </Select>
         )}
-      </Form.Item>
+      </Form.Item> */}
       <Form.Item>
         <Button htmlType='submit'>查询</Button>
       </Form.Item>

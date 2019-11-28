@@ -37,15 +37,16 @@ export const menuDataSelector = createSelector(projectIdSelector, boardListSelec
         }
       ]
     },
+
     {
-      key: `/project/metadata-list?projectId=${id}`,
-      name: '元数据',
+      key: `/project/report-list?projectId=${id}`,
+      name: '报表',
       icon: 'setting',
       auth: ['dev', 'admin']
     },
     {
-      key: `/project/report-list?projectId=${id}`,
-      name: '报表',
+      key: `/project/metadata-list?projectId=${id}`,
+      name: '元数据',
       icon: 'setting',
       auth: ['dev', 'admin']
     }

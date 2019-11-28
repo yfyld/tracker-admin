@@ -1,9 +1,11 @@
+import { ROUTE_PATH } from '@/constants';
 import axios, { AxiosPromise, AxiosRequestConfig, AxiosResponse, AxiosError, AxiosInterceptorManager } from 'axios';
 import config from '@/config';
 import { message } from 'antd';
 import { doChangeLoadingStatus } from '@/store/actions';
 import { store } from '@/index';
-import { localStore } from '@/utils';
+import { localStore, getCookie, setCookie } from '@/utils';
+import { push } from 'connected-react-router';
 
 export interface AxiosInstance {
   (config: AxiosRequestConfig): AxiosPromise;
@@ -85,7 +87,16 @@ instance.interceptors.response.use(
       response.data = response.data.result;
       return Promise.resolve(response);
     } else {
-      errorMessage(response.data.error || response.data.message);
+      errorMessage(response.data.message || response.data.error);
+      if (response.data.status === 401 || response.data.status === 403) {
+        config.signonAble
+          ? store.dispatch(
+              push(
+                ROUTE_PATH.login + '?fromURL=' + encodeURIComponent(window.location.pathname + window.location.search)
+              )
+            )
+          : (window.location.href = config.singelLoginURL);
+      }
       return Promise.reject(response);
     }
   },
@@ -116,8 +127,13 @@ instance.delete = (url: string, data?: object, config: AxiosRequestConfig = {}):
   return deleteFn(url, config);
 };
 
-export function updateToken(token?: string) {
-  if (!token) {
+export function updateToken(token?: string): string {
+  if (typeof token === 'undefined') {
+    const cookieToken = getCookie('TELESCOPE_TOKEN');
+    if (cookieToken) {
+      setCookie('TELESCOPE_TOKEN', '');
+      return updateToken(cookieToken);
+    }
     token = localStore.getSyncItem('token');
   } else {
     localStore.setSyncItem('token', token);

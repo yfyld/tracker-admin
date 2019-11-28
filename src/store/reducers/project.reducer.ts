@@ -2,7 +2,7 @@ import { doGetProjectInfo } from './../actions/project.action';
 import update from 'immutability-helper';
 import { getType } from 'typesafe-actions';
 import { IAction, IPageData } from '@/types';
-import { doGetProjectList } from '@/store/actions';
+import { doGetProjectList, doResetStore } from '@/store/actions';
 import { IProjectInfo, IProjectListParam, IProjectListItem } from '@/api';
 //import * as Api from "@/api"
 
@@ -29,6 +29,8 @@ const initialState = (): ProjectState => ({
 
 export const projectReducer = (state: ProjectState = initialState(), action: IAction): ProjectState => {
   switch (action.type) {
+    case getType(doResetStore):
+      return update(state, { $set: initialState() });
     case getType(doGetProjectList.request):
       return update(state, { projectListParams: { $set: action.payload } });
     case getType(doGetProjectList.success):

@@ -11,6 +11,7 @@ import { IAction } from '@/types';
 import style from './Account.less';
 import { doLogin } from '@/store/actions';
 import { ILoginParam } from '@/api';
+import config from '@/config';
 
 interface Props {
   form: WrappedFormUtils;
@@ -51,12 +52,21 @@ const Login = ({ form, doLoginRequest }: Props) => {
           )}
         </Form.Item>
         <Form.Item>
-          <Button type='primary' htmlType='submit' className={style.btn}>
+          <Button block type='primary' htmlType='submit' className={style.btn}>
             登&emsp;&emsp;录
           </Button>
-          <div className={style.text}>
-            没有账号 <Link to='/signup'>马上注册!</Link>
-          </div>
+
+          <a href={config.singelLoginURL}>
+            <Button block type='primary' className={style.btn}>
+              内&emsp;网&emsp;登&emsp;录
+            </Button>
+          </a>
+
+          {config.signupAble && (
+            <div className={style.text}>
+              没有账号 <Link to='/signup'>马上注册!</Link>(测试用,请直接内网登录)
+            </div>
+          )}
         </Form.Item>
       </Form>
     </AccountLayout>
@@ -73,7 +83,4 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
     dispatch
   );
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(Form.create()(Login));
+export default connect(null, mapDispatchToProps)(Form.create()(Login));

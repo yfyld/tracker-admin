@@ -1,3 +1,4 @@
+import { doResetStore } from '@/store/actions';
 import { doGetBoardList, doGetBoardInfo } from './../actions/board.action';
 import update from 'immutability-helper';
 import { getType } from 'typesafe-actions';
@@ -30,6 +31,8 @@ const initialState = (): BoardState => ({
 
 export const boardReducer = (state: BoardState = initialState(), action: IAction): BoardState => {
   switch (action.type) {
+    case getType(doResetStore):
+      return update(state, { $set: initialState() });
     case getType(doGetBoardList.request):
       return update(state, { boardListParams: { $set: action.payload } });
     case getType(doGetBoardList.success):

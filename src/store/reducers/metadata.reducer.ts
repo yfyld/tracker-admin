@@ -8,7 +8,7 @@ import {
 import update from 'immutability-helper';
 import { getType } from 'typesafe-actions';
 import { IAction, IPageData } from '@/types';
-import { doGetMetadataList } from '@/store/actions';
+import { doGetMetadataList, doResetStore } from '@/store/actions';
 import { IMetadataInfo, IMetadataListParam } from '@/api';
 
 export interface MetadataState {
@@ -53,6 +53,8 @@ const initialState = (): MetadataState => ({
 
 export const metadataReducer = (state: MetadataState = initialState(), action: IAction): MetadataState => {
   switch (action.type) {
+    case getType(doResetStore):
+      return update(state, { $set: initialState() });
     case getType(doGetMetadataList.request):
       return update(state, { metadataListParams: { $set: action.payload } });
     case getType(doGetMetadataList.success):

@@ -4,7 +4,7 @@ import { put, takeEvery, delay } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
 import { mapLocationIntoActions, call, select } from '@/utils';
 
-import { doLogin, doGetUserInfo } from '@/store/actions';
+import { doLogin, doGetUserInfo, doResetStore } from '@/store/actions';
 import { fetchLogin, fetchUserInfo, fetchUserList } from '@/api';
 
 import { message } from 'antd';
@@ -63,9 +63,15 @@ function* getUserList(action: ReturnType<typeof doGetUserList.request>): Generat
   }
 }
 
+function* resetStore(action: ReturnType<typeof doResetStore>): Generator {
+  window.localStorage.removeItem('token');
+  updateToken('');
+}
+
 export default function* watchApp() {
   yield takeEvery(getType(doLogin.request), login);
   yield takeEvery(getType(doGetUserInfo.request), getUserInfo);
   yield takeEvery(getType(doGetUserList.request), getUserList);
   yield takeEvery('@@router/LOCATION_CHANGE', triggerFetchOnLocation);
+  yield takeEvery(getType(doResetStore), resetStore);
 }
