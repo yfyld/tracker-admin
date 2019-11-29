@@ -14,9 +14,9 @@ import TagEditModal from './TagEditModal';
 const { confirm } = Modal;
 
 interface Props {
-  doDelTag: (params: IDeleteParam) => IAction;
-  doAddTag: (params: ITagAddParam) => IAction;
-  doUpdateTag: (params: ITagUpdateParam) => IAction;
+  onDelTag: (params: number) => IAction;
+  onAddTag: (params: ITagAddParam) => IAction;
+  onUpdateTag: (params: ITagUpdateParam) => IAction;
   projectId: number;
   tagList: ITagList;
 }
@@ -49,7 +49,7 @@ const TagManagement = (props: Props) => {
           <Button type='link' size='small' onClick={() => handleUpdateMetadata(record)}>
             编辑
           </Button>
-          <Button type='link' size='small' onClick={() => handleDeleteMetadata(record)}>
+          <Button type='link' size='small' onClick={() => handleDeleteMetadata(record.id)}>
             删除
           </Button>
         </span>
@@ -62,7 +62,7 @@ const TagManagement = (props: Props) => {
     setEditTagVisible(true);
   };
 
-  const handleDeleteMetadata = (record: ITagInfo) => {
+  const handleDeleteMetadata = (tagId: number) => {
     confirm({
       title: '提示',
       content: '确定要删除选中的标签',
@@ -70,7 +70,7 @@ const TagManagement = (props: Props) => {
       okType: 'danger',
       cancelText: '取消',
       onOk() {
-        props.doDelTag(record);
+        props.onDelTag(tagId);
       }
     });
   };
@@ -80,13 +80,13 @@ const TagManagement = (props: Props) => {
       <TagAddModal
         visible={addTagVisible}
         onClose={setAddTagVisible}
-        onSubmit={values => props.doAddTag({ projectId: props.projectId, ...values })}
+        onSubmit={values => props.onAddTag({ projectId: props.projectId, ...values })}
       ></TagAddModal>
       <TagEditModal
         defaultValue={curTagInfo}
         visible={editTagVisible}
         onClose={setEditTagVisible}
-        onSubmit={props.doUpdateTag}
+        onSubmit={props.onUpdateTag}
       ></TagEditModal>
       <div className={style.btnBox}>
         <Button onClick={() => setAddTagVisible(true)}>新增标签</Button>
@@ -99,9 +99,9 @@ const TagManagement = (props: Props) => {
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
-      doDelTag: (params: IDeleteParam) => doDelTag.request(params),
-      doAddTag: (params: ITagAddParam) => doAddTag.request(params),
-      doUpdateTag: (params: ITagUpdateParam) => doUpdateTag.request(params)
+      onDelTag: (params: number) => doDelTag.request(params),
+      onAddTag: (params: ITagAddParam) => doAddTag.request(params),
+      onUpdateTag: (params: ITagUpdateParam) => doUpdateTag.request(params)
     },
     dispatch
   );
@@ -115,7 +115,4 @@ const mapStateToProps = (state: IStoreState) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TagManagement);
+export default connect(mapStateToProps, mapDispatchToProps)(TagManagement);
