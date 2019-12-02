@@ -2,7 +2,7 @@ import { put, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
 import { doGetProjectList, doAddProject, doDeleteProject, doGetProjectInfo, doUpdateProject } from '@/store/actions';
 import { fetchProjectList, fetchProjectAdd, fetchProjectDel, fetchProjectInfo, fetchProjectUpdate } from '@/api';
-import { call } from '@/utils';
+import { call, select } from '@/utils';
 import { message } from 'antd';
 
 function* getProjectList(action: ReturnType<typeof doGetProjectList.request>): Generator {
@@ -47,7 +47,9 @@ function* updateProject(action: ReturnType<typeof doUpdateProject.request>): Gen
   try {
     yield* call(fetchProjectUpdate, action.payload);
     yield put(doUpdateProject.success());
-    yield put(doGetProjectInfo.request(action.payload.id));
+    const projectListParams = yield* select(state => state.project.projectListParams);
+    yield put(doGetProjectList.request(projectListParams));
+    // yield put(doGetProjectInfo.request(action.payload.id));
   } catch (error) {
     yield put(doUpdateProject.failure(error));
   }

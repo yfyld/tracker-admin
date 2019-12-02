@@ -28,12 +28,15 @@ const columns = [
   {
     title: '操作',
     key: 'action',
-    render: (text: any, record: any) => (
-      <span>
-        <button>编辑</button>
-        <button>移除</button>
-      </span>
-    )
+    render: (text: any, record: any) => {
+      return (
+        <span>
+          text
+          <button>编辑</button>
+          <button>移除</button>
+        </span>
+      );
+    }
   }
 ];
 
@@ -55,7 +58,4 @@ const mapStateToProps = (state: IStoreState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) => bindActionCreators({}, dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ProjectMember);
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectMember);
