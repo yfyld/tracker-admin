@@ -31,6 +31,7 @@ export default class Routes extends React.Component {
             <Route exact path={ROUTE_PATH.projectInfo} component={Project} />
             <Route exact path={ROUTE_PATH.reportList} component={ReportList} />
             <Route exact path={ROUTE_PATH.draft} component={DraftList} />
+            <Route exact path={ROUTE_PATH.draft} component={DraftList} />
           </Switch>
         </React.Suspense>
       </CoreLayout>

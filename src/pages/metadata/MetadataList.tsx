@@ -163,7 +163,6 @@ const MetadataList = ({
   ];
 
   const filterMetadataType = (type: number) => {
-    console.log('type', type);
     switch (type) {
       case EMetadataType.page:
         return '页面';

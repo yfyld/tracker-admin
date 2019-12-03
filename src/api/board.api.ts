@@ -3,6 +3,7 @@ import { IPageQuery, IInfoParam } from './../types/index';
 import { IReportInfo } from './report.api';
 import fetch from './http';
 import { IPageData } from '@/types';
+import { IMemberInfo } from './user.api';
 
 export interface IBoardInfo {
   id: number;
@@ -43,6 +44,22 @@ export interface IReportAppendToBoard {
   boardIds: number[];
 }
 
+// 我的看板
+export interface IMyBoardListParam {
+  type: number;
+  name?: string;
+  page: number;
+  pageSize: number;
+}
+
+export interface IMyBoardListItem {
+  id: number;
+  projectId: number;
+  name: string;
+  creator: IMemberInfo;
+  description: string;
+}
+
 export function fetchBoardList(params: IBoardListParam) {
   return fetch.get<IPageData<IBoardInfo>>('/board/', params);
 }
@@ -65,4 +82,8 @@ export function fetchBoardDel(id: number) {
 
 export function fetchReportAppendToBoard(params: IReportAppendToBoard) {
   return fetch.post(`/board/append`, params);
+}
+
+export function fetchMyBoardList(params: IMyBoardListParam) {
+  return fetch.get<IPageData<IMyBoardListItem>>('/board/my-board', params);
 }
