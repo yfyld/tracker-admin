@@ -29,11 +29,11 @@ const ProjectListForm = (props: Props) => {
           initialValue: props.defaultValue.projectName
         })(<Input placeholder='请输入项目名称' />)}
       </Form.Item>
-      <Form.Item>
+      {/* <Form.Item>
         <Button type='primary' htmlType='submit'>
           查询
         </Button>
-      </Form.Item>
+      </Form.Item> */}
     </Form>
   );
 };

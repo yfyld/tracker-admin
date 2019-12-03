@@ -16,7 +16,7 @@ export interface ILoginRes {
 export interface ISignupParam {
   username: string;
   password: string;
-  nickName: string;
+  nicnkme: string;
 }
 
 export interface IUserInfo {

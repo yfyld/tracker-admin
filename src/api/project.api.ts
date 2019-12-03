@@ -22,7 +22,10 @@ export interface IProjectInfo {
 
 export interface IAddProject {
   name: string;
+  image: string;
+  description: string;
 }
+
 export interface IProjectAddRes {
   id: string;
 }
@@ -30,6 +33,8 @@ export interface IProjectAddRes {
 export interface IProjectUpdateParam {
   id: number;
   name: string;
+  image: string;
+  description: string;
 }
 
 export interface IProjectListItem {
