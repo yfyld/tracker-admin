@@ -9,8 +9,7 @@ import {
   doEnableMetadata,
   doDisableMetadata,
   doGetActiveMetadataList,
-  doGetFieldList,
-  doGetActiveFieldList
+  doGetFieldList
 } from '@/store/actions';
 import {
   fetchMetadataList,
@@ -20,7 +19,6 @@ import {
   fetchMetadataEnable,
   fetchMetadataDisable,
   fetchFieldList,
-  fetchActiveFieldList,
   fetchTagList,
   fetchTagAdd,
   fetchTagDel,
@@ -109,19 +107,10 @@ function* disableMetadata(action: ReturnType<typeof doDisableMetadata.request>):
 
 function* getFieldList(action: ReturnType<typeof doGetFieldList.request>): Generator {
   try {
-    const response = yield* call(fetchFieldList, action.payload);
+    const response = yield* call(fetchFieldList);
     yield put(doGetFieldList.success(response.data));
   } catch (error) {
     yield put(doGetFieldList.failure(error));
-  }
-}
-
-function* getActiveFieldList(action: ReturnType<typeof doGetActiveFieldList.request>): Generator {
-  try {
-    const response = yield* call(fetchActiveFieldList, action.payload);
-    yield put(doGetActiveFieldList.success(response.data));
-  } catch (error) {
-    yield put(doGetActiveFieldList.failure(error));
   }
 }
 
@@ -183,7 +172,6 @@ export default function* watchMetadata() {
   yield takeEvery(getType(doDisableMetadata.request), disableMetadata);
 
   yield takeEvery(getType(doGetFieldList.request), getFieldList);
-  yield takeEvery(getType(doGetActiveFieldList.request), getActiveFieldList);
 
   yield takeEvery(getType(doGetTagList.request), getTagList);
   yield takeEvery(getType(doUpdateTag.request), updateTag);

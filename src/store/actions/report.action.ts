@@ -1,5 +1,5 @@
 import { IInfoParam } from './../../types/index';
-import { IFieldListParam, IFieldInfo } from '../../api/metadata.api';
+import { IFieldInfo } from '../../api/metadata.api';
 import { createAsyncAction, createAction } from 'typesafe-actions';
 import { IPageData } from '@/types';
 import * as actionType from '@/constants/actionType';

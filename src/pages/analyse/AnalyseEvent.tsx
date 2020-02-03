@@ -1,4 +1,4 @@
-import { Icon, Collapse, Divider, Select, Input } from 'antd';
+import { Icon, Collapse, Divider, Select, Input, Row, Col, Button } from 'antd';
 import React from 'react';
 import AnalyseRangePicker from '@/components/AnalyseRangePicker';
 import moment from 'moment';
@@ -8,16 +8,18 @@ import Indicator from '@/components/Indicator';
 import Dimension from '@/components/Dimension';
 import Filter from '@/components/Filter';
 import AnalyseHeader from './components/AnalyseHeader';
-import { IReportInfo } from '@/api';
+import { IReportInfo, IFieldInfo, IFilterInfo, IEventQuery } from '@/api';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { doAddReport, doUpdateReport } from '@/store/actions';
-import { IAction, IStoreState } from '@/types';
+import { IAction, IStoreState, IListData, IDate } from '@/types';
+import { RangePickerValue } from 'antd/lib/date-picker/interface';
 const { Option } = Select;
 const { Panel } = Collapse;
 const { Group } = Input;
 interface Props {
   reportInfo: IReportInfo;
+  fieldList: IListData<IFieldInfo>;
 }
 
 const options = {
@@ -36,10 +38,41 @@ const options = {
   ]
 };
 
-const onChange = (dates: [moment.Moment, moment.Moment], type: string) => {};
+const onChange = (param: IDate) => {};
 
-const AnalyseEvent = ({ reportInfo }: Props) => {
+const AnalyseEvent = ({ reportInfo, fieldList }: Props) => {
   const [newInfo, setNewInfo] = React.useState(reportInfo);
+
+  const [query, setquery] = React.useState<IEventQuery>({
+    indicators: [
+      {
+        trackId: 'aaa',
+        type: 'SUM',
+        id: 1,
+        filter: {
+          filterType: 'OR',
+          filterValues: []
+        }
+      }
+    ],
+    dimension: '',
+    filter: {
+      filterType: 'OR',
+      filterValues: []
+    },
+    time: {
+      date: [],
+      type: ''
+    },
+    type: 'LINE',
+    timeUlit: 'DAY'
+  });
+
+  const handleChange = (info: IEventQuery) => {
+    setquery(info);
+    console.log(info);
+  };
+
   return (
     <div>
       <AnalyseHeader reportInfo={newInfo}></AnalyseHeader>
@@ -48,67 +81,75 @@ const AnalyseEvent = ({ reportInfo }: Props) => {
           <div>
             <div className={style.ruleTitle}>
               <span>指标:</span>
-              <span className='app-link'>
-                <Icon type='plus' />
-                添加指标
-              </span>
             </div>
             <div>
-              <Indicator />
-              <div className='app-link'>
-                <Icon type='plus' />
-                添加筛选
-              </div>
-              <Filter />
+              <Indicator
+                fieldList={fieldList}
+                indicators={query.indicators}
+                onChange={indicators => handleChange({ ...query, indicators })}
+              />
+
+              {/* <Filter fieldList={fieldList} filterInfo={filter} /> */}
             </div>
           </div>
 
           <div>
             <div className={style.ruleTitle}>
               <span>维度:</span>
-              <span className='app-link'>
-                <Icon type='plus' />
-                添加维度
-              </span>
             </div>
-            <Dimension />
+            <Dimension
+              dimension={query.dimension}
+              fieldList={fieldList}
+              onChange={dimension => handleChange({ ...query, dimension })}
+            />
           </div>
 
           <div>
             <div className={style.ruleTitle}>
               <span>筛选:</span>
-              <span className='app-link'>
-                <Icon type='plus' />
-                添加筛选
-              </span>
             </div>
-            <Filter />
+            <Filter
+              fieldList={fieldList}
+              filterInfo={query.filter}
+              onChange={filter => handleChange({ ...query, filter })}
+            />
           </div>
         </Panel>
       </Collapse>
 
-      <div>
+      <div className={style.preview}>
+        <Row>
+          <Col span={14}>
+            <AnalyseRangePicker onChange={time => handleChange({ ...query, time })} value={query.time} />
+          </Col>
+          <Col span={6} offset={4}>
+            <Group compact>
+              <Select
+                style={{ width: '33%' }}
+                value={query.type}
+                onChange={(type: string) => handleChange({ ...query, type })}
+              >
+                <Option value='LINE'>折线图</Option>
+                <Option value='PIE'>饼图</Option>
+                <Option value='TABLE'>表格</Option>
+                <Option value='NUMBER'>数值</Option>
+              </Select>
+              <Select
+                style={{ width: '33%' }}
+                value='DAY'
+                onChange={(timeUlit: string) => handleChange({ ...query, timeUlit })}
+              >
+                <Option value='HOURS'>按小时</Option>
+                <Option value='DAY'>按天</Option>
+                <Option value='WEEK'>按周</Option>
+                <Option value='MONTH'>按月</Option>
+                <Option value='YEAR'>按年</Option>
+              </Select>
+              <Button icon='download'>导出</Button>
+            </Group>
+          </Col>
+        </Row>
         <div>
-          <AnalyseRangePicker onChange={onChange} value={[moment(), moment()]} />
-          |本月
-        </div>
-        <div>
-          <Group compact>
-            <Select style={{ width: '33%' }} defaultValue='Home'>
-              <Option value='Company'>Company</Option>
-            </Select>
-            <Select style={{ width: '33%' }} defaultValue='Home'>
-              <Option value='Home'>折线图</Option>
-              <Option value='Company'>饼图</Option>
-            </Select>
-            <Select style={{ width: '33%' }} defaultValue='Home'>
-              <Option value='Home'>按天</Option>
-              <Option value='Company'>按月</Option>
-            </Select>
-          </Group>
-        </div>
-        <div>
-          <h4>临时使用</h4>
           <pre>
             <code></code>
           </pre>
@@ -123,8 +164,10 @@ const AnalyseEvent = ({ reportInfo }: Props) => {
 
 const mapStateToProps = (state: IStoreState) => {
   const { reportInfo } = state.report;
+  const { fieldList } = state.metadata;
   return {
-    reportInfo
+    reportInfo,
+    fieldList
   };
 };
 

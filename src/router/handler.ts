@@ -1,6 +1,6 @@
-import { doGetTeamList } from './../store/actions/team.action';
+import { doGetTeamList, doGetTeamInfo } from './../store/actions/team.action';
 import { doGetBoardList, doGetBoardInfo } from './../store/actions/board.action';
-import { doGetTagList } from './../store/actions/metadata.action';
+import { doGetTagList, doGetFieldList } from './../store/actions/metadata.action';
 import { doResetReportInfo } from './../store/actions/report.action';
 import { doGetProjectInfo } from './../store/actions/project.action';
 import { CACHE_TIME } from '@/constants';
@@ -29,6 +29,15 @@ const handlers = {
         action: doGetTeamList.request(state.team.teamListParam),
         ttl: CACHE_TIME,
         disable: !!state.team.teamList.list.length
+      }
+    ];
+  },
+  '/team-info': ({ search: { teamId } }: any, state: IStoreState): IHandler[] => {
+    return [
+      {
+        action: doGetTeamInfo.request({ id: teamId }),
+        ttl: CACHE_TIME,
+        disable: false
       }
     ];
   },
@@ -91,6 +100,11 @@ const handlers = {
         action: doResetReportInfo('EVENT'),
         ttl: CACHE_TIME,
         disable: false
+      },
+      {
+        action: doGetFieldList.request(),
+        ttl: CACHE_TIME,
+        disable: state.metadata.fieldList.list.length > 0
       }
     ];
   },

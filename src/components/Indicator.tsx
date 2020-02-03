@@ -1,107 +1,135 @@
 import * as React from 'react';
 import { Tag, Select, Row, Col, Icon, Popover, Input, Dropdown, Divider } from 'antd';
 import style from './Indicator.module.less';
-import { IMetadataInfo, IMetadataListParam } from '@/api';
-import { IPageData, IAction, IStoreState } from '@/types';
+import { IMetadataInfo, IMetadataListParam, IIndicatorInfo, IFieldInfo, IFilterInfo } from '@/api';
+import { IPageData, IAction, IStoreState, IListData } from '@/types';
 import { connect } from 'react-redux';
 
 import { bindActionCreators, Dispatch } from 'redux';
+import Filter from './Filter';
 const { Option, OptGroup } = Select;
 
 const { Search } = Input;
 
-interface IndicatorItem {
-  event?: string;
-}
-
 interface Props {
-  indicators?: IndicatorItem[];
   activeMetadataList: IPageData<IMetadataInfo>;
   activeMetadataListParams: IMetadataListParam;
   index?: number;
+  fieldList: IListData<IFieldInfo>;
+  indicators: IIndicatorInfo[];
+  onChange: (param: IIndicatorInfo[]) => any;
 }
 
-const Indicator = ({ indicators, activeMetadataList, activeMetadataListParams, index = 0 }: Props) => {
-  const [indicatorInfo, setindicatorInfo] = React.useState<{ target: string; metadata: IMetadataInfo }>({
-    metadata: {
-      id: null,
-      name: null,
-      code: null,
-      type: null,
-      description: null,
-      status: null,
-      projectId: null,
-      tags: []
-    },
-    target: '1'
-  });
-  function handleSelectMetadata(info: IMetadataInfo) {
-    setindicatorInfo({
-      ...indicatorInfo,
-      metadata: info
-    });
+const Indicator = ({ indicators, activeMetadataList, activeMetadataListParams, onChange, fieldList }: Props) => {
+  function handleSelectMetadata(info: IMetadataInfo, index: number) {
+    const newIndicators: IIndicatorInfo[] = JSON.parse(JSON.stringify(indicators));
+    newIndicators[index].trackId = info.code;
+    onChange(newIndicators);
   }
 
-  function handleTargetChange(value: string) {
-    setindicatorInfo({
-      ...indicatorInfo,
-      target: value
-    });
+  function handleFilterChange(info: IFilterInfo, index: number) {
+    const newIndicators: IIndicatorInfo[] = JSON.parse(JSON.stringify(indicators));
+    newIndicators[index].filter = info;
+    onChange(newIndicators);
   }
 
-  const content = (
-    <div className={style.content}>
-      <div onClick={e => e.stopPropagation()}>
-        <Search placeholder='搜索事件' onSearch={value => console.log(value)} style={{ width: 200 }} />
-        <Select style={{ width: 200 }}>
-          <Option value='1'>标签1</Option>
-          <Option value='2'>标签2</Option>
-          <Option value='3'>标签3</Option>
-        </Select>
-      </div>
+  function handleTypeChange(value: string, index: number) {
+    const newIndicators: IIndicatorInfo[] = JSON.parse(JSON.stringify(indicators));
+    newIndicators[index].type = value;
+    onChange(newIndicators);
+  }
 
-      <div className={style.metadataBox}>
-        {activeMetadataList.list.map(item => (
-          <span onClick={() => handleSelectMetadata(item)} className='app-pointer' key={item.code}>
-            {item.name}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
+  function handleAdd() {
+    const newIndicators: IIndicatorInfo[] = JSON.parse(JSON.stringify(indicators));
+    newIndicators.push({
+      trackId: null,
+      type: 'SUM',
+      id: Date.now(),
+      filter: {
+        filterType: 'AND',
+        filterValues: []
+      }
+    });
+    onChange(newIndicators);
+  }
+
+  function handleRemove(index: number) {
+    const newIndicators: IIndicatorInfo[] = JSON.parse(JSON.stringify(indicators));
+    newIndicators.splice(index, 1);
+    onChange(newIndicators);
+  }
 
   return (
     <div className={style.wrapper}>
-      <Row className={style.item}>
-        <Col span={1}>
-          <div className={style.center}>
-            <Tag color='gold'>{index + 1}</Tag>
-          </div>
-        </Col>
-        <Col span={3}>
-          <Dropdown overlay={content}>
-            <Input value={indicatorInfo.metadata.name} readOnly className={style.select} />
-          </Dropdown>
-        </Col>
-        <Col span={1}>
-          <div className={style.center}>的</div>
-        </Col>
-        <Col span={3}>
-          <Select onChange={handleTargetChange} value={indicatorInfo.target}>
-            <Option value='1'>总次数</Option>
-            <Option value='2'>用户数</Option>
-            <Option value='3'>人均次数</Option>
-          </Select>
-        </Col>
+      <div>
+        {indicators.map((indicatorInfo, index) => (
+          <div key={indicatorInfo.id}>
+            <Row className={style.item}>
+              <Col span={1}>
+                <div className={style.center}>
+                  <Tag color='gold'>{index + 1}</Tag>
+                </div>
+              </Col>
+              <Col span={3}>
+                <Dropdown
+                  overlay={
+                    <div className={style.content}>
+                      <div onClick={e => e.stopPropagation()}>
+                        <Search placeholder='搜索事件' onSearch={value => console.log(value)} style={{ width: 200 }} />
+                        <Select style={{ width: 200 }}>
+                          <Option value='1'>标签1</Option>
+                          <Option value='2'>标签2</Option>
+                          <Option value='3'>标签3</Option>
+                        </Select>
+                      </div>
 
-        {!!index && (
-          <Col span={1}>
-            <div className={'app-link ' + style.center}>
-              <Icon type='close' />
+                      <div className={style.metadataBox}>
+                        {activeMetadataList.list.map(item => (
+                          <span
+                            onClick={() => handleSelectMetadata(item, index)}
+                            className='app-pointer'
+                            key={item.code}
+                          >
+                            {item.name}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  }
+                >
+                  <Input value={indicatorInfo.trackId} readOnly className={style.select} />
+                </Dropdown>
+              </Col>
+              <Col span={1}>
+                <div className={style.center}>的</div>
+              </Col>
+              <Col span={3}>
+                <Select onChange={(val: string) => handleTypeChange(val, index)} value={indicatorInfo.type}>
+                  <Option value='SUM'>总次数</Option>
+                  <Option value='USER_SUM'>用户数</Option>
+                  <Option value='3'>人均次数</Option>
+                </Select>
+              </Col>
+
+              {indicators.length > 1 && (
+                <Col span={1}>
+                  <div onClick={() => handleRemove(index)} className={'app-link ' + style.center}>
+                    <Icon type='close' />
+                  </div>
+                </Col>
+              )}
+            </Row>
+            <div className={style.filter}>
+              <Filter
+                fieldList={fieldList}
+                filterInfo={indicatorInfo.filter}
+                onChange={filter => handleFilterChange(filter, index)}
+              ></Filter>
             </div>
-          </Col>
-        )}
-      </Row>
+          </div>
+        ))}
+      </div>
+      <a onClick={handleAdd}>+添加指标</a>
     </div>
   );
 };

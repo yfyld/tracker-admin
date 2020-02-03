@@ -1,12 +1,5 @@
-import { IDeleteParam } from './../../types/index';
-import {
-  IFieldListParam,
-  IFieldInfo,
-  ITagAddParam,
-  ITagUpdateParam,
-  ITagListParam,
-  ITagList
-} from './../../api/metadata.api';
+import { IDeleteParam, IListData } from './../../types/index';
+import { IFieldInfo, ITagAddParam, ITagUpdateParam, ITagListParam, ITagList } from './../../api/metadata.api';
 import { createAsyncAction } from 'typesafe-actions';
 import { IPageData } from '@/types';
 import * as actionType from '@/constants/actionType';
@@ -58,13 +51,7 @@ export const doGetFieldList = createAsyncAction(
   actionType.GET_FIELD_LIST_REQUEST,
   actionType.GET_FIELD_LIST_SUCCESS,
   actionType.GET_FIELD_LIST_FAILURE
-)<IFieldListParam, IPageData<IFieldInfo>, Error>();
-
-export const doGetActiveFieldList = createAsyncAction(
-  actionType.GET_ACTIVE_FIELD_LIST_REQUEST,
-  actionType.GET_ACTIVE_FIELD_LIST_SUCCESS,
-  actionType.GET_ACTIVE_FIELD_LIST_FAILURE
-)<IFieldListParam, IPageData<IFieldInfo>, Error>();
+)<undefined, IListData<IFieldInfo>, Error>();
 
 export const doGetTagList = createAsyncAction(
   actionType.GET_TAG_LIST_REQUEST,

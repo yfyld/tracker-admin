@@ -1,6 +1,7 @@
-import { IStoreState } from '@/store/reducers';
+import { IStoreState as _IStoreState } from '@/store/reducers';
 import * as actions from '@/store/actions';
 import { ActionType } from 'typesafe-actions';
+import { RangePickerValue } from 'antd/lib/date-picker/interface';
 
 //全局
 
@@ -11,7 +12,7 @@ export interface IActionAny {
   payload?: any;
 }
 
-export type IStoreState = IStoreState;
+export type IStoreState = _IStoreState;
 
 export interface Store {
   nameSpace: string;
@@ -22,6 +23,10 @@ export interface Store {
 
 export interface IPageData<T> {
   totalCount: number;
+  list: T[];
+}
+
+export interface IListData<T> {
   list: T[];
 }
 
@@ -53,6 +58,11 @@ export interface IDeleteParam {
 export interface IInfoParam {
   projectId: number;
   id: number;
+}
+
+export interface IDate {
+  date: RangePickerValue;
+  type: string;
 }
 
 // //project

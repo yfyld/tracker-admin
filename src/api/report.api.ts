@@ -1,5 +1,5 @@
 import { IBoardInfo } from './board.api';
-import { IPageData, IInfoParam } from './../types/index';
+import { IPageData, IInfoParam, IDate } from './../types/index';
 import fetch from './http';
 
 export interface IReportInfo {
@@ -47,6 +47,35 @@ export interface IReportUpdateParam {
   data: Object;
   id: number;
 }
+
+export interface IFilterValue {
+  key: string;
+  type: string;
+  value: any;
+  id: number;
+}
+
+export interface IFilterInfo {
+  filterType: string;
+  filterValues: IFilterValue[];
+}
+
+export interface IIndicatorInfo {
+  trackId: string;
+  type: string;
+  filter: IFilterInfo;
+  id: number;
+}
+
+export interface IEventQuery {
+  indicators: IIndicatorInfo[];
+  filter: IFilterInfo;
+  dimension: string;
+  time: IDate;
+  type: string;
+  timeUlit: string;
+}
+
 export function fetchReportList(params: IReportListParam) {
   return fetch.get<IPageData<IReportInfo>>('/report', params);
 }

@@ -75,6 +75,11 @@ export function getQuarterStartDate() {
   return new Date(nowYear, getQuarterStartMonth(), 1).setHours(0, 0, 0, 0);
 }
 
+//获得本季度的开端日期
+export function getQuarterEndDate() {
+  return new Date(nowYear, getQuarterStartMonth() + 3, 1).setHours(0, 0, 0, 0) - 1;
+}
+
 //获得上季度的开端日期
 export function getLastQuarterStartDate() {
   const nowQuarter = getQuarterStartMonth();
@@ -86,6 +91,9 @@ export function getLastQuarterStartDate() {
   }
   return new Date(year, lastQuarter, 1).setHours(0, 0, 0, 0);
 }
+export function getLastQuarterEndDate() {
+  return getQuarterStartDate() - 1;
+}
 
 //获得本年的开端日期
 export function getYearStartDate() {
@@ -95,4 +103,8 @@ export function getYearStartDate() {
 //获得去年的开端日期
 export function getLastYearStartDate() {
   return new Date(nowYear - 1, 0, 1).setHours(0, 0, 0, 0);
+}
+
+export function getLastYearEndDate() {
+  return getYearStartDate() - 1;
 }

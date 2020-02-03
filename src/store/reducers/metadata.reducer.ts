@@ -1,10 +1,6 @@
-import { IFieldInfo, IFieldListParam, ITagList } from './../../api/metadata.api';
-import {
-  doGetActiveMetadataList,
-  doGetFieldList,
-  doGetActiveFieldList,
-  doGetTagList
-} from './../actions/metadata.action';
+import { IListData } from './../../types/index';
+import { IFieldInfo, ITagList } from './../../api/metadata.api';
+import { doGetActiveMetadataList, doGetFieldList, doGetTagList } from './../actions/metadata.action';
 import update from 'immutability-helper';
 import { getType } from 'typesafe-actions';
 import { IAction, IPageData } from '@/types';
@@ -20,10 +16,7 @@ export interface MetadataState {
   activeMetadataList: IPageData<IMetadataInfo>;
   activeMetadataListParams: IMetadataListParam;
   //属性列表
-  fieldList: IPageData<IFieldInfo>;
-  fieldListParams: IFieldListParam;
-  //用于分析数据(多个推荐字段)
-  activeFieldList: IPageData<IFieldInfo>;
+  fieldList: IListData<IFieldInfo>;
 
   tagList: ITagList;
 }
@@ -37,7 +30,9 @@ const initialState = (): MetadataState => ({
     description: null,
     status: null,
     projectId: null,
-    tags: []
+    tags: [],
+    log: null,
+    recentLog: null
   },
   metadataList: { totalCount: 0, list: [] },
   metadataListParams: { page: 1, pageSize: 20, projectId: null },
@@ -45,9 +40,7 @@ const initialState = (): MetadataState => ({
   activeMetadataList: { totalCount: 0, list: [] },
   activeMetadataListParams: { page: 1, pageSize: 120, projectId: null, name: null, tags: null, status: 1 },
 
-  fieldList: { totalCount: 0, list: [] },
-  fieldListParams: { page: 1, pageSize: 20, projectId: null },
-  activeFieldList: { totalCount: 0, list: [] },
+  fieldList: { list: [] },
   tagList: { totalCount: 0, list: [] }
 });
 
@@ -69,15 +62,9 @@ export const metadataReducer = (state: MetadataState = initialState(), action: I
         activeMetadataList: { $set: action.payload }
       });
 
-    case getType(doGetFieldList.request):
-      return update(state, { fieldListParams: { $set: action.payload } });
     case getType(doGetFieldList.success):
       return update(state, {
         fieldList: { $set: action.payload }
-      });
-    case getType(doGetActiveFieldList.success):
-      return update(state, {
-        activeFieldList: { $set: action.payload }
       });
 
     case getType(doGetTagList.success):

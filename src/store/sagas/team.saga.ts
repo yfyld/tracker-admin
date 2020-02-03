@@ -1,15 +1,7 @@
 import { put, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
 import { doGetTeamList, doAddTeam, doUpdateTeam, doDeleteTeam, doGetTeamInfo, doGetBoardInfo } from '@/store/actions';
-import {
-  fetchTeamList,
-  fetchTeamAdd,
-  fetchFieldList,
-  fetchActiveFieldList,
-  fetchTeamUpdate,
-  fetchTeamDel,
-  fetchTeamInfo
-} from '@/api';
+import { fetchTeamList, fetchTeamAdd, fetchFieldList, fetchTeamUpdate, fetchTeamDel, fetchTeamInfo } from '@/api';
 import { select, call } from '@/utils';
 
 function* getTeamList(action: ReturnType<typeof doGetTeamList.request>): Generator {

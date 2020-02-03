@@ -1,7 +1,17 @@
 .wrapper {
   padding: 15px 5px;
+  position: relative;
   &:hover {
     background: #dfecfb;
+  }
+  &:after {
+    background: @primary;
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 5px;
+    bottom: 5px;
+    width: 2px;
   }
   :global {
     .ant-select,
@@ -11,7 +21,46 @@
   }
 }
 
-.center {
+.line {
+  border: 1px solid @border;
+  position: absolute;
+  width: 45px;
+  top: 20px;
+  left: 34px;
+  bottom: 0px;
+  border-right: 0;
+}
+
+.type {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  bottom: 40px;
+  right: 0;
+
+  button {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    margin-top: -2px;
+    z-index: 2;
+  }
+}
+
+.form {
+  padding-left: 80px;
+  > div {
+    margin-bottom: 10px;
+  }
+  &:hover {
+    .close {
+      display: block;
+    }
+  }
+}
+
+.close {
+  display: none;
   text-align: center;
   line-height: 32px;
 }

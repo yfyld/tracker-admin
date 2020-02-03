@@ -1,4 +1,4 @@
-import { IDeleteParam, IPageQuery } from './../types/index';
+import { IDeleteParam, IPageQuery, IListData } from './../types/index';
 import fetch from './http';
 import { IPageData } from '@/types';
 
@@ -16,6 +16,8 @@ export interface IMetadataInfo {
   status: number;
   tags: ITagInfo[];
   projectId: number;
+  log: number;
+  recentLog: number;
 }
 
 export interface IMetadataListParam extends IPageQuery {
@@ -77,16 +79,10 @@ export interface ITagUpdateParam {
 }
 
 export interface IFieldInfo {
-  code: string;
-  name?: string;
-  des?: string;
-}
-
-export interface IFieldListParam {
-  name?: string;
-  page: number;
-  pageSize: number;
-  projectId: number;
+  name: string;
+  value: string;
+  type: string;
+  recommend: string[];
 }
 
 export function fetchMetadataList(params: IMetadataListParam) {
@@ -129,10 +125,6 @@ export function fetchTagUpdate(params: ITagUpdateParam) {
   return fetch.put('/metadata/tag', params);
 }
 
-export function fetchFieldList(params: IFieldListParam) {
-  return fetch.get<IPageData<IFieldInfo>>('/metadata/fields', params);
-}
-
-export function fetchActiveFieldList(params: IFieldListParam) {
-  return fetch.get<IPageData<IFieldInfo>>('/metadata/active-fields', params);
+export function fetchFieldList() {
+  return fetch.get<IListData<IFieldInfo>>('/metadata/fields');
 }

@@ -8,7 +8,7 @@ import { formItemLayout } from '@/constants';
 
 interface Props extends FormComponentProps {
   visible: boolean;
-  onClose: (param: boolean) => any;
+  onClose: (param: boolean) => void;
   projectId: number;
   onSubmit: (param: IBoardAddParam) => IAction;
 }

@@ -44,7 +44,9 @@ const MetadataList = ({
     description: '',
     projectId: null,
     status: null,
-    tags: []
+    tags: [],
+    log: 0,
+    recentLog: 0
   });
   const [tagDrawerVisible, setTagDrawerVisible] = React.useState(false);
 
@@ -101,16 +103,23 @@ const MetadataList = ({
       dataIndex: 'log',
       filters: [
         {
-          text: '是',
+          text: '有',
           value: '1'
         },
         {
-          text: '否',
+          text: '无',
           value: '0'
         }
       ],
       filterMultiple: false,
-      render: (text: number) => <span>{text === 1 ? '是' : '否'}</span>
+      render: (text: number, record) =>
+        record.log ? (
+          <span>
+            {record.log}条(最新:{record.recentLog}条)
+          </span>
+        ) : (
+          <span>无</span>
+        )
     },
     {
       key: 'tags',
