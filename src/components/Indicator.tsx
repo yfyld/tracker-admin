@@ -24,6 +24,8 @@ const Indicator = ({ indicators, activeMetadataList, activeMetadataListParams, o
   function handleSelectMetadata(info: IMetadataInfo, index: number) {
     const newIndicators: IIndicatorInfo[] = JSON.parse(JSON.stringify(indicators));
     newIndicators[index].trackId = info.code;
+    newIndicators[index].metadataCode = info.code;
+    newIndicators[index].metadataName = info.name;
     onChange(newIndicators);
   }
 
@@ -43,6 +45,8 @@ const Indicator = ({ indicators, activeMetadataList, activeMetadataListParams, o
     const newIndicators: IIndicatorInfo[] = JSON.parse(JSON.stringify(indicators));
     newIndicators.push({
       trackId: null,
+      metadataCode: null,
+      metadataName: '所有事件',
       type: 'SUM',
       id: Date.now(),
       filter: {
@@ -97,7 +101,7 @@ const Indicator = ({ indicators, activeMetadataList, activeMetadataListParams, o
                     </div>
                   }
                 >
-                  <Input value={indicatorInfo.trackId} readOnly className={style.select} />
+                  <Input value={indicatorInfo.metadataName} readOnly className={style.select} />
                 </Dropdown>
               </Col>
               <Col span={1}>

@@ -166,5 +166,8 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "@types/echarts": "^4.4.3"
   }
 }

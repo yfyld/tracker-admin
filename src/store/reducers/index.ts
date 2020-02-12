@@ -6,6 +6,7 @@ import { metadataReducer, MetadataState } from './metadata.reducer';
 import { boardReducer, BoardState } from './board.reducer';
 import { reportReducer, ReportState } from './report.reducer';
 import { teamReducer, TeamState } from './team.reducer';
+import { analyseReducer, AnalyseState } from './analyse.reducer';
 import { RouterState, connectRouter } from 'connected-react-router';
 import { history } from '@/utils';
 export interface IStoreState {
@@ -16,6 +17,7 @@ export interface IStoreState {
   board: BoardState;
   report: ReportState;
   team: TeamState;
+  analyse: AnalyseState;
 }
 
 const reducers = combineReducers({
@@ -25,6 +27,7 @@ const reducers = combineReducers({
   board: boardReducer,
   report: reportReducer,
   team: teamReducer,
+  analyse: analyseReducer,
   router: connectRouter(history)
 });
 

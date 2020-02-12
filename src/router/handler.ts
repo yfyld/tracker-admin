@@ -10,7 +10,8 @@ import {
   doGetMetadataList,
   doGetProjectList,
   doGetActiveMetadataList,
-  doGetReportList
+  doGetReportList,
+  doGetEventAnalyse
 } from '@/store/actions';
 
 const handlers = {
@@ -105,6 +106,11 @@ const handlers = {
         action: doGetFieldList.request(),
         ttl: CACHE_TIME,
         disable: state.metadata.fieldList.list.length > 0
+      },
+      {
+        action: doGetEventAnalyse.request({ ...state.analyse.eventAnalyseParam, projectId }),
+        ttl: CACHE_TIME,
+        disable: state.analyse.eventAnalyseData.list.length > 0
       }
     ];
   },

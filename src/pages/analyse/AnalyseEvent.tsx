@@ -8,69 +8,40 @@ import Indicator from '@/components/Indicator';
 import Dimension from '@/components/Dimension';
 import Filter from '@/components/Filter';
 import AnalyseHeader from './components/AnalyseHeader';
-import { IReportInfo, IFieldInfo, IFilterInfo, IEventQuery } from '@/api';
+import { IReportInfo, IFieldInfo, IFilterInfo, IEventAnalyseParam } from '@/api';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { doAddReport, doUpdateReport } from '@/store/actions';
+import { doAddReport, doUpdateReport, doGetEventAnalyse } from '@/store/actions';
 import { IAction, IStoreState, IListData, IDate } from '@/types';
-import { RangePickerValue } from 'antd/lib/date-picker/interface';
+import { DYNAMIC_TIME } from '@/constants';
+import AnalyseEventChart from './components/AnalyseEventChart';
 const { Option } = Select;
 const { Panel } = Collapse;
 const { Group } = Input;
 interface Props {
   reportInfo: IReportInfo;
   fieldList: IListData<IFieldInfo>;
+  onGetEventAnalyseData: (param: IEventAnalyseParam) => IAction;
+  projectId: number;
+  eventAnalyseData: any;
+  eventAnalyseParam: IEventAnalyseParam;
 }
-
-const options = {
-  xAxis: {
-    type: 'category',
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-  },
-  yAxis: {
-    type: 'value'
-  },
-  series: [
-    {
-      data: [820, 932, 901, 934, 1290, 1330, 1320],
-      type: 'line'
-    }
-  ]
-};
 
 const onChange = (param: IDate) => {};
 
-const AnalyseEvent = ({ reportInfo, fieldList }: Props) => {
+const AnalyseEvent = ({
+  reportInfo,
+  fieldList,
+  onGetEventAnalyseData,
+  projectId,
+  eventAnalyseData,
+  eventAnalyseParam
+}: Props) => {
   const [newInfo, setNewInfo] = React.useState(reportInfo);
 
-  const [query, setquery] = React.useState<IEventQuery>({
-    indicators: [
-      {
-        trackId: 'aaa',
-        type: 'SUM',
-        id: 1,
-        filter: {
-          filterType: 'OR',
-          filterValues: []
-        }
-      }
-    ],
-    dimension: '',
-    filter: {
-      filterType: 'OR',
-      filterValues: []
-    },
-    time: {
-      date: [],
-      type: ''
-    },
-    type: 'LINE',
-    timeUlit: 'DAY'
-  });
-
-  const handleChange = (info: IEventQuery) => {
-    setquery(info);
-    console.log(info);
+  const handleChange = (info: IEventAnalyseParam) => {
+    info.projectId = projectId;
+    onGetEventAnalyseData(info);
   };
 
   return (
@@ -85,8 +56,8 @@ const AnalyseEvent = ({ reportInfo, fieldList }: Props) => {
             <div>
               <Indicator
                 fieldList={fieldList}
-                indicators={query.indicators}
-                onChange={indicators => handleChange({ ...query, indicators })}
+                indicators={eventAnalyseParam.indicators}
+                onChange={indicators => handleChange({ ...eventAnalyseParam, indicators })}
               />
 
               {/* <Filter fieldList={fieldList} filterInfo={filter} /> */}
@@ -98,9 +69,9 @@ const AnalyseEvent = ({ reportInfo, fieldList }: Props) => {
               <span>维度:</span>
             </div>
             <Dimension
-              dimension={query.dimension}
+              dimension={eventAnalyseParam.dimension}
               fieldList={fieldList}
-              onChange={dimension => handleChange({ ...query, dimension })}
+              onChange={dimension => handleChange({ ...eventAnalyseParam, dimension })}
             />
           </div>
 
@@ -110,8 +81,8 @@ const AnalyseEvent = ({ reportInfo, fieldList }: Props) => {
             </div>
             <Filter
               fieldList={fieldList}
-              filterInfo={query.filter}
-              onChange={filter => handleChange({ ...query, filter })}
+              filterInfo={eventAnalyseParam.filter}
+              onChange={filter => handleChange({ ...eventAnalyseParam, filter })}
             />
           </div>
         </Panel>
@@ -120,14 +91,17 @@ const AnalyseEvent = ({ reportInfo, fieldList }: Props) => {
       <div className={style.preview}>
         <Row>
           <Col span={14}>
-            <AnalyseRangePicker onChange={time => handleChange({ ...query, time })} value={query.time} />
+            <AnalyseRangePicker
+              onChange={time => handleChange({ ...eventAnalyseParam, time })}
+              value={eventAnalyseParam.time}
+            />
           </Col>
           <Col span={6} offset={4}>
             <Group compact>
               <Select
                 style={{ width: '33%' }}
-                value={query.type}
-                onChange={(type: string) => handleChange({ ...query, type })}
+                value={eventAnalyseParam.type}
+                onChange={(type: string) => handleChange({ ...eventAnalyseParam, type })}
               >
                 <Option value='LINE'>折线图</Option>
                 <Option value='PIE'>饼图</Option>
@@ -136,10 +110,10 @@ const AnalyseEvent = ({ reportInfo, fieldList }: Props) => {
               </Select>
               <Select
                 style={{ width: '33%' }}
-                value='DAY'
-                onChange={(timeUlit: string) => handleChange({ ...query, timeUlit })}
+                value={eventAnalyseParam.timeUlit}
+                onChange={(timeUlit: string) => handleChange({ ...eventAnalyseParam, timeUlit })}
               >
-                <Option value='HOURS'>按小时</Option>
+                <Option value='HOUR'>按小时</Option>
                 <Option value='DAY'>按天</Option>
                 <Option value='WEEK'>按周</Option>
                 <Option value='MONTH'>按月</Option>
@@ -155,7 +129,7 @@ const AnalyseEvent = ({ reportInfo, fieldList }: Props) => {
           </pre>
         </div>
         <div>
-          <ReactEcharts option={options} notMerge={true} lazyUpdate={true} />
+          <AnalyseEventChart data={eventAnalyseData} param={eventAnalyseParam}></AnalyseEventChart>
         </div>
       </div>
     </div>
@@ -165,12 +139,23 @@ const AnalyseEvent = ({ reportInfo, fieldList }: Props) => {
 const mapStateToProps = (state: IStoreState) => {
   const { reportInfo } = state.report;
   const { fieldList } = state.metadata;
+  const projectId = state.project.projectInfo.id;
+  const { eventAnalyseData, eventAnalyseParam } = state.analyse;
   return {
     reportInfo,
-    fieldList
+    fieldList,
+    projectId,
+    eventAnalyseData,
+    eventAnalyseParam
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IAction>) => bindActionCreators({}, dispatch);
+const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
+  bindActionCreators(
+    {
+      onGetEventAnalyseData: (param: IEventAnalyseParam) => doGetEventAnalyse.request(param)
+    },
+    dispatch
+  );
 
 export default connect(mapStateToProps, mapDispatchToProps)(AnalyseEvent);

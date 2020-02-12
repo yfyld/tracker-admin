@@ -4,3 +4,4 @@ export * from './metadata.api';
 export * from './board.api';
 export * from './report.api';
 export * from './team.api';
+export * from './analyse.api';
