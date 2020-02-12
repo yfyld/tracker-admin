@@ -124,19 +124,10 @@ export function fetchTagUpdate(params: ITagUpdateParam) {
   return fetch.put('/metadata/tag', params);
 }
 
-<<<<<<< HEAD
-export function fetchFieldList() {
-  return fetch.get<IListData<IFieldInfo>>('/metadata/fields');
-=======
 export function fetchTagDel(projectId: number, tagId: number) {
   return fetch.delete(`/metadata/tag/${projectId}/${tagId}`);
 }
 
-export function fetchFieldList(params: IFieldListParam) {
-  return fetch.get<IPageData<IFieldInfo>>('/metadata/fields', params);
-}
-
-export function fetchActiveFieldList(params: IFieldListParam) {
-  return fetch.get<IPageData<IFieldInfo>>('/metadata/active-fields', params);
->>>>>>> 5c66036e12ffa1af322f423c07ef0847eb889671
+export function fetchFieldList() {
+  return fetch.get<IPageData<IFieldInfo>>('/metadata/fields');
 }
