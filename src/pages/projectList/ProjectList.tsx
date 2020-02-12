@@ -27,9 +27,9 @@ const ProjectList = ({ projectList, handleSubmit, projectListParams }: Props) =>
     <div className={style.wrapper}>
       <ProjectAddModel visible={addProjectVisible} onClose={setAddProjectVisible}></ProjectAddModel>
 
-      <div>
+      <div className={style.header}>
         <ProjectListForm defaultValue={projectListParams} onSubmit={handleSubmit}></ProjectListForm>
-        <Button onClick={() => setAddProjectVisible(true)} size='small'>
+        <Button type='primary' onClick={() => setAddProjectVisible(true)}>
           新建项目
         </Button>
       </div>

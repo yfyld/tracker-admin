@@ -6,7 +6,7 @@ import { doGetMetadataList, doDeleteMetadata, doEnableMetadata, doDisableMetadat
 import { bindActionCreators, Dispatch } from 'redux';
 import { Table, Button, Modal, Drawer, Tag } from 'antd';
 import { PaginationConfig, SorterResult, ColumnProps, ColumnFilterItem } from 'antd/lib/table';
-import { IMetadataListParam, IMetadataInfo, ITagInfo, IMetadataType } from '@/api';
+import { IMetadataListParam, IMetadataInfo, ITagInfo, EMetadataType } from '@/api';
 import MetadataAddModal from './components/MetadataAddModal';
 import MetadataEditModal from './components/MetadataEditModal';
 import TagManagement from './components/TagManagement';
@@ -15,10 +15,10 @@ import { tagListFiltersSelector } from '@/store/selectors';
 const { confirm } = Modal;
 
 interface Props {
-  getMetadataList: (params: IMetadataListParam) => IAction;
-  doDeleteMetadata: (params: number) => IAction;
-  doEnableMetadata: (params: number) => IAction;
-  doDisableMetadata: (params: number) => IAction;
+  onGetMetadataList: (params: IMetadataListParam) => IAction;
+  onDeleteMetadata: (params: number) => IAction;
+  onEnableMetadata: (params: number) => IAction;
+  onDisableMetadata: (params: number) => IAction;
   metadataList: IPageData<IMetadataInfo>;
   metadataListParams: IMetadataListParam;
   tagListFilters: ColumnFilterItem[];
@@ -27,10 +27,10 @@ interface Props {
 
 const MetadataList = ({
   metadataList,
-  getMetadataList,
-  doDeleteMetadata,
-  doEnableMetadata,
-  doDisableMetadata,
+  onGetMetadataList,
+  onDeleteMetadata,
+  onEnableMetadata,
+  onDisableMetadata,
   metadataListParams,
   tagListFilters
 }: Props) => {
@@ -70,11 +70,11 @@ const MetadataList = ({
       filters: [
         {
           text: '页面',
-          value: '' + IMetadataType.page
+          value: '' + EMetadataType.page
         },
         {
           text: '事件',
-          value: '' + IMetadataType.event
+          value: '' + EMetadataType.event
         }
       ],
       filterMultiple: false,
@@ -154,12 +154,12 @@ const MetadataList = ({
             编辑
           </Button>
           {record.status === 1 && (
-            <Button type='link' size='small' onClick={() => handleDisableMetadata(record.id)}>
+            <Button type='link' size='small' onClick={() => onDisableMetadata(record.id)}>
               禁用
             </Button>
           )}
           {record.status === 0 && (
-            <Button type='link' size='small' onClick={() => handleEnableMetadata(record.id)}>
+            <Button type='link' size='small' onClick={() => onEnableMetadata(record.id)}>
               启用
             </Button>
           )}
@@ -173,9 +173,9 @@ const MetadataList = ({
 
   const filterMetadataType = (type: number) => {
     switch (type) {
-      case IMetadataType.page:
+      case EMetadataType.page:
         return '页面';
-      case IMetadataType.event:
+      case EMetadataType.event:
         return '事件';
       default:
         return '';
@@ -213,7 +213,7 @@ const MetadataList = ({
       params.log = filters.log[0];
     }
 
-    getMetadataList({ ...metadataListParams, ...params });
+    onGetMetadataList({ ...metadataListParams, ...params });
   }
 
   const handleDeleteMetadata = (metadataId: number) => {
@@ -224,7 +224,7 @@ const MetadataList = ({
       okType: 'danger',
       cancelText: '取消',
       onOk() {
-        doDeleteMetadata(metadataId);
+        onDeleteMetadata(metadataId);
       }
     });
   };
@@ -232,13 +232,6 @@ const MetadataList = ({
   const handleUpdateMetadata = (record: IMetadataInfo) => {
     setCurMetadataInfo(record);
     setEditMetadataVisible(true);
-  };
-
-  const handleDisableMetadata = (id: number) => {
-    doDisableMetadata(id);
-  };
-  const handleEnableMetadata = (id: number) => {
-    doEnableMetadata(id);
   };
 
   return (
@@ -261,7 +254,7 @@ const MetadataList = ({
       </Drawer>
       <div className='app-card'>
         <div className='app-fl'>
-          <MetadataListForm defaultValue={metadataListParams} onSubmit={getMetadataList}></MetadataListForm>
+          <MetadataListForm defaultValue={metadataListParams} onSubmit={onGetMetadataList}></MetadataListForm>
         </div>
         <div className='app-fr'>
           <Button onClick={() => setAddMetadataVisible(true)}>新增元数据</Button>
@@ -279,20 +272,19 @@ const MetadataList = ({
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
-      getMetadataList: params => {
+      onGetMetadataList: params => {
         return doGetMetadataList.request(params);
       },
-      doDeleteMetadata: params => {
+      onDeleteMetadata: params => {
         return doDeleteMetadata.request(params);
       },
-      doEnableMetadata: params => {
+      onEnableMetadata: params => {
         return doEnableMetadata.request(params);
       },
-      doDisableMetadata: params => {
+      onDisableMetadata: params => {
         return doDisableMetadata.request(params);
       }
     },
-
     dispatch
   );
 

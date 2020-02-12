@@ -69,7 +69,7 @@ export const doDelTag = createAsyncAction(
   actionType.DELETE_TAG_REQUEST,
   actionType.DELETE_TAG_SUCCESS,
   actionType.DELETE_TAG_FAILURE
-)<IDeleteParam, undefined, Error>();
+)<number, undefined, Error>();
 
 export const doUpdateTag = createAsyncAction(
   actionType.UPDATE_TAG_REQUEST,

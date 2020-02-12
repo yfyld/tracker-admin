@@ -2,7 +2,7 @@ import { Modal, Form, Input, Select, Button } from 'antd';
 import * as React from 'react';
 import { formItemLayout } from '@/constants';
 import { FormComponentProps } from 'antd/lib/form';
-import { IMetadataAddParam, ITagList, IMetadataType } from '@/api';
+import { IMetadataAddParam, ITagList, EMetadataType } from '@/api';
 import { toastformError } from '@/utils';
 import { connect } from 'react-redux';
 import { IAction, IStoreState } from '@/types';
@@ -14,14 +14,13 @@ interface Props extends FormComponentProps {
   onClose: (param: boolean) => any;
   projectId: number;
   tagList: ITagList;
-  handleAddMetadata: (param: IMetadataAddParam) => IAction;
+  onAddMetadata: (param: IMetadataAddParam) => IAction;
 }
 
 const MetadataAddModel = (props: Props) => {
   const { getFieldDecorator } = props.form;
   const { Option } = Select;
   const { TextArea } = Input;
-  const [newTags, setNewTags] = React.useState(['']);
   React.useEffect(() => {
     props.form.resetFields();
   }, [props.visible]);
@@ -47,19 +46,9 @@ const MetadataAddModel = (props: Props) => {
         });
         values.newTags = newTagsTemp;
       }
-      props.handleAddMetadata({ projectId: props.projectId, status: 0, ...values });
+      props.onAddMetadata({ projectId: props.projectId, status: 0, log: 0, ...values });
       props.onClose(false);
     });
-  };
-
-  const handleTagChange = (selectedItems: string[]) => {
-    console.log('selectedItems', selectedItems);
-  };
-
-  const handleAddTag = () => {
-    console.log('newTags', newTags);
-    newTags.push('');
-    setNewTags(newTags);
   };
 
   return (
@@ -78,8 +67,8 @@ const MetadataAddModel = (props: Props) => {
         <Form.Item label='事件类型'>
           {getFieldDecorator('type', { rules: [{ required: true, message: '请选择事件类型' }] })(
             <Select placeholder='请选择事件类型'>
-              <Option value={IMetadataType.page}>页面</Option>
-              <Option value={IMetadataType.event}>事件</Option>
+              <Option value={EMetadataType.page}>页面</Option>
+              <Option value={EMetadataType.event}>事件</Option>
             </Select>
           )}
         </Form.Item>
@@ -117,7 +106,7 @@ const mapStateToProps = (state: IStoreState) => {
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
-      handleAddMetadata: (params: IMetadataAddParam) => {
+      onAddMetadata: (params: IMetadataAddParam) => {
         return doAddMetadata.request(params);
       }
     },

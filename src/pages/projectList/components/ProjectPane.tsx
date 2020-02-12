@@ -4,20 +4,24 @@ import { Card, Icon, Popover, Modal, Input, message } from 'antd';
 import { Link } from 'react-router-dom';
 import React from 'react';
 import style from './ProjectPane.module.less';
-import { IProjectListItem } from '@/api';
+import { IProjectListItem, IProjectUpdateParam } from '@/api';
 import { connect } from 'react-redux';
 import { IAction } from '@/types';
 import { bindActionCreators, Dispatch } from 'redux';
-import { doDeleteProject } from '@/store/actions';
+import { doDeleteProject, doUpdateProject } from '@/store/actions';
+import ProjectUpdateModal from './ProjectUpdateModal';
 const { Meta } = Card;
 const { confirm } = Modal;
 
 interface Props {
   projectInfo: IProjectListItem;
-  doDeleteProject: (id: number) => IAction;
+  onDeleteProject: (id: number) => IAction;
+  onUpdateProject: (param: IProjectUpdateParam) => IAction;
 }
 
-const ProjectPane = ({ projectInfo, doDeleteProject }: Props) => {
+const ProjectPane = ({ projectInfo, onDeleteProject, onUpdateProject }: Props) => {
+  console.log(projectInfo);
+  const [updateProjectVisible, setUpdateProjectVisible] = React.useState(false);
   const handleDelete = () => {
     let name = '';
     confirm({
@@ -31,11 +35,10 @@ const ProjectPane = ({ projectInfo, doDeleteProject }: Props) => {
         </div>
       ),
       okText: '删除',
-      okType: 'danger',
       cancelText: '取消',
       onOk() {
         if (name === projectInfo.name) {
-          doDeleteProject(projectInfo.id);
+          onDeleteProject(projectInfo.id);
         } else {
           message.error('项目名称不正确,请确认');
           return Promise.reject();
@@ -46,15 +49,32 @@ const ProjectPane = ({ projectInfo, doDeleteProject }: Props) => {
       }
     });
   };
+  // const onUpdateProject = (param: IProjectUpdateParam) => {
+  //   return ;
+  // };
   return (
-    <Link className={style.wrapper} to={`/project/analyse-event?projectId=${projectInfo.id}`}>
-      <div>
+    <div className={style.wrapper}>
+      <ProjectUpdateModal
+        orginInfo={projectInfo}
+        visible={updateProjectVisible}
+        onClose={setUpdateProjectVisible}
+        onSubmit={onUpdateProject}
+      ></ProjectUpdateModal>
+      <Link to={`/project/analyse-event?projectId=${projectInfo.id}`}>
         <Card
           style={{ width: 300 }}
           cover={<img alt='image' src={projectInfo.image || noimg} />}
           actions={[
             <Icon key='eye' type='eye' />,
             <Icon key='share-alt' type='share-alt' />,
+            <Icon
+              key='edit'
+              type='edit'
+              onClick={e => {
+                e.preventDefault();
+                setUpdateProjectVisible(true);
+              }}
+            />,
             <Icon
               type='delete'
               key='delete'
@@ -71,16 +91,19 @@ const ProjectPane = ({ projectInfo, doDeleteProject }: Props) => {
             description={projectInfo.description || '这人太懒了,没写描述'}
           />
         </Card>
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
-      doDeleteProject: (id: number) => {
+      onDeleteProject: (id: number) => {
         return doDeleteProject.request(id);
+      },
+      onUpdateProject: (param: IProjectUpdateParam) => {
+        return doUpdateProject.request(param);
       }
     },
     dispatch

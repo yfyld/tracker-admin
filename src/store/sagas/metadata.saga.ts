@@ -75,7 +75,8 @@ function* updateMetadata(action: ReturnType<typeof doUpdateMetadata.request>): G
 function* deleteMetadata(action: ReturnType<typeof doDeleteMetadata.request>): Generator {
   try {
     const metadataListParams = yield* select(state => state.metadata.metadataListParams);
-    yield call(fetchMetadataDelete, action.payload);
+    const projectId = yield* select(state => state.project.projectInfo.id);
+    yield call(fetchMetadataDelete, projectId, action.payload);
     yield put(doDeleteMetadata.success());
     yield put(doGetMetadataList.request(metadataListParams));
   } catch (error) {
@@ -86,7 +87,8 @@ function* deleteMetadata(action: ReturnType<typeof doDeleteMetadata.request>): G
 function* enableMetadata(action: ReturnType<typeof doEnableMetadata.request>): Generator {
   try {
     const metadataListParams = yield* select(state => state.metadata.metadataListParams);
-    yield call(fetchMetadataEnable, action.payload);
+    const projectId = yield* select(state => state.project.projectInfo.id);
+    yield call(fetchMetadataEnable, projectId, action.payload);
     yield put(doEnableMetadata.success());
     yield put(doGetMetadataList.request(metadataListParams));
   } catch (error) {
@@ -97,7 +99,8 @@ function* enableMetadata(action: ReturnType<typeof doEnableMetadata.request>): G
 function* disableMetadata(action: ReturnType<typeof doDisableMetadata.request>): Generator {
   try {
     const metadataListParams = yield* select(state => state.metadata.metadataListParams);
-    yield call(fetchMetadataDisable, action.payload);
+    const projectId = yield* select(state => state.project.projectInfo.id);
+    yield call(fetchMetadataDisable, projectId, action.payload);
     yield put(doDisableMetadata.success());
     yield put(doGetMetadataList.request(metadataListParams));
   } catch (error) {
@@ -139,7 +142,7 @@ function* addTag(action: ReturnType<typeof doAddTag.request>): Generator {
 function* deleteTag(action: ReturnType<typeof doDelTag.request>): Generator {
   try {
     const projectId = yield* select(state => state.project.projectInfo.id);
-    yield call(fetchTagDel, action.payload);
+    yield call(fetchTagDel, projectId, action.payload);
     yield put(doDelTag.success());
     yield put(doGetTagList.request({ projectId, page: 1, pageSize: 1000 }));
     const metadataListParams = yield* select(state => state.metadata.metadataListParams);

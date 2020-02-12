@@ -1,5 +1,6 @@
 import fetch from './http';
 import { IPageData } from '@/types';
+import { IMemberInfo } from './user.api';
 
 export interface IProjectListParam {
   role?: string;
@@ -19,16 +20,12 @@ export interface IProjectInfo {
   description: string;
 }
 
-export interface IMemberInfo {
-  id: number;
-  username: string;
-  nickname: string;
-  roleCode: string;
-}
-
 export interface IAddProject {
   name: string;
+  image: string;
+  description: string;
 }
+
 export interface IProjectAddRes {
   id: string;
 }
@@ -36,6 +33,8 @@ export interface IProjectAddRes {
 export interface IProjectUpdateParam {
   id: number;
   name: string;
+  image: string;
+  description: string;
 }
 
 export interface IProjectListItem {

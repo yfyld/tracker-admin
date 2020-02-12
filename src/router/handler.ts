@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 import { doGetTeamList, doGetTeamInfo } from './../store/actions/team.action';
 import { doGetBoardList, doGetBoardInfo } from './../store/actions/board.action';
 import { doGetTagList, doGetFieldList } from './../store/actions/metadata.action';
+=======
+import { doGetTeamList } from './../store/actions/team.action';
+import { doGetBoardList, doGetBoardInfo, doGetMyBoardList } from './../store/actions/board.action';
+import { doGetTagList } from './../store/actions/metadata.action';
+>>>>>>> 5c66036e12ffa1af322f423c07ef0847eb889671
 import { doResetReportInfo } from './../store/actions/report.action';
 import { doGetProjectInfo } from './../store/actions/project.action';
 import { CACHE_TIME } from '@/constants';
@@ -46,6 +52,15 @@ const handlers = {
     return [
       {
         action: doGetProjectList.request(state.project.projectListParams),
+        ttl: CACHE_TIME,
+        disable: false
+      }
+    ];
+  },
+  '/my-board': ({}: any, state: IStoreState): IHandler[] => {
+    return [
+      {
+        action: doGetMyBoardList.request(state.board.myBoardListParams),
         ttl: CACHE_TIME,
         disable: false
       }

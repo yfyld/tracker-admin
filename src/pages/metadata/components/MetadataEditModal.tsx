@@ -2,7 +2,7 @@ import { Modal, Form, Input, Select } from 'antd';
 import * as React from 'react';
 import { formItemLayout } from '@/constants';
 import { FormComponentProps } from 'antd/lib/form';
-import { IMetadataUpdateParam, ITagList, IMetadataInfo, IMetadataType } from '@/api';
+import { IMetadataUpdateParam, ITagList, IMetadataInfo, EMetadataType } from '@/api';
 import { toastformError } from '@/utils';
 import { connect } from 'react-redux';
 import { IAction, IStoreState } from '@/types';
@@ -15,7 +15,7 @@ interface Props extends FormComponentProps {
   projectId: number;
   tagList: ITagList;
   defaultValue: IMetadataInfo;
-  handleUpdateMetadata: (param: IMetadataUpdateParam) => IAction;
+  onUpdateMetadata: (param: IMetadataUpdateParam) => IAction;
 }
 
 const MetadataEditModel = (props: Props) => {
@@ -47,7 +47,7 @@ const MetadataEditModel = (props: Props) => {
         });
         values.newTags = newTagsTemp;
       }
-      props.handleUpdateMetadata({ ...props.defaultValue, ...values });
+      props.onUpdateMetadata({ ...props.defaultValue, ...values });
       props.onClose(false);
     });
   };
@@ -72,8 +72,8 @@ const MetadataEditModel = (props: Props) => {
             rules: [{ required: true, message: '请选择事件类型' }]
           })(
             <Select placeholder='请选择事件类型'>
-              <Option value={IMetadataType.page}>页面</Option>
-              <Option value={IMetadataType.event}>事件</Option>
+              <Option value={EMetadataType.page}>页面</Option>
+              <Option value={EMetadataType.event}>事件</Option>
             </Select>
           )}
         </Form.Item>
@@ -112,7 +112,7 @@ const mapStateToProps = (state: IStoreState) => {
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
-      handleUpdateMetadata: (params: IMetadataUpdateParam) => {
+      onUpdateMetadata: (params: IMetadataUpdateParam) => {
         return doUpdateMetadata.request(params);
       }
     },

@@ -3,14 +3,22 @@ import { doGetReportInfo } from './../actions/report.action';
 import { doAppendReportToBoard } from './../actions/board.action';
 import { put, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
-import { doGetBoardList, doAddBoard, doUpdateBoard, doDeleteBoard, doGetBoardInfo } from '@/store/actions';
+import {
+  doGetBoardList,
+  doAddBoard,
+  doUpdateBoard,
+  doDeleteBoard,
+  doGetBoardInfo,
+  doGetMyBoardList
+} from '@/store/actions';
 import {
   fetchBoardList,
   fetchBoardAdd,
   fetchBoardUpdate,
   fetchBoardDel,
   fetchBoardInfo,
-  fetchReportAppendToBoard
+  fetchReportAppendToBoard,
+  fetchMyBoardList
 } from '@/api';
 import { select, call } from '@/utils';
 
@@ -81,6 +89,15 @@ function* appendReportToBoard(action: ReturnType<typeof doAppendReportToBoard.re
   }
 }
 
+function* getMyBoardList(action: ReturnType<typeof doGetMyBoardList.request>): Generator {
+  try {
+    const response = yield* call(fetchMyBoardList, action.payload);
+    yield put(doGetMyBoardList.success(response.data));
+  } catch (error) {
+    yield put(doGetMyBoardList.failure(error));
+  }
+}
+
 export default function* watchBoard() {
   yield takeEvery(getType(doGetBoardList.request), getBoardList);
   yield takeEvery(getType(doGetBoardInfo.request), getBoardInfo);
@@ -88,4 +105,5 @@ export default function* watchBoard() {
   yield takeEvery(getType(doUpdateBoard.request), updateBoard);
   yield takeEvery(getType(doDeleteBoard.request), deleteBoard);
   yield takeEvery(getType(doAppendReportToBoard.request), appendReportToBoard);
+  yield takeEvery(getType(doGetMyBoardList.request), getMyBoardList);
 }

@@ -54,7 +54,7 @@ const AppHeader = ({ collapsed, onChangeCollapsed, userInfo, alone = false, proj
       <div className={style.navRight}>
         {userInfo.id
           ? [
-              <Link key='borad' to='/project-list'>
+              <Link key='borad' to='/my-board'>
                 我的看板
               </Link>,
 
