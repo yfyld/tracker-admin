@@ -162,6 +162,14 @@ const AnalyseEventChart = ({ data, param }: Props) => {
 
   return (
     <div>
+      {data.list.map((item: any) => (
+        <div>
+          {item.metadataName} 合计:{Number(item.compare.yoyCurrent)} 同比:
+          {item.compare.yoyPercentage === 'NaN' ? '--' : Math.floor(Number(item.compare.yoyPercentage) * 100) + '%'}
+          环比:
+          {item.compare.qoqPercentage === 'NaN' ? '--' : Math.floor(Number(item.compare.qoqPercentage) * 100) + '%'}
+        </div>
+      ))}
       {hasData ? <ReactEcharts option={getOptions(data)} theme='ts' notMerge={true} lazyUpdate={true} /> : '暂无数据'}
 
       <Table columns={tableData} dataSource={getTableData(data)} scroll={tableScroll} />
