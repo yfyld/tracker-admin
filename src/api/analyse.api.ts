@@ -29,7 +29,7 @@ export interface IEventAnalyseParam {
   dimension: string;
   time: IDate;
   type: string;
-  timeUlit: string;
+  timeUnit: string;
   projectId: number;
 }
 export function fetchEventAnalyseData(param: IEventAnalyseParam) {

@@ -3,6 +3,8 @@ import ReactEcharts, { ObjectMap } from 'echarts-for-react';
 import { Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import { IEventAnalyseParam } from '@/api';
+import moment from 'moment';
+import { getFormatByTimeUnit } from '@/utils';
 
 interface Props {
   data: any;
@@ -78,14 +80,17 @@ interface TableColumnProps {
   time: number;
 }
 
-const getColumns = (data: any, param: any) => {
+const getColumns = (data: any) => {
   let columns: ColumnProps<TableColumnProps>[] = [
     {
       title: '日期',
       key: 'time',
       dataIndex: 'time',
+      fixed: 'left',
+      width: 200,
       defaultSortOrder: 'descend',
-      sorter: (a: any, b: any) => a.time - b.time
+      sorter: (a: any, b: any) => a.time - b.time,
+      render: (text: number) => moment(text).format(getFormatByTimeUnit(data.timeUnit))
     }
   ];
 
@@ -134,7 +139,11 @@ const getTableData = (data: any): TableColumnProps[] => {
         date[item.time] = { time: item.time, key: item.time, pv: item.pv };
       }
       if (data.dimension && data.list.length > 1) {
-        date[item.time][aaaaa.key + data.dimension] = item.pv;
+        date[item.time].demension = [];
+        date[item.time].demension.push({
+          name: item[data.dimension],
+          pv: item.pv
+        });
       } else if (data.dimension && data.dimensionValues.length > 0) {
         date[item.time][item[data.dimension]] = item.pv;
       } else if (data.list.length > 1) {
@@ -148,11 +157,14 @@ const getTableData = (data: any): TableColumnProps[] => {
 const AnalyseEventChart = ({ data, param }: Props) => {
   const hasData = !!data.list.find((item: any) => item.data.length > 0);
 
+  const tableData = getColumns(data);
+  const tableScroll = tableData.length > 5 ? { x: tableData.length * 200 } : {};
+
   return (
     <div>
       {hasData ? <ReactEcharts option={getOptions(data)} theme='ts' notMerge={true} lazyUpdate={true} /> : '暂无数据'}
 
-      <Table columns={getColumns(data, param)} dataSource={getTableData(data)} />
+      <Table columns={tableData} dataSource={getTableData(data)} scroll={tableScroll} />
     </div>
   );
 };

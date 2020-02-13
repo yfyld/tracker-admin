@@ -37,7 +37,7 @@ const initialState = (): AnalyseState => ({
       type: 'DAY'
     },
     type: 'LINE',
-    timeUlit: 'DAY'
+    timeUnit: 'DAY'
   }
 });
 

@@ -108,3 +108,18 @@ export function getLastYearStartDate() {
 export function getLastYearEndDate() {
   return getYearStartDate() - 1;
 }
+
+export function getFormatByTimeUnit(type: string) {
+  switch (type) {
+    case 'HOUR':
+      return 'DD HH:mm';
+    case 'DAY':
+      return 'YYYY-MM-DD(dddd)';
+    case 'WEEK':
+      return 'YYYY-MM-DD(DDD)';
+    case 'MONTH':
+      return 'YYYY-MM';
+    default:
+      return 'YYYY-MM-DD';
+  }
+}

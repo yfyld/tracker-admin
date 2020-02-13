@@ -110,8 +110,8 @@ const AnalyseEvent = ({
               </Select>
               <Select
                 style={{ width: '33%' }}
-                value={eventAnalyseParam.timeUlit}
-                onChange={(timeUlit: string) => handleChange({ ...eventAnalyseParam, timeUlit })}
+                value={eventAnalyseParam.timeUnit}
+                onChange={(timeUnit: string) => handleChange({ ...eventAnalyseParam, timeUnit })}
               >
                 <Option value='HOUR'>按小时</Option>
                 <Option value='DAY'>按天</Option>
