@@ -32,6 +32,17 @@ export interface IEventAnalyseParam {
   timeUnit: string;
   projectId: number;
 }
+
+// export interface IEventAnalyseData {
+//   indicators: IIndicatorInfo[];
+//   filter: IFilterInfo;
+//   dimension: string;
+//   time: IDate;
+//   type: string;
+//   timeUnit: string;
+//   projectId: number;
+// }
+
 export function fetchEventAnalyseData(param: IEventAnalyseParam) {
   return fetch.post<any>('/analyse/event', param);
 }

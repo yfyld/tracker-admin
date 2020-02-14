@@ -11,7 +11,7 @@ interface Props {
   param: IEventAnalyseParam;
 }
 
-const getOptions = (data: any): ObjectMap => {
+const getBarOptions = (data: any): ObjectMap => {
   const options: ObjectMap = {
     dataZoom: [
       {
@@ -21,10 +21,16 @@ const getOptions = (data: any): ObjectMap => {
         end: 100
       }
     ],
-    minInterval: 28 * 86400000,
-    maxInterval: 31 * 86400000,
+    /*     minInterval: 28 * 86400000,
+    maxInterval: 31 * 86400000, */
     grid: {
       bottom: 80
+    },
+    tooltip: {
+      trigger: 'axis'
+    },
+    legend: {
+      show: true
     },
     xAxis: {
       type: 'time',
@@ -59,19 +65,234 @@ const getOptions = (data: any): ObjectMap => {
     series: []
   };
 
-  data.list.forEach((item: any) => {
-    options.series.push({
-      type: 'line',
-      data: item.data.map((val: any) => {
-        return {
-          name: val.time,
-          value: [val.time, Number(val.pv)]
-        };
-      })
+  if (data.dimension) {
+    if (data.list.length > 1) {
+      data.list.forEach((item: any) => {
+        data.dimensionValues.forEach((dimension: any) => {
+          options.series.push({
+            type: 'line',
+            name: item.metadataName + '/' + dimension,
+            data: item.data
+              .filter((val: any) => val[data.dimension] === dimension)
+              .map((val: any) => {
+                return {
+                  name: item.metadataName + '/' + dimension,
+                  value: [val.time, Number(val.pv)]
+                };
+              })
+          });
+        });
+      });
+    } else {
+      data.dimensionValues.forEach((dimension: any) => {
+        options.series.push({
+          type: 'line',
+          name: dimension,
+          data: data.list[0].data
+            .filter((val: any) => val[data.dimension] === dimension)
+            .map((val: any) => {
+              return {
+                name: data.list[0].metadataName + '/' + dimension,
+                value: [val.time, Number(val.pv)]
+              };
+            })
+        });
+      });
+    }
+  } else {
+    data.list.forEach((item: any) => {
+      options.series.push({
+        type: 'line',
+        name: item.metadataName,
+        data: item.data.map((val: any) => {
+          return {
+            name: item.metadataName,
+            value: [val.time, Number(val.pv)]
+          };
+        })
+      });
     });
-  });
+  }
 
   return options;
+};
+
+const getLineOptions = (data: any): ObjectMap => {
+  const options: ObjectMap = {
+    dataZoom: [
+      {
+        show: true,
+        realtime: true,
+        start: 0,
+        end: 100
+      }
+    ],
+    /*     minInterval: 28 * 86400000,
+    maxInterval: 31 * 86400000, */
+    grid: {
+      bottom: 80
+    },
+    tooltip: {
+      trigger: 'axis'
+    },
+    legend: {
+      show: true
+    },
+    xAxis: {
+      type: 'time',
+      axisLine: {
+        lineStyle: {
+          color: '#999'
+        }
+      }
+    },
+    yAxis: {
+      type: 'value',
+      minInterval: 1,
+      splitLine: {
+        lineStyle: {
+          type: 'dashed',
+          color: '#DDD'
+        }
+      },
+      axisLine: {
+        show: false,
+        lineStyle: {
+          color: '#333'
+        }
+      },
+      nameTextStyle: {
+        color: '#999'
+      },
+      splitArea: {
+        show: false
+      }
+    },
+    series: []
+  };
+
+  if (data.dimension) {
+    if (data.list.length > 1) {
+      data.list.forEach((item: any) => {
+        data.dimensionValues.forEach((dimension: any) => {
+          options.series.push({
+            type: 'line',
+            name: item.metadataName + '/' + dimension,
+            data: item.data
+              .filter((val: any) => val[data.dimension] === dimension)
+              .map((val: any) => {
+                return {
+                  name: item.metadataName + '/' + dimension,
+                  value: [val.time, Number(val.pv)]
+                };
+              })
+          });
+        });
+      });
+    } else {
+      data.dimensionValues.forEach((dimension: any) => {
+        options.series.push({
+          type: 'line',
+          name: dimension,
+          data: data.list[0].data
+            .filter((val: any) => val[data.dimension] === dimension)
+            .map((val: any) => {
+              return {
+                name: data.list[0].metadataName + '/' + dimension,
+                value: [val.time, Number(val.pv)]
+              };
+            })
+        });
+      });
+    }
+  } else {
+    data.list.forEach((item: any) => {
+      options.series.push({
+        type: 'line',
+        name: item.metadataName,
+        data: item.data.map((val: any) => {
+          return {
+            name: item.metadataName,
+            value: [val.time, Number(val.pv)]
+          };
+        })
+      });
+    });
+  }
+
+  return options;
+};
+
+const getPieOptions = (data: any): ObjectMap => {
+  const options: ObjectMap = {
+    tooltip: {
+      show: true
+    },
+    legend: {
+      show: true
+    },
+
+    series: []
+  };
+
+  if (data.dimension) {
+    if (data.list.length > 1) {
+      data.list.forEach((item: any) => {
+        options.series = options.series.concat(
+          data.dimensionValues.map((dimension: string) => ({
+            type: 'pie',
+            name: item.metadataName + '/' + dimension,
+            value: item.data.reduce((total: any, val: any) => {
+              if (val[data.dimension] === dimension) {
+                total += Number(val.pv);
+              }
+              return total;
+            }, 0)
+          }))
+        );
+      });
+    } else {
+      options.series.push({
+        type: 'pie',
+        name: data.list[0].metadataName,
+        data: data.dimensionValues.map((dimension: any) => ({
+          name: dimension,
+          value: data.list[0].data.reduce((total: any, item: any) => {
+            if (item[data.dimension] === dimension) {
+              total += Number(item.pv);
+            }
+            return total;
+          }, 0)
+        }))
+      });
+    }
+  } else {
+    data.list.forEach((item: any) => {
+      options.series.push({
+        type: 'pie',
+        name: item.metadataName,
+        data: item.data.map((val: any) => {
+          return {
+            name: item.metadataName,
+            value: Number(item.compare.yoyCurrent)
+          };
+        })
+      });
+    });
+  }
+
+  return options;
+};
+
+const getOptions = (type: string, data: any) => {
+  switch (type) {
+    case 'pie':
+      return getPieOptions(data);
+    case 'bar':
+      return getBarOptions(data);
+    default:
+      return getLineOptions(data);
+  }
 };
 
 interface TableColumnProps {
@@ -163,14 +384,14 @@ const AnalyseEventChart = ({ data, param }: Props) => {
   return (
     <div>
       {data.list.map((item: any) => (
-        <div>
+        <div key={item.key}>
           {item.metadataName} 合计:{Number(item.compare.yoyCurrent)} 同比:
           {item.compare.yoyPercentage === 'NaN' ? '--' : Math.floor(Number(item.compare.yoyPercentage) * 100) + '%'}
           环比:
           {item.compare.qoqPercentage === 'NaN' ? '--' : Math.floor(Number(item.compare.qoqPercentage) * 100) + '%'}
         </div>
       ))}
-      {hasData ? <ReactEcharts option={getOptions(data)} theme='ts' notMerge={true} lazyUpdate={true} /> : '暂无数据'}
+      {hasData ? <ReactEcharts option={getPieOptions(data)} theme='ts' /> : '暂无数据'}
 
       <Table columns={tableData} dataSource={getTableData(data)} scroll={tableScroll} />
     </div>
