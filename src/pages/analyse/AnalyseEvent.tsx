@@ -8,7 +8,7 @@ import Indicator from '@/components/Indicator';
 import Dimension from '@/components/Dimension';
 import Filter from '@/components/Filter';
 import AnalyseHeader from './components/AnalyseHeader';
-import { IReportInfo, IFieldInfo, IFilterInfo, IEventAnalyseParam } from '@/api';
+import { IReportInfo, IFieldInfo, IEventAnalyseData, IEventAnalyseParam } from '@/api';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { doAddReport, doUpdateReport, doGetEventAnalyse } from '@/store/actions';
@@ -23,7 +23,7 @@ interface Props {
   fieldList: IListData<IFieldInfo>;
   onGetEventAnalyseData: (param: IEventAnalyseParam) => IAction;
   projectId: number;
-  eventAnalyseData: any;
+  eventAnalyseData: IEventAnalyseData;
   eventAnalyseParam: IEventAnalyseParam;
 }
 
@@ -106,7 +106,7 @@ const AnalyseEvent = ({
                 <Option value='LINE'>折线图</Option>
                 <Option value='PIE'>饼图</Option>
                 <Option value='TABLE'>表格</Option>
-                <Option value='NUMBER'>数值</Option>
+                <Option value='TEXT'>数值</Option>
               </Select>
               <Select
                 style={{ width: '33%' }}
@@ -129,7 +129,7 @@ const AnalyseEvent = ({
           </pre>
         </div>
         <div>
-          <AnalyseEventChart data={eventAnalyseData} param={eventAnalyseParam}></AnalyseEventChart>
+          <AnalyseEventChart data={eventAnalyseData}></AnalyseEventChart>
         </div>
       </div>
     </div>

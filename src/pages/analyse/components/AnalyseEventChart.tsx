@@ -2,16 +2,15 @@ import * as React from 'react';
 import ReactEcharts, { ObjectMap } from 'echarts-for-react';
 import { Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
-import { IEventAnalyseParam } from '@/api';
+import { IEventAnalyseParam, IEventAnalyseData } from '@/api';
 import moment from 'moment';
 import { getFormatByTimeUnit } from '@/utils';
 
 interface Props {
-  data: any;
-  param: IEventAnalyseParam;
+  data: IEventAnalyseData;
 }
 
-const getBarOptions = (data: any): ObjectMap => {
+const getBarOptions = (data: IEventAnalyseData): ObjectMap => {
   const options: ObjectMap = {
     dataZoom: [
       {
@@ -67,14 +66,14 @@ const getBarOptions = (data: any): ObjectMap => {
 
   if (data.dimension) {
     if (data.list.length > 1) {
-      data.list.forEach((item: any) => {
-        data.dimensionValues.forEach((dimension: any) => {
+      data.list.forEach(item => {
+        data.dimensionValues.forEach(dimension => {
           options.series.push({
             type: 'line',
             name: item.metadataName + '/' + dimension,
             data: item.data
-              .filter((val: any) => val[data.dimension] === dimension)
-              .map((val: any) => {
+              .filter(val => val[data.dimension] === dimension)
+              .map(val => {
                 return {
                   name: item.metadataName + '/' + dimension,
                   value: [val.time, Number(val.pv)]
@@ -84,13 +83,13 @@ const getBarOptions = (data: any): ObjectMap => {
         });
       });
     } else {
-      data.dimensionValues.forEach((dimension: any) => {
+      data.dimensionValues.forEach(dimension => {
         options.series.push({
           type: 'line',
           name: dimension,
           data: data.list[0].data
-            .filter((val: any) => val[data.dimension] === dimension)
-            .map((val: any) => {
+            .filter(val => val[data.dimension] === dimension)
+            .map(val => {
               return {
                 name: data.list[0].metadataName + '/' + dimension,
                 value: [val.time, Number(val.pv)]
@@ -100,11 +99,11 @@ const getBarOptions = (data: any): ObjectMap => {
       });
     }
   } else {
-    data.list.forEach((item: any) => {
+    data.list.forEach(item => {
       options.series.push({
         type: 'line',
         name: item.metadataName,
-        data: item.data.map((val: any) => {
+        data: item.data.map(val => {
           return {
             name: item.metadataName,
             value: [val.time, Number(val.pv)]
@@ -117,7 +116,7 @@ const getBarOptions = (data: any): ObjectMap => {
   return options;
 };
 
-const getLineOptions = (data: any): ObjectMap => {
+const getLineOptions = (data: IEventAnalyseData): ObjectMap => {
   const options: ObjectMap = {
     dataZoom: [
       {
@@ -173,14 +172,14 @@ const getLineOptions = (data: any): ObjectMap => {
 
   if (data.dimension) {
     if (data.list.length > 1) {
-      data.list.forEach((item: any) => {
-        data.dimensionValues.forEach((dimension: any) => {
+      data.list.forEach(item => {
+        data.dimensionValues.forEach(dimension => {
           options.series.push({
             type: 'line',
             name: item.metadataName + '/' + dimension,
             data: item.data
-              .filter((val: any) => val[data.dimension] === dimension)
-              .map((val: any) => {
+              .filter(val => val[data.dimension] === dimension)
+              .map(val => {
                 return {
                   name: item.metadataName + '/' + dimension,
                   value: [val.time, Number(val.pv)]
@@ -190,13 +189,13 @@ const getLineOptions = (data: any): ObjectMap => {
         });
       });
     } else {
-      data.dimensionValues.forEach((dimension: any) => {
+      data.dimensionValues.forEach(dimension => {
         options.series.push({
           type: 'line',
           name: dimension,
           data: data.list[0].data
-            .filter((val: any) => val[data.dimension] === dimension)
-            .map((val: any) => {
+            .filter(val => val[data.dimension] === dimension)
+            .map(val => {
               return {
                 name: data.list[0].metadataName + '/' + dimension,
                 value: [val.time, Number(val.pv)]
@@ -206,11 +205,11 @@ const getLineOptions = (data: any): ObjectMap => {
       });
     }
   } else {
-    data.list.forEach((item: any) => {
+    data.list.forEach(item => {
       options.series.push({
         type: 'line',
         name: item.metadataName,
-        data: item.data.map((val: any) => {
+        data: item.data.map(val => {
           return {
             name: item.metadataName,
             value: [val.time, Number(val.pv)]
@@ -223,13 +222,15 @@ const getLineOptions = (data: any): ObjectMap => {
   return options;
 };
 
-const getPieOptions = (data: any): ObjectMap => {
+const getPieOptions = (data: IEventAnalyseData): ObjectMap => {
   const options: ObjectMap = {
     tooltip: {
       show: true
     },
     legend: {
-      show: true
+      show: true,
+      orient: 'vertical',
+      left: 10
     },
 
     series: []
@@ -237,12 +238,12 @@ const getPieOptions = (data: any): ObjectMap => {
 
   if (data.dimension) {
     if (data.list.length > 1) {
-      data.list.forEach((item: any) => {
-        options.series = options.series.concat(
+      let pieData: { value: number; name: string }[] = [];
+      data.list.forEach(item => {
+        pieData = pieData.concat(
           data.dimensionValues.map((dimension: string) => ({
-            type: 'pie',
             name: item.metadataName + '/' + dimension,
-            value: item.data.reduce((total: any, val: any) => {
+            value: item.data.reduce((total, val) => {
               if (val[data.dimension] === dimension) {
                 total += Number(val.pv);
               }
@@ -251,13 +252,17 @@ const getPieOptions = (data: any): ObjectMap => {
           }))
         );
       });
+      options.series.push({
+        type: 'pie',
+        data: pieData
+      });
     } else {
       options.series.push({
         type: 'pie',
         name: data.list[0].metadataName,
-        data: data.dimensionValues.map((dimension: any) => ({
+        data: data.dimensionValues.map(dimension => ({
           name: dimension,
-          value: data.list[0].data.reduce((total: any, item: any) => {
+          value: data.list[0].data.reduce((total, item) => {
             if (item[data.dimension] === dimension) {
               total += Number(item.pv);
             }
@@ -267,28 +272,27 @@ const getPieOptions = (data: any): ObjectMap => {
       });
     }
   } else {
-    data.list.forEach((item: any) => {
-      options.series.push({
-        type: 'pie',
+    options.series.push({
+      type: 'pie',
+      data: data.list.map(item => ({
         name: item.metadataName,
-        data: item.data.map((val: any) => {
-          return {
-            name: item.metadataName,
-            value: Number(item.compare.yoyCurrent)
-          };
-        })
-      });
+        value: item.data.reduce((total, val) => {
+          total += Number(val.pv);
+          return total;
+        }, 0)
+      }))
     });
+    data.list.forEach(item => {});
   }
 
   return options;
 };
 
-const getOptions = (type: string, data: any) => {
-  switch (type) {
-    case 'pie':
+const getOptions = (data: IEventAnalyseData) => {
+  switch (data.type) {
+    case 'PIE':
       return getPieOptions(data);
-    case 'bar':
+    case 'BAR':
       return getBarOptions(data);
     default:
       return getLineOptions(data);
@@ -298,10 +302,10 @@ const getOptions = (type: string, data: any) => {
 interface TableColumnProps {
   key: string;
   pv: number;
-  time: number;
+  time: string;
 }
 
-const getColumns = (data: any) => {
+const getColumns = (data: IEventAnalyseData) => {
   let columns: ColumnProps<TableColumnProps>[] = [
     {
       title: '日期',
@@ -310,7 +314,7 @@ const getColumns = (data: any) => {
       fixed: 'left',
       width: 200,
       defaultSortOrder: 'descend',
-      sorter: (a: any, b: any) => a.time - b.time,
+      sorter: (a, b) => new Date(a.time).getTime() - new Date(b.time).getTime(),
       render: (text: number) => moment(text).format(getFormatByTimeUnit(data.timeUnit))
     }
   ];
@@ -324,7 +328,7 @@ const getColumns = (data: any) => {
       });
     } else {
       columns = columns.concat(
-        data.dimensionValues.map((item: any) => ({
+        data.dimensionValues.map(item => ({
           key: item,
           title: item,
           dataIndex: item
@@ -334,7 +338,7 @@ const getColumns = (data: any) => {
   } else {
     if (data.list.length > 1) {
       columns = columns.concat(
-        data.list.map((item: any) => ({
+        data.list.map(item => ({
           key: item.key,
           title: item.metadataName,
           dataIndex: item.key
@@ -352,50 +356,85 @@ const getColumns = (data: any) => {
   return columns;
 };
 
-const getTableData = (data: any): TableColumnProps[] => {
-  const date: any = {};
-  data.list.forEach((aaaaa: any) => {
-    aaaaa.data.forEach((item: any) => {
-      if (!date[item.time]) {
-        date[item.time] = { time: item.time, key: item.time, pv: item.pv };
-      }
-      if (data.dimension && data.list.length > 1) {
-        date[item.time].demension = [];
-        date[item.time].demension.push({
-          name: item[data.dimension],
-          pv: item.pv
-        });
-      } else if (data.dimension && data.dimensionValues.length > 0) {
-        date[item.time][item[data.dimension]] = item.pv;
-      } else if (data.list.length > 1) {
-        date[item.time][aaaaa.key] = item.pv;
-      }
-    });
-  });
-  return Object.values(date);
+const getTableData = (data: IEventAnalyseData): TableColumnProps[] => {
+  const dataBydateMap: { [prop: string]: TableColumnProps } = {};
+  if (data.dimension) {
+    if (data.list.length > 1) {
+    } else {
+    }
+  } else {
+    if (data.list.length > 1) {
+      data.list.forEach(indicator => {});
+    } else if (data.list.length === 1) {
+      return data.list[0].data.map(item => ({
+        time: '',
+        key: item.time,
+        pv: item.pv
+      }));
+    }
+
+    return Object.values(dataBydateMap);
+  }
+
+  // data.list.forEach((aaaaa: any) => {
+  //   aaaaa.data.forEach((item: any) => {
+  //     if (!date[item.time]) {
+  //       date[item.time] = { time: item.time, key: item.time, pv: item.pv };
+  //     }
+  //     if (data.dimension && data.list.length > 1) {
+  //       date[item.time].demension = [];
+  //       date[item.time].demension.push({
+  //         name: item[data.dimension],
+  //         pv: item.pv
+  //       });
+  //     } else if (data.dimension && data.dimensionValues.length > 0) {
+  //       date[item.time][item[data.dimension]] = item.pv;
+  //     } else if (data.list.length > 1) {
+  //       date[item.time][aaaaa.key] = item.pv;
+  //     }
+  //   });
+  // });
+  // return Object.values(date);
 };
 
-const AnalyseEventChart = ({ data, param }: Props) => {
-  const hasData = !!data.list.find((item: any) => item.data.length > 0);
+const AnalyseEventChart = ({ data }: Props) => {
+  const hasData = !!data.list.find(item => item.data.length > 0);
 
-  const tableData = getColumns(data);
-  const tableScroll = tableData.length > 5 ? { x: tableData.length * 200 } : {};
+  if (!hasData) {
+    return <div>暂无数据</div>;
+  }
 
-  return (
-    <div>
-      {data.list.map((item: any) => (
-        <div key={item.key}>
-          {item.metadataName} 合计:{Number(item.compare.yoyCurrent)} 同比:
-          {item.compare.yoyPercentage === 'NaN' ? '--' : Math.floor(Number(item.compare.yoyPercentage) * 100) + '%'}
-          环比:
-          {item.compare.qoqPercentage === 'NaN' ? '--' : Math.floor(Number(item.compare.qoqPercentage) * 100) + '%'}
-        </div>
-      ))}
-      {hasData ? <ReactEcharts option={getPieOptions(data)} theme='ts' /> : '暂无数据'}
-
-      <Table columns={tableData} dataSource={getTableData(data)} scroll={tableScroll} />
+  const compare = data.list.map(item => (
+    <div key={item.key}>
+      {item.metadataName} 合计:{Number(item.compare.yoyCurrent)} 同比:
+      {item.compare.yoyPercentage === 'NaN' ? '--' : Math.floor(Number(item.compare.yoyPercentage) * 100) + '%'}
+      环比:
+      {item.compare.qoqPercentage === 'NaN' ? '--' : Math.floor(Number(item.compare.qoqPercentage) * 100) + '%'}
     </div>
-  );
+  ));
+
+  switch (data.type) {
+    case 'TEXT':
+      return <div>{compare}</div>;
+    case 'TABLE': {
+      const tableData = getColumns(data);
+      const tableScroll = tableData.length > 5 ? { x: tableData.length * 200 } : {};
+      return (
+        <div>
+          {compare}
+          <Table columns={tableData} dataSource={getTableData(data)} scroll={tableScroll} />
+        </div>
+      );
+    }
+
+    default:
+      return (
+        <div>
+          {compare}
+          <ReactEcharts option={getOptions(data)} theme='ts' notMerge={true} lazyUpdate={true} />
+        </div>
+      );
+  }
 };
 
 export default AnalyseEventChart;

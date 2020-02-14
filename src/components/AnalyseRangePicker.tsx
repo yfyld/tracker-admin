@@ -4,9 +4,10 @@ import { DatePicker, Tag, Button } from 'antd';
 import moment from 'moment';
 import { DYNAMIC_TIME, IDynamicTime } from '@/constants';
 import { RangePickerValue } from 'antd/lib/date-picker/interface';
+import { IDate } from '@/types';
 const RangePicker = DatePicker.RangePicker;
 interface Props {
-  value?: { date: RangePickerValue; type: string };
+  value?: IDate;
   onChange?: (param: { date: RangePickerValue; type: string }) => any;
 }
 
@@ -55,7 +56,7 @@ class AnalyseRangePicker extends React.Component<Props> {
           open={this.state.open}
           format='YYYY-MM-DD'
           onOpenChange={this.handleOpenChange}
-          value={this.props.value.date}
+          value={this.props.value.date as RangePickerValue}
           onChange={value => {
             this.setState({ open: false });
             this.props.onChange({ date: value, type: '' });

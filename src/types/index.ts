@@ -2,6 +2,7 @@ import { IStoreState as _IStoreState } from '@/store/reducers';
 import * as actions from '@/store/actions';
 import { ActionType } from 'typesafe-actions';
 import { RangePickerValue } from 'antd/lib/date-picker/interface';
+import moment from 'moment';
 
 //全局
 
@@ -61,7 +62,7 @@ export interface IInfoParam {
 }
 
 export interface IDate {
-  date: RangePickerValue;
+  date: moment.Moment[];
   type: string;
 }
 

@@ -1,3 +1,8 @@
+import { DYNAMIC_TIME } from './../../constants/constant';
+import { RangePickerValue } from 'antd/lib/date-picker/interface';
+import { IDate } from './../../types/index';
+import { IEventAnalyseData } from './../../api/analyse.api';
+import { IEventAnalyseParam } from '@/api';
 import { doGetEventAnalyse } from './../actions/analyse.action';
 import { doResetStore } from '@/store/actions';
 import update from 'immutability-helper';
@@ -6,12 +11,12 @@ import { IAction, IPageData } from '@/types';
 import moment from 'moment';
 
 export interface AnalyseState {
-  eventAnalyseData: any;
-  eventAnalyseParam: any;
+  eventAnalyseData: IEventAnalyseData;
+  eventAnalyseParam: IEventAnalyseParam;
 }
 
 const initialState = (): AnalyseState => ({
-  eventAnalyseData: { list: [] },
+  eventAnalyseData: { list: [], dimension: '', dimensionValues: [], timeUnit: 'DAY', type: 'LINE' },
   eventAnalyseParam: {
     projectId: null,
     indicators: [
@@ -33,8 +38,8 @@ const initialState = (): AnalyseState => ({
       filterValues: []
     },
     time: {
-      date: [moment(new Date().setHours(0, 0, 0, 0)), moment(new Date().setHours(23, 59, 59, 999))],
-      type: 'DAY'
+      date: [moment(DYNAMIC_TIME[1].startDate()), moment(DYNAMIC_TIME[1].endDate())],
+      type: DYNAMIC_TIME[1].value
     },
     type: 'LINE',
     timeUnit: 'DAY'

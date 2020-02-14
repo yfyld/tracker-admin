@@ -33,16 +33,38 @@ export interface IEventAnalyseParam {
   projectId: number;
 }
 
-// export interface IEventAnalyseData {
-//   indicators: IIndicatorInfo[];
-//   filter: IFilterInfo;
-//   dimension: string;
-//   time: IDate;
-//   type: string;
-//   timeUnit: string;
-//   projectId: number;
-// }
+interface IEventAnalyseDataItemDataItem {
+  pv: number;
+  key: string;
+  time: string;
+  [prop: string]: string | number;
+}
+
+export interface ICompareInfo {
+  qoqCurrent: string;
+  qoqPercentage: string;
+  qoqPrev: string;
+  yoyCurrent: string;
+  yoyPercentage: string;
+  yoyPrev: string;
+}
+
+interface IEventAnalyseDataItem {
+  key: string;
+  metadataCode: string;
+  metadataName: string;
+  data: IEventAnalyseDataItemDataItem[];
+  compare: ICompareInfo;
+}
+
+export interface IEventAnalyseData {
+  list: IEventAnalyseDataItem[];
+  dimension: string;
+  dimensionValues: string[];
+  timeUnit: string;
+  type: string;
+}
 
 export function fetchEventAnalyseData(param: IEventAnalyseParam) {
-  return fetch.post<any>('/analyse/event', param);
+  return fetch.post<IEventAnalyseData>('/analyse/event', param);
 }
