@@ -19,7 +19,6 @@ const { Option } = Select;
 const { Panel } = Collapse;
 const { Group } = Input;
 interface Props {
-  reportInfo: IReportInfo;
   fieldList: IListData<IFieldInfo>;
   onGetEventAnalyseData: (param: IEventAnalyseParam) => IAction;
   projectId: number;
@@ -27,18 +26,7 @@ interface Props {
   eventAnalyseParam: IEventAnalyseParam;
 }
 
-const onChange = (param: IDate) => {};
-
-const AnalyseEvent = ({
-  reportInfo,
-  fieldList,
-  onGetEventAnalyseData,
-  projectId,
-  eventAnalyseData,
-  eventAnalyseParam
-}: Props) => {
-  const [newInfo, setNewInfo] = React.useState(reportInfo);
-
+const AnalyseEvent = ({ fieldList, onGetEventAnalyseData, projectId, eventAnalyseData, eventAnalyseParam }: Props) => {
   const handleChange = (info: IEventAnalyseParam) => {
     info.projectId = projectId;
     onGetEventAnalyseData(info);
@@ -46,7 +34,7 @@ const AnalyseEvent = ({
 
   return (
     <div>
-      <AnalyseHeader reportInfo={newInfo}></AnalyseHeader>
+      <AnalyseHeader data={JSON.stringify(eventAnalyseParam)}></AnalyseHeader>
       <Collapse defaultActiveKey={['1']}>
         <Panel header='添加分析规则' key='1'>
           <div>
@@ -137,12 +125,10 @@ const AnalyseEvent = ({
 };
 
 const mapStateToProps = (state: IStoreState) => {
-  const { reportInfo } = state.report;
   const { fieldList } = state.metadata;
   const projectId = state.project.projectInfo.id;
   const { eventAnalyseData, eventAnalyseParam } = state.analyse;
   return {
-    reportInfo,
     fieldList,
     projectId,
     eventAnalyseData,

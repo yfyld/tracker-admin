@@ -10,34 +10,42 @@ interface Props {
   reportInfo: IReportInfo;
   handleAddReport: (params: IReportAddParam) => IAction;
   handleUpdateReport: (params: IReportUpdateParam) => IAction;
+  data: string;
   //handleAppandBoard: (params: any) => IAction;
 }
-const AnalyseHeader = ({ reportInfo, handleUpdateReport, handleAddReport }: Props) => {
+const AnalyseHeader = ({ reportInfo, handleUpdateReport, handleAddReport, data }: Props) => {
+  const [newReportInfo, setnewReportInfo] = React.useState(reportInfo);
+
   const handleSave = () => {
-    if (typeof reportInfo.id !== 'undefined') {
-      handleUpdateReport({ id: null, ...reportInfo });
+    if (typeof newReportInfo.id !== 'undefined') {
+      handleUpdateReport({ id: null, ...newReportInfo, data });
     } else {
-      handleAddReport(reportInfo);
+      handleAddReport({ ...newReportInfo, data });
     }
   };
 
   const handleSaveAs = () => {
-    handleAddReport(reportInfo);
+    handleAddReport({ ...newReportInfo, data });
   };
 
   const handleAppand = () => {
-    //handleAppandBoard(reportInfo);
+    //handleAppandBoard(newReportInfo);
   };
+
   return (
     <div className={style.wrapper}>
       <h2 className={style.title}>
-        <Input type='text' defaultValue={reportInfo.name} />
+        <Input
+          type='text'
+          onChange={e => setnewReportInfo({ ...newReportInfo, name: e.target.value })}
+          value={newReportInfo.name}
+        />
       </h2>
       <div className={style.btns}>
         <Button type='link' icon='save' onClick={handleSave}>
           保存
         </Button>
-        {reportInfo.id && (
+        {newReportInfo.id && (
           <Button type='link' icon='save' onClick={handleSaveAs}>
             另存为
           </Button>
@@ -47,12 +55,20 @@ const AnalyseHeader = ({ reportInfo, handleUpdateReport, handleAddReport }: Prop
         </Button>
       </div>
       <div className={style.description}>
-        <Input defaultValue={reportInfo.description}></Input>
+        <Input
+          onChange={e => setnewReportInfo({ ...newReportInfo, description: e.target.value })}
+          value={newReportInfo.description}
+        ></Input>
       </div>
     </div>
   );
 };
-
+const mapStateToProps = (state: IStoreState) => {
+  const { reportInfo } = state.report;
+  return {
+    reportInfo
+  };
+};
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
@@ -66,7 +82,4 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
     dispatch
   );
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(AnalyseHeader);
+export default connect(mapStateToProps, mapDispatchToProps)(AnalyseHeader);
