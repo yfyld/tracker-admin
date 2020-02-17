@@ -65,6 +65,9 @@ const AppHeader = ({ collapsed, onChangeCollapsed, userInfo, alone = false, proj
               <Link key='project' to='/project-list'>
                 项目列表
               </Link>,
+              <Link key='seting' to='/admin'>
+                设置
+              </Link>,
               <Dropdown key='menu' overlay={menu}>
                 <a className='ant-dropdown-link' href='#'>
                   {userInfo.nickname || userInfo.username} <Icon type='down' />

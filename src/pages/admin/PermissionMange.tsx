@@ -1,7 +1,7 @@
 import React from 'react';
 
-const UserManage = () => {
-  return <div></div>;
+const PermissionManage = () => {
+  return <div>33333</div>;
 };
 
-export default UserManage;
+export default PermissionManage;

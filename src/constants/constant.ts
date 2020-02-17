@@ -52,7 +52,10 @@ export const ROUTE_PATH = {
   login: '/login',
   teamInfo: '/team-info',
   signup: '/signup',
-  home: '/home'
+  home: '/home',
+  userManage: '/admin/user-manage',
+  roleManage: '/admin/role-manage',
+  permissionManage: '/admin/permission-manage'
 };
 
 export interface IDynamicTime {

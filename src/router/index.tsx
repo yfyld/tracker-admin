@@ -7,6 +7,7 @@ import PrivateRoute from './PrivateRoute';
 import ProgressBar from '@/components/ProgressBar';
 import TeamInfo from '@/pages/team/TeamInfo';
 import VerticalRouter from './VerticalRouter';
+import AdminRouter from './AdminRouter';
 import { ROUTE_PATH } from '@/constants';
 
 const Home = React.lazy(() => import('@/pages/home/Home'));
@@ -28,6 +29,7 @@ export default class Routes extends React.Component {
             <Route exact path={ROUTE_PATH.home} component={Home} />
 
             <Route path='/project' component={CoreRouter} />
+            <Route path='/admin' component={AdminRouter}></Route>
             <Route path='/' component={VerticalRouter}></Route>
 
             <Redirect from='*' to={ROUTE_PATH.home} />
