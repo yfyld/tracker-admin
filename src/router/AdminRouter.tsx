@@ -26,6 +26,7 @@ export default class AdminRouter extends React.Component {
             <PrivateRoute exact path={ROUTE_PATH.permissionManage} component={PermissionMange} />
             <PrivateRoute exact path={ROUTE_PATH.roleManage} component={RoleManage} />
             <PrivateRoute exact path={ROUTE_PATH.userManage} component={UserManage} />
+            <PrivateRoute path='*' component={UserManage} />
           </Switch>
         </React.Suspense>
       </AdminLayout>
