@@ -13,9 +13,11 @@ import moment from 'moment';
 export interface AnalyseState {
   eventAnalyseData: IEventAnalyseData;
   eventAnalyseParam: IEventAnalyseParam;
+  analyseLoading: boolean;
 }
 
 const initialState = (): AnalyseState => ({
+  analyseLoading: false,
   eventAnalyseData: { list: [], dimension: '', dimensionValues: [], timeUnit: 'DAY', type: 'LINE' },
   eventAnalyseParam: {
     projectId: null,
@@ -51,10 +53,11 @@ export const analyseReducer = (state: AnalyseState = initialState(), action: IAc
     case getType(doResetStore):
       return update(state, { $set: initialState() });
     case getType(doGetEventAnalyse.request):
-      return update(state, { eventAnalyseParam: { $set: action.payload } });
+      return update(state, { eventAnalyseParam: { $set: action.payload }, analyseLoading: { $set: true } });
     case getType(doGetEventAnalyse.success):
       return update(state, {
-        eventAnalyseData: { $set: action.payload }
+        eventAnalyseData: { $set: action.payload },
+        analyseLoading: { $set: false }
       });
 
     default:

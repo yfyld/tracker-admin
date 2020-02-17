@@ -9,7 +9,7 @@ export interface IReportInfo {
   boards?: IBoardInfo[];
   description: string;
   type: string;
-  data: Object;
+  data: any;
   showType?: string;
   dateStart?: number;
   dateEnd?: number;
@@ -33,7 +33,7 @@ export interface IReportAddParam {
   boardId?: number;
   description: string;
   type: string;
-  data: Object;
+  data: any;
   dateStart?: number;
   dateEnd?: number;
   dateType: string;
@@ -44,7 +44,7 @@ export interface IReportUpdateParam {
   projectId: number;
   description: string;
   type: string;
-  data: Object;
+  data: any;
   id: number;
 }
 

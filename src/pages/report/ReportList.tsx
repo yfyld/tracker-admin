@@ -45,7 +45,7 @@ const ReportList = ({
     description: '',
     projectId: null,
     type: '',
-    data: {},
+    data: '{}',
     dateStart: null,
     dateEnd: null,
     dateType: null
@@ -246,7 +246,13 @@ const ReportList = ({
         </div>
       </div>
       <div className='app-card'>
-        <Table rowKey='id' columns={columns} dataSource={reportList.list} onChange={handleChange} />
+        <Table
+          rowKey='id'
+          pagination={{ pageSize: 20, total: reportList.totalCount }}
+          columns={columns}
+          dataSource={reportList.list}
+          onChange={handleChange}
+        />
       </div>
     </div>
   );

@@ -19,7 +19,7 @@ const eventAnalyseInital = (type?: string): IReportInfo => {
       projectId: null,
       description: '描述',
       type: 'EVENT',
-      data: {},
+      data: '{}',
       dateStart: null,
       dateEnd: null,
       dateType: null
@@ -30,7 +30,7 @@ const eventAnalyseInital = (type?: string): IReportInfo => {
       projectId: null,
       description: '描述',
       type: 'EVENT',
-      data: {},
+      data: '{}',
       dateStart: null,
       dateEnd: null,
       dateType: null

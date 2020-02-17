@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import { put, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
 import {
@@ -44,6 +45,7 @@ function* addReport(action: ReturnType<typeof doAddReport.request>): Generator {
     yield call(fetchReportAdd, { ...action.payload, projectId });
     yield put(doAddReport.success());
     yield put(doGetReportList.request(reportListParams));
+    message.success('保存成功');
   } catch (error) {
     yield put(doAddReport.failure(error));
   }
@@ -55,6 +57,7 @@ function* updateReport(action: ReturnType<typeof doUpdateReport.request>): Gener
     yield call(fetchReportUpdate, action.payload);
     yield put(doUpdateReport.success());
     yield put(doGetReportList.request(reportListParams));
+    message.success('保存成功');
   } catch (error) {
     yield put(doUpdateReport.failure(error));
   }
@@ -66,6 +69,7 @@ function* deleteReport(action: ReturnType<typeof doDeleteReport.request>): Gener
     yield call(fetchReportDel, action.payload);
     yield put(doDeleteReport.success());
     yield put(doGetReportList.request(reportListParams));
+    message.success('删除成功');
   } catch (error) {
     yield put(doDeleteReport.failure(error));
   }

@@ -56,7 +56,10 @@ function* updateBoard(action: ReturnType<typeof doUpdateBoard.request>): Generat
     yield call(fetchBoardUpdate, action.payload);
     yield put(doUpdateBoard.success());
     const projectId = yield* select(state => state.project.projectInfo.id);
-    yield put(doGetBoardList.request({ projectId, page: 1, pageSize: 1000 }));
+    yield [
+      put(doGetBoardInfo.request({ id: action.payload.id, projectId })),
+      put(doGetBoardList.request({ projectId, page: 1, pageSize: 1000 }))
+    ];
   } catch (error) {
     yield put(doUpdateBoard.failure(error));
   }

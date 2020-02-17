@@ -31,9 +31,14 @@ export const menuDataSelector = createSelector(projectIdSelector, boardListSelec
       icon: 'setting',
       children: [
         {
-          key: `/project/analyse-event?projectId=${id}`,
+          key: `/project/analyse/event?projectId=${id}`,
           icon: 'setting',
           name: '事件分析'
+        },
+        {
+          key: `/project/analyse/funnel?projectId=${id}`,
+          icon: 'setting',
+          name: '漏斗分析'
         }
       ]
     },

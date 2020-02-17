@@ -23,7 +23,7 @@ const ReportDrawerContent = ({ reportList, onSearch, name, onSubmit, boardId }: 
     description: '',
     projectId: null,
     type: '',
-    data: {},
+    data: '{}',
     dateType: null
   });
   const [appendBoardVisible, setappendBoardVisible] = React.useState(false);

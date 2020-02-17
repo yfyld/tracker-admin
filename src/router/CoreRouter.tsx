@@ -6,7 +6,7 @@ import ProgressBar from '@/components/ProgressBar';
 import { ROUTE_PATH } from '@/constants';
 
 const MetadataList = React.lazy(() => import('@/pages/metadata/MetadataList'));
-const Analyse = React.lazy(() => import('@/pages/analyse/Analyse'));
+const AnalyseEvent = React.lazy(() => import('@/pages/analyse/AnalyseEvent'));
 const Board = React.lazy(() => import('@/pages/board/Board'));
 const ReportList = React.lazy(() => import('@/pages/report/ReportList'));
 const Project = React.lazy(() => import('@/pages/project/Project'));
@@ -26,7 +26,7 @@ export default class Routes extends React.Component {
         >
           <Switch>
             <Route exact path={ROUTE_PATH.metadataList} component={MetadataList} />
-            <Route exact path={ROUTE_PATH.analyse} component={Analyse} />
+            <Route exact path={ROUTE_PATH.analyseEvent} component={AnalyseEvent} />
             <Route exact path={ROUTE_PATH.board} component={Board} />
             <Route exact path={ROUTE_PATH.projectInfo} component={Project} />
             <Route exact path={ROUTE_PATH.reportList} component={ReportList} />

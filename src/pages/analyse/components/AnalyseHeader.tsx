@@ -10,7 +10,7 @@ interface Props {
   reportInfo: IReportInfo;
   handleAddReport: (params: IReportAddParam) => IAction;
   handleUpdateReport: (params: IReportUpdateParam) => IAction;
-  data: string;
+  data: Object;
   //handleAppandBoard: (params: any) => IAction;
 }
 const AnalyseHeader = ({ reportInfo, handleUpdateReport, handleAddReport, data }: Props) => {

@@ -68,7 +68,7 @@ const instance: AxiosInstance = axios.create({
 
 instance.interceptors.request.use(
   (config: AxiosRequestConfig) => {
-    if ((config as any).showLoading !== false) {
+    if (config.params && config.params.SHOW_LOADING !== false) {
       Loading.add(config);
     }
     return config;

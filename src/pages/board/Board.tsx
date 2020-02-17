@@ -26,37 +26,45 @@ interface Props {
   reportList: IPageData<IReportInfo>;
   boardInfo: IBoardInfo;
   addReport: (params: IReportAddParam) => IAction;
-  handleSave: (params: IBoardUpdateParam) => IAction;
+  onSave: (params: IBoardUpdateParam) => IAction;
   reportListParams: IReportListParam;
   onAppendReportToBoard: (params: IReportAppendToBoard) => IAction;
   getReportList: (params: IReportListParam) => IAction;
 }
 
-function generateDOM(reportList: IReportInfo[]) {
-  return reportList.map(item => (
-    <div key={item.id}>
-      <BoardPane reportInfo={item} />
-    </div>
-  ));
-}
-
 const BasicLayout = ({
   reportList,
   boardInfo,
-  handleSave,
+  onSave,
   reportListParams,
   getReportList,
-  addReport,
   onAppendReportToBoard
 }: Props) => {
   const [addReportDrawerVisible, setaddReportDrawerVisible] = React.useState(false);
-  function onLayoutChange(layout: RGL.Layout[]) {
-    console.log(layout);
+
+  function generateDOM(reportList: IReportInfo[]) {
+    return reportList.map(item => (
+      <div key={item.id}>
+        <BoardPane reportInfo={item} onDeletePane={handleDeletePane} />
+      </div>
+    ));
+  }
+
+  const handleDeletePane = (id: number) => {
+    const newBoardInfo: IBoardInfo = JSON.parse(JSON.stringify(boardInfo));
+    const index = newBoardInfo.reports.findIndex(item => item.id === id);
+    if (index >= 0) {
+      newBoardInfo.reports.splice(index, 1);
+      onSave(newBoardInfo);
+    }
+  };
+
+  function handleLayoutChange(layout: RGL.Layout[]) {
     const { id, projectId } = boardInfo;
     if (JSON.stringify(layout) === JSON.stringify(boardInfo.layout)) {
       return;
     }
-    handleSave({ id, projectId, layout });
+    onSave({ id, projectId, layout });
   }
 
   function handleOpenReportDrawer() {
@@ -121,7 +129,7 @@ const BasicLayout = ({
           key={boardInfo.id}
           className='layout'
           layout={boardInfo.layout}
-          onLayoutChange={onLayoutChange}
+          onLayoutChange={handleLayoutChange}
           cols={24}
           rowHeight={30}
         >
@@ -135,10 +143,8 @@ const BasicLayout = ({
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
-      handleSave: params => doUpdateBoard.request(params),
-      addReport: (params: IReportAddParam) => {
-        return doAddReport.request(params);
-      },
+      onSave: params => doUpdateBoard.request(params),
+
       onAppendReportToBoard: (params: IReportAppendToBoard) => {
         return doAppendReportToBoard.request(params);
       },

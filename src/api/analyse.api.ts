@@ -66,5 +66,5 @@ export interface IEventAnalyseData {
 }
 
 export function fetchEventAnalyseData(param: IEventAnalyseParam) {
-  return fetch.post<IEventAnalyseData>('/analyse/event', param);
+  return fetch.post<IEventAnalyseData>('/analyse/event', { ...param, SHOW_LOADING: false });
 }

@@ -1,4 +1,4 @@
-import { Icon, Collapse, Divider, Select, Input, Row, Col, Button } from 'antd';
+import { Icon, Collapse, Divider, Select, Input, Row, Col, Button, Spin } from 'antd';
 import React from 'react';
 import AnalyseRangePicker from '@/components/AnalyseRangePicker';
 import moment from 'moment';
@@ -24,9 +24,17 @@ interface Props {
   projectId: number;
   eventAnalyseData: IEventAnalyseData;
   eventAnalyseParam: IEventAnalyseParam;
+  analyseLoading: boolean;
 }
 
-const AnalyseEvent = ({ fieldList, onGetEventAnalyseData, projectId, eventAnalyseData, eventAnalyseParam }: Props) => {
+const AnalyseEvent = ({
+  analyseLoading,
+  fieldList,
+  onGetEventAnalyseData,
+  projectId,
+  eventAnalyseData,
+  eventAnalyseParam
+}: Props) => {
   const handleChange = (info: IEventAnalyseParam) => {
     info.projectId = projectId;
     onGetEventAnalyseData(info);
@@ -34,7 +42,7 @@ const AnalyseEvent = ({ fieldList, onGetEventAnalyseData, projectId, eventAnalys
 
   return (
     <div>
-      <AnalyseHeader data={JSON.stringify(eventAnalyseParam)}></AnalyseHeader>
+      <AnalyseHeader data={{ ...eventAnalyseParam, projectId }}></AnalyseHeader>
       <Collapse defaultActiveKey={['1']}>
         <Panel header='添加分析规则' key='1'>
           <div>
@@ -111,14 +119,10 @@ const AnalyseEvent = ({ fieldList, onGetEventAnalyseData, projectId, eventAnalys
             </Group>
           </Col>
         </Row>
-        <div>
-          <pre>
-            <code></code>
-          </pre>
-        </div>
-        <div>
+        <Spin spinning={analyseLoading}>
           <AnalyseEventChart data={eventAnalyseData}></AnalyseEventChart>
-        </div>
+        </Spin>
+        <div></div>
       </div>
     </div>
   );
@@ -127,12 +131,13 @@ const AnalyseEvent = ({ fieldList, onGetEventAnalyseData, projectId, eventAnalys
 const mapStateToProps = (state: IStoreState) => {
   const { fieldList } = state.metadata;
   const projectId = state.project.projectInfo.id;
-  const { eventAnalyseData, eventAnalyseParam } = state.analyse;
+  const { eventAnalyseData, eventAnalyseParam, analyseLoading } = state.analyse;
   return {
     fieldList,
     projectId,
     eventAnalyseData,
-    eventAnalyseParam
+    eventAnalyseParam,
+    analyseLoading
   };
 };
 

@@ -60,7 +60,8 @@ const renderMenuItem = (data: IMenuItem) => {
   }
 };
 
-const AppSidebar = ({ collapsed, menuData, history, projectId, onAddBoard }: Props) => {
+const AppSidebar = ({ collapsed, menuData, history, projectId, onAddBoard, location }: Props) => {
+  const selecteds = /analyse/.test(location.search) ? [location.pathname] : [location.pathname + location.search];
   const [addBoardVisible, setaddBoardVisible] = React.useState(false);
   return (
     <div className={style.wrapper + ' ' + (collapsed ? style.collapsed : '')}>
@@ -81,8 +82,8 @@ const AppSidebar = ({ collapsed, menuData, history, projectId, onAddBoard }: Pro
             history.push(key);
           }
         }}
-        defaultSelectedKeys={['1']}
-        defaultOpenKeys={['sub1']}
+        defaultSelectedKeys={selecteds}
+        defaultOpenKeys={['broad', 'analyse']}
         mode='inline'
         theme='dark'
         inlineCollapsed={collapsed}
