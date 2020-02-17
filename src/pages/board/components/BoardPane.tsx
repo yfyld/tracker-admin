@@ -31,7 +31,7 @@ const BoardPane = ({ reportInfo, onDeletePane }: Props) => {
     <Menu onClick={handleClickMenu}>
       <Menu.Item>设置</Menu.Item>
       <Menu.Item>
-        <Link to={`/project/analyse-event?reportId=${reportInfo.id}&projectId=${reportInfo.projectId}`}>编辑</Link>
+        <Link to={`/project/analyse/event?reportId=${reportInfo.id}&projectId=${reportInfo.projectId}`}>编辑</Link>
       </Menu.Item>
       <Menu.Item key='REMOVE'>删除</Menu.Item>
     </Menu>
