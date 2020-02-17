@@ -1,3 +1,4 @@
+import { doGetEventAnalyse } from './../actions/analyse.action';
 import { message } from 'antd';
 import { put, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
@@ -32,6 +33,7 @@ function* getReportInfo(action: ReturnType<typeof doGetReportInfo.request>): Gen
   try {
     const response = yield* call(fetchReportInfo, action.payload);
     yield put(doGetReportInfo.success(response.data));
+    yield put(doGetEventAnalyse.request(response.data.data));
   } catch (error) {
     yield put(doGetReportInfo.failure(error));
   }

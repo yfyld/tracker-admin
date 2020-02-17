@@ -1,5 +1,5 @@
 import { ROUTE_PATH } from '@/constants';
-import { doGetReportInfo } from './../actions/report.action';
+
 import { doAppendReportToBoard } from './../actions/board.action';
 import { put, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
@@ -85,7 +85,7 @@ function* appendReportToBoard(action: ReturnType<typeof doAppendReportToBoard.re
     if (location.pathname === ROUTE_PATH.board) {
       yield put(doGetBoardInfo.request({ projectId, id: action.payload.boardIds[0] }));
     } else {
-      yield put(doGetReportInfo.request({ projectId, id: action.payload.reportId }));
+      //yield put(doGetReportInfo.request({ projectId, id: action.payload.reportId }));
     }
   } catch (error) {
     yield put(doAppendReportToBoard.failure(error));

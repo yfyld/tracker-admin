@@ -62,7 +62,7 @@ export interface IInfoParam {
 }
 
 export interface IDate {
-  date: moment.Moment[];
+  date: number[];
   type: string;
 }
 

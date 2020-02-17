@@ -15,9 +15,12 @@ interface Props {
 }
 const AnalyseHeader = ({ reportInfo, handleUpdateReport, handleAddReport, data }: Props) => {
   const [newReportInfo, setnewReportInfo] = React.useState(reportInfo);
+  React.useEffect(() => {
+    setnewReportInfo(reportInfo);
+  }, [reportInfo]);
 
   const handleSave = () => {
-    if (typeof newReportInfo.id !== 'undefined') {
+    if (typeof reportInfo.id !== 'undefined') {
       handleUpdateReport({ id: null, ...newReportInfo, data });
     } else {
       handleAddReport({ ...newReportInfo, data });

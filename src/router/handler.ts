@@ -1,3 +1,4 @@
+import { doInitAnalyse } from './../store/actions/analyse.action';
 import { doGetTeamList, doGetTeamInfo } from './../store/actions/team.action';
 import { doGetTagList, doGetFieldList } from './../store/actions/metadata.action';
 import { doGetBoardList, doGetBoardInfo, doGetMyBoardList } from './../store/actions/board.action';
@@ -97,7 +98,7 @@ const handlers = {
       }
     ];
   },
-  '/project/analyse-event': ({ search: { projectId } }: any, state: IStoreState): IHandler[] => {
+  '/project/analyse/*': ({ search: { projectId, reportId } }: any, state: IStoreState): IHandler[] => {
     return [
       {
         action: doGetActiveMetadataList.request({ ...state.metadata.activeMetadataListParams, projectId }),
@@ -117,12 +118,21 @@ const handlers = {
         disable: state.metadata.fieldList.list.length > 0
       },
       {
-        action: doGetEventAnalyse.request({ ...state.analyse.eventAnalyseParam, projectId }),
+        action: doInitAnalyse({ projectId, reportId }),
         ttl: CACHE_TIME,
-        disable: state.analyse.eventAnalyseData.list.length > 0
+        disable: false
       }
     ];
   },
+  // '/project/analyse/event': ({ search: { projectId,reportId } }: any, state: IStoreState): IHandler[] => {
+  //   return [
+  //     {
+  //       action: doGetEventAnalyse.request({ ...state.analyse.eventAnalyseParam, projectId }),
+  //       ttl: CACHE_TIME,
+  //       disable: false
+  //     }
+  //   ];
+  // },
   '/project/board': ({ search: { projectId, boardId } }: any, state: IStoreState): IHandler[] => {
     return [
       {

@@ -1,4 +1,5 @@
-import { doGetEventAnalyse } from './../actions/analyse.action';
+import { doGetReportInfo } from './../actions/report.action';
+import { doGetEventAnalyse, doInitAnalyse } from './../actions/analyse.action';
 import { put, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
 import { select, call } from '@/utils';
@@ -13,6 +14,24 @@ function* getEventAnalyseData(action: ReturnType<typeof doGetEventAnalyse.reques
   }
 }
 
+function* initAnalyse(action: ReturnType<typeof doInitAnalyse>): Generator {
+  try {
+    const eventAnalyseParam = yield* select(state => state.analyse.eventAnalyseParam);
+    const { projectId, reportId } = action.payload;
+    if (!action.payload.reportId) {
+      yield put(doGetEventAnalyse.request({ ...eventAnalyseParam, projectId }));
+    } else {
+      yield put(
+        doGetReportInfo.request({
+          projectId,
+          id: reportId
+        })
+      );
+    }
+  } catch (error) {}
+}
+
 export default function* watchAnalyse() {
   yield takeEvery(getType(doGetEventAnalyse.request), getEventAnalyseData);
+  yield takeEvery(getType(doInitAnalyse), initAnalyse);
 }

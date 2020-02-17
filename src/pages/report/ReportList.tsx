@@ -11,11 +11,13 @@ import ReportAddModal from './components/ReportAddModal';
 import ReportListForm from './components/ReportListForm';
 import BoardAppendReportModal from '@/components/BoardAppendReportModal';
 import { boardListFiltersSelector, boardListMapSelector } from '@/store/selectors';
+import { Link } from 'react-router-dom';
+import { ROUTE_PATH } from '@/constants';
 const { confirm } = Modal;
 interface Props {
-  doGetReportList: (params: IReportListParam) => IAction;
-  doAddReport: (params: IReportAddParam) => IAction;
-  doDeleteReport: (param: number) => IAction;
+  onGetReportList: (params: IReportListParam) => IAction;
+  onAddReport: (params: IReportAddParam) => IAction;
+  onDeleteReport: (param: number) => IAction;
   reportList: IPageData<IReportInfo>;
   boardList: IPageData<IBoardInfo>;
   reportListParams: IReportListParam;
@@ -27,10 +29,10 @@ interface Props {
 
 const ReportList = ({
   reportList,
-  doGetReportList,
+  onGetReportList,
   reportListParams,
-  doAddReport,
-  doDeleteReport,
+  onAddReport,
+  onDeleteReport,
   boardList,
   boardListFilters,
   onAppendReportToBoard,
@@ -45,7 +47,7 @@ const ReportList = ({
     description: '',
     projectId: null,
     type: '',
-    data: '{}',
+    data: {},
     dateStart: null,
     dateEnd: null,
     dateType: null
@@ -113,7 +115,9 @@ const ReportList = ({
       render: (text: string, record) => (
         <span>
           <Tooltip title='编辑'>
-            <Icon type='edit' />
+            <Link to={`${ROUTE_PATH.analyseEvent}?projectId=${record.projectId}&reportId=${record.id}`}>
+              <Icon type='edit' />
+            </Link>
           </Tooltip>
           &nbsp;
           <Tooltip title='拷贝'>
@@ -167,7 +171,7 @@ const ReportList = ({
     newRecord.id = null;
     newRecord.boards = null;
     newRecord.name = newRecord.name + '-copy';
-    doAddReport(newRecord);
+    onAddReport(newRecord);
   }
 
   function handleReportAppendBoard(record: IReportInfo) {
@@ -192,7 +196,7 @@ const ReportList = ({
       okType: 'danger',
       cancelText: '取消',
       onOk() {
-        doDeleteReport(record.id);
+        onDeleteReport(record.id);
       }
     });
   }
@@ -224,7 +228,7 @@ const ReportList = ({
       params.boardId = filters.boardId[0];
     }
 
-    doGetReportList({ ...reportListParams, ...params });
+    onGetReportList({ ...reportListParams, ...params });
   }
 
   return (
@@ -239,7 +243,7 @@ const ReportList = ({
       />
       <div className='app-card'>
         <div className='app-fl'>
-          <ReportListForm onSubmit={doGetReportList} defaultValue={reportListParams}></ReportListForm>
+          <ReportListForm onSubmit={onGetReportList} defaultValue={reportListParams}></ReportListForm>
         </div>
         <div className='app-fr'>
           <Button onClick={() => setAddReportVisible(true)}>新增报表</Button>
@@ -261,13 +265,13 @@ const ReportList = ({
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
-      doGetReportList: params => {
+      onGetReportList: params => {
         return doGetReportList.request(params);
       },
-      doAddReport: (params: IReportAddParam) => {
+      onAddReport: (params: IReportAddParam) => {
         return doAddReport.request(params);
       },
-      doDeleteReport: (params: number) => {
+      onDeleteReport: (params: number) => {
         return doDeleteReport.request(params);
       },
       onAppendReportToBoard: (params: IReportAppendToBoard) => {

@@ -40,7 +40,7 @@ const initialState = (): AnalyseState => ({
       filterValues: []
     },
     time: {
-      date: [moment(DYNAMIC_TIME[1].startDate()), moment(DYNAMIC_TIME[1].endDate())],
+      date: [DYNAMIC_TIME[1].startDate(), DYNAMIC_TIME[1].endDate()],
       type: DYNAMIC_TIME[1].value
     },
     type: 'LINE',

@@ -8,13 +8,13 @@ import { IDate } from '@/types';
 const RangePicker = DatePicker.RangePicker;
 interface Props {
   value?: IDate;
-  onChange?: (param: { date: RangePickerValue; type: string }) => any;
+  onChange?: (param: { date: number[]; type: string }) => any;
 }
 
 //需结合Form组件使用 不能使用函数组件
 class AnalyseRangePicker extends React.Component<Props> {
   handleSelectDynamicTime = (item: IDynamicTime) => {
-    this.props.onChange({ date: [moment(item.startDate()), moment(item.endDate())], type: item.value });
+    this.props.onChange({ date: [item.startDate(), item.endDate()], type: item.value });
     this.setState({ open: false });
   };
   state = {
@@ -35,6 +35,7 @@ class AnalyseRangePicker extends React.Component<Props> {
   };
 
   render() {
+    const date = this.props.value.date.map(item => moment(item));
     return (
       <div>
         <RangePicker
@@ -56,10 +57,11 @@ class AnalyseRangePicker extends React.Component<Props> {
           open={this.state.open}
           format='YYYY-MM-DD'
           onOpenChange={this.handleOpenChange}
-          value={this.props.value.date as RangePickerValue}
+          value={date as RangePickerValue}
           onChange={value => {
             this.setState({ open: false });
-            this.props.onChange({ date: value, type: '' });
+            let date: number[] = (value as any).map((item: moment.Moment) => item.valueOf());
+            this.props.onChange({ date, type: '' });
           }}
         />
         <span>{this.getShowDate()}</span>
