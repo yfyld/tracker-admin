@@ -13,15 +13,11 @@ import BoardChart from './BoardChart';
 interface Props {
   reportInfo: IReportInfo;
   onDeletePane: (param: number) => any;
-  startDate?: number;
-  endDate?: number;
+  dateStart?: number;
+  dateEnd?: number;
 }
 
-const BoardPane = ({ reportInfo, onDeletePane }: Props) => {
-  const { dateStart, dateEnd, dateType } = reportInfo;
-
-  console.log(reportInfo.data);
-
+const BoardPane = ({ reportInfo, onDeletePane, dateStart, dateEnd }: Props) => {
   const handleClickMenu = ({ key }: ClickParam) => {
     if (key === 'REMOVE') {
       onDeletePane(reportInfo.id);
@@ -42,7 +38,11 @@ const BoardPane = ({ reportInfo, onDeletePane }: Props) => {
         <h3 className={style.title}>
           {reportInfo.name}
           <div className={style.time}>
-            <DateParse dateStart={dateStart} dateEnd={dateEnd} dateType={dateType}></DateParse>
+            <DateParse
+              dateStart={dateStart || reportInfo.dateStart}
+              dateEnd={dateEnd || reportInfo.dateEnd}
+              dateType={reportInfo.dateType}
+            ></DateParse>
           </div>
         </h3>
         <div className={style.menu}>
@@ -52,7 +52,7 @@ const BoardPane = ({ reportInfo, onDeletePane }: Props) => {
         </div>
       </div>
       <div className={style.body}>
-        <BoardChart type='EVENT' analyseParam={reportInfo.data}></BoardChart>
+        <BoardChart type='EVENT' analyseParam={reportInfo.data} dateStart={dateStart} dateEnd={dateEnd}></BoardChart>
       </div>
     </div>
   );

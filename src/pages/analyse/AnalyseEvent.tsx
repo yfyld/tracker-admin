@@ -88,8 +88,12 @@ const AnalyseEvent = ({
         <Row>
           <Col span={14}>
             <AnalyseRangePicker
-              onChange={time => handleChange({ ...eventAnalyseParam, time })}
-              value={eventAnalyseParam.time}
+              onChange={time => handleChange({ ...eventAnalyseParam, ...time })}
+              value={{
+                dateType: eventAnalyseParam.dateType,
+                dateEnd: eventAnalyseParam.dateEnd,
+                dateStart: eventAnalyseParam.dateStart
+              }}
             />
           </Col>
           <Col span={6} offset={4}>

@@ -28,19 +28,20 @@ const ReportDrawerContent = ({ reportList, onSearch, name, onSubmit, boardId }: 
   });
   const [appendBoardVisible, setappendBoardVisible] = React.useState(false);
 
-  function handleAdd(info: IReportAddParam) {
-    setcurReportInfo(info);
-    setappendBoardVisible(true);
+  function handleAdd(info: IReportInfo) {
+    // setcurReportInfo(info);
+    // setappendBoardVisible(true);
+    onSubmit({ projectId: info.projectId, reportId: info.id, boardIds: [boardId] });
   }
   return (
     <div className={style.wrapper}>
-      <BoardAppendReportModal
+      {/* <BoardAppendReportModal
         reportInfo={curReportInfo}
         boardIds={[boardId]}
         visible={appendBoardVisible}
         onClose={setappendBoardVisible}
         onSubmit={onSubmit}
-      />
+      /> */}
       <Search placeholder='输入报表名称' defaultValue={name} onSearch={onSearch} style={{ width: 200 }} />
       <List
         itemLayout='horizontal'

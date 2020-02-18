@@ -46,6 +46,9 @@ export interface IReportUpdateParam {
   type: string;
   data: any;
   id: number;
+  dateStart?: number;
+  dateEnd?: number;
+  dateType: string;
 }
 
 export function fetchReportList(params: IReportListParam) {
@@ -57,7 +60,7 @@ export function fetchReportInfo(params: IInfoParam) {
 }
 
 export function fetchReportAdd(params: IReportAddParam) {
-  return fetch.post('/report', params);
+  return fetch.post<IReportInfo>('/report', params);
 }
 
 export function fetchReportDel(id: number) {

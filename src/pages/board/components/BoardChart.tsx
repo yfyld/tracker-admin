@@ -1,7 +1,7 @@
 import * as React from 'react';
 import style from './BoardChart.module.less';
 
-import { IReportInfo, fetchEventAnalyseData, IEventAnalyseData } from '@/api';
+import { IReportInfo, fetchEventAnalyseData, IEventAnalyseData, IEventAnalyseParam } from '@/api';
 import { Icon, Dropdown, Menu, Spin } from 'antd';
 import { Link } from 'react-router-dom';
 import ChartLine from '@/components/ChartLine';
@@ -12,9 +12,11 @@ import AnalyseEventChart from '@/pages/analyse/components/AnalyseEventChart';
 interface Props {
   analyseParam: any;
   type: string;
+  dateEnd?: number;
+  dateStart?: number;
 }
 
-const BoardChart = ({ type, analyseParam }: Props) => {
+const BoardChart = ({ type, analyseParam, dateEnd, dateStart }: Props) => {
   const [data, setdata] = React.useState<IEventAnalyseData>({
     list: [],
     dimension: '',
@@ -26,10 +28,17 @@ const BoardChart = ({ type, analyseParam }: Props) => {
 
   React.useEffect(() => {
     setloading(true);
-    fetchEventAnalyseData(analyseParam).then(res => {
-      setdata(res.data);
-      setloading(false);
-    });
+    const newParam = JSON.parse(JSON.stringify(analyseParam));
+    if (type === 'EVENT') {
+      let newParam: IEventAnalyseParam = JSON.parse(JSON.stringify(analyseParam));
+      if (dateEnd && dateStart) {
+        newParam = { ...newParam, dateEnd, dateStart, dateType: '' };
+      }
+      fetchEventAnalyseData(newParam).then(res => {
+        setdata(res.data);
+        setloading(false);
+      });
+    }
   }, [analyseParam]);
 
   switch (type) {

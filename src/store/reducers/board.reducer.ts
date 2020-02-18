@@ -1,8 +1,8 @@
 import { doResetStore } from '@/store/actions';
-import { doGetBoardList, doGetBoardInfo, doGetMyBoardList } from './../actions/board.action';
+import { doGetBoardList, doGetBoardInfo, doGetMyBoardList, doChangeBoardGlobalDate } from './../actions/board.action';
 import update from 'immutability-helper';
 import { getType } from 'typesafe-actions';
-import { IAction, IPageData } from '@/types';
+import { IAction, IPageData, IDate } from '@/types';
 import { IBoardInfo, IReportInfo, IBoardListParam, IMyBoardListParam, IMyBoardListItem } from '@/api';
 
 export interface BoardState {
@@ -11,9 +11,15 @@ export interface BoardState {
   boardList: IPageData<IBoardInfo>;
   myBoardListParams: IMyBoardListParam;
   myBoardList: IPageData<IMyBoardListItem>;
+  globalDate: IDate;
 }
 
 const initialState = (): BoardState => ({
+  globalDate: {
+    dateStart: null,
+    dateEnd: null,
+    dateType: ''
+  },
   boardInfo: {
     id: null,
     name: null,
@@ -60,6 +66,11 @@ export const boardReducer = (state: BoardState = initialState(), action: IAction
       return update(state, {
         boardInfo: { $set: action.payload }
       });
+    case getType(doChangeBoardGlobalDate):
+      return update(state, {
+        globalDate: { $set: action.payload }
+      });
+
     default:
       return state;
   }

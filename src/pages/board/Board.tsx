@@ -4,7 +4,7 @@ import * as React from 'react';
 import BoardPane from './components/BoardPane';
 import { connect } from 'react-redux';
 import style from './Board.module.less';
-import { IStoreState, IAction, IPageData } from '@/types';
+import { IStoreState, IAction, IPageData, IDate } from '@/types';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Icon, Button, Popover, Drawer } from 'antd';
 import {
@@ -15,8 +15,15 @@ import {
   IReportAddParam,
   IReportAppendToBoard
 } from '@/api';
-import { doUpdateBoard, doGetReportList, doAddReport, doAppendReportToBoard } from '@/store/actions';
+import {
+  doUpdateBoard,
+  doGetReportList,
+  doAddReport,
+  doAppendReportToBoard,
+  doChangeBoardGlobalDate
+} from '@/store/actions';
 import ReportDrawerContent from './components/ReportDrawerContent';
+import AnalyseRangePicker from '@/components/AnalyseRangePicker';
 
 const ButtonGroup = Button.Group;
 
@@ -25,20 +32,24 @@ const ReactGridLayout = RGL.WidthProvider(RGL);
 interface Props {
   reportList: IPageData<IReportInfo>;
   boardInfo: IBoardInfo;
+  globalDate: IDate;
   addReport: (params: IReportAddParam) => IAction;
   onSave: (params: IBoardUpdateParam) => IAction;
   reportListParams: IReportListParam;
   onAppendReportToBoard: (params: IReportAppendToBoard) => IAction;
   getReportList: (params: IReportListParam) => IAction;
+  onChangeBoardGlobalDate: (params: IDate) => IAction;
 }
 
 const BasicLayout = ({
   reportList,
   boardInfo,
   onSave,
+  globalDate,
   reportListParams,
   getReportList,
-  onAppendReportToBoard
+  onAppendReportToBoard,
+  onChangeBoardGlobalDate
 }: Props) => {
   const [addReportDrawerVisible, setaddReportDrawerVisible] = React.useState(false);
 
@@ -114,6 +125,7 @@ const BasicLayout = ({
           {boardInfo.name} <Icon type='edit' />
         </h2>
         <div className={style.btnBox}>
+          <AnalyseRangePicker value={globalDate} onChange={onChangeBoardGlobalDate}></AnalyseRangePicker>
           <ButtonGroup>
             {/* <Button icon='save'></Button> */}
             <Button icon='calendar'></Button>
@@ -144,7 +156,7 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
       onSave: params => doUpdateBoard.request(params),
-
+      onChangeBoardGlobalDate: params => doChangeBoardGlobalDate(params),
       onAppendReportToBoard: (params: IReportAppendToBoard) => {
         return doAppendReportToBoard.request(params);
       },
@@ -154,12 +166,13 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   );
 
 const mapStateToProps = (state: IStoreState) => {
-  const { boardInfo } = state.board;
+  const { boardInfo, globalDate } = state.board;
   const { reportList, reportListParams } = state.report;
   return {
     reportList,
     boardInfo,
-    reportListParams
+    reportListParams,
+    globalDate
   };
 };
 

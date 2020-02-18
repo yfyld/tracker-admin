@@ -27,10 +27,12 @@ export interface IEventAnalyseParam {
   indicators: IIndicatorInfo[];
   filter: IFilterInfo;
   dimension: string;
-  time: IDate;
   type: string;
   timeUnit: string;
   projectId: number;
+  dateType: string;
+  dateStart: number;
+  dateEnd: number;
 }
 
 interface IEventAnalyseDataItemDataItem {

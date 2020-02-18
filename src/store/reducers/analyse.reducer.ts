@@ -39,12 +39,12 @@ const initialState = (): AnalyseState => ({
       filterType: 'OR',
       filterValues: []
     },
-    time: {
-      date: [DYNAMIC_TIME[1].startDate(), DYNAMIC_TIME[1].endDate()],
-      type: DYNAMIC_TIME[1].value
-    },
+
     type: 'LINE',
-    timeUnit: 'DAY'
+    timeUnit: 'DAY',
+    dateStart: DYNAMIC_TIME[1].startDate(),
+    dateEnd: DYNAMIC_TIME[1].endDate(),
+    dateType: DYNAMIC_TIME[1].value
   }
 });
 

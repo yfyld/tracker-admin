@@ -50,7 +50,7 @@ const AnalyseFunnel = ({
               <span>指标:</span>
             </div>
             <div>
-              <Select value=''>
+              <Select value='SUM'>
                 <Option value='SUM'>总数</Option>
               </Select>
 
@@ -71,12 +71,12 @@ const AnalyseFunnel = ({
 
           <div>
             <div className={style.ruleTitle}>
-              <span>筛选:</span>
+              <span>漏斗步骤:</span>
             </div>
-            <Filter
+            <Indicator
               fieldList={fieldList}
-              filterInfo={eventAnalyseParam.filter}
-              onChange={filter => handleChange({ ...eventAnalyseParam, filter })}
+              indicators={eventAnalyseParam.indicators}
+              onChange={indicators => handleChange({ ...eventAnalyseParam, indicators })}
             />
           </div>
         </Panel>
@@ -86,8 +86,12 @@ const AnalyseFunnel = ({
         <Row>
           <Col span={14}>
             <AnalyseRangePicker
-              onChange={time => handleChange({ ...eventAnalyseParam, time })}
-              value={eventAnalyseParam.time}
+              onChange={time => handleChange({ ...eventAnalyseParam, ...time })}
+              value={{
+                dateType: eventAnalyseParam.dateType,
+                dateEnd: eventAnalyseParam.dateEnd,
+                dateStart: eventAnalyseParam.dateStart
+              }}
             />
           </Col>
           <Col span={6} offset={4}>

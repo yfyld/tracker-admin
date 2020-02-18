@@ -62,8 +62,9 @@ export interface IInfoParam {
 }
 
 export interface IDate {
-  date: number[];
-  type: string;
+  dateStart: number;
+  dateEnd: number;
+  dateType: string;
 }
 
 // //project

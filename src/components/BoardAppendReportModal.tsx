@@ -40,7 +40,7 @@ const BoardAppendReportModal = (props: Props) => {
             initialValue: props.reportInfo.name
           })(<Input placeholder='名称' />)}
         </Form.Item>
-        <Form.Item label='时间范围'>{getFieldDecorator('rangeTime', {})(<AnalyseRangePicker />)}</Form.Item>
+        {/* <Form.Item label='时间范围'>{getFieldDecorator('rangeTime', {})(<AnalyseRangePicker />)}</Form.Item> */}
         <Form.Item label='展现方式'>
           {getFieldDecorator('type', {
             initialValue: props.reportInfo.type

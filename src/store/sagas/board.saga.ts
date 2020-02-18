@@ -1,6 +1,6 @@
 import { ROUTE_PATH } from '@/constants';
 
-import { doAppendReportToBoard } from './../actions/board.action';
+import { doAppendReportToBoard, doChangeBoardGlobalDate } from './../actions/board.action';
 import { put, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
 import {

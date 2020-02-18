@@ -1,5 +1,5 @@
 import { createAsyncAction, createAction } from 'typesafe-actions';
-import { IPageData, IInfoParam } from '@/types';
+import { IPageData, IInfoParam, IDate } from '@/types';
 import * as actionType from '@/constants/actionType';
 import {
   IBoardListParam,
@@ -52,3 +52,7 @@ export const doGetMyBoardList = createAsyncAction(
   actionType.GET_MY_BOARD_LIST_SUCCESS,
   actionType.GET_MY_BOARD_LIST_FAILURE
 )<IMyBoardListParam, IPageData<IMyBoardListItem>, Error>();
+
+export const doChangeBoardGlobalDate = createAction(actionType.CHENGE_GLOBAL_DATE, action => (date: IDate) =>
+  action(date)
+);

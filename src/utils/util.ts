@@ -1,3 +1,4 @@
+import { ROUTE_PATH } from './../constants/constant';
 import { createBrowserHistory } from 'history';
 
 import { matchPath } from 'react-router-dom';
@@ -123,5 +124,19 @@ export const toastformError = (err: any) => {
     message.error(err[keys[0]]['errors'][0]['message']);
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const getAnalysePath = (type: string, projectId: number, reportId: number) => {
+  let search = `?projectId=${projectId}`;
+  if (reportId) {
+    search += `&reportId=${reportId}`;
+  }
+  switch (type) {
+    case 'EVENT':
+      return ROUTE_PATH.analyseEvent + search;
+
+    default:
+      break;
   }
 };

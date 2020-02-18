@@ -7,14 +7,14 @@ import { RangePickerValue } from 'antd/lib/date-picker/interface';
 import { IDate } from '@/types';
 const RangePicker = DatePicker.RangePicker;
 interface Props {
-  value?: IDate;
-  onChange?: (param: { date: number[]; type: string }) => any;
+  value: IDate;
+  onChange?: (param: IDate) => any;
 }
 
 //需结合Form组件使用 不能使用函数组件
 class AnalyseRangePicker extends React.Component<Props> {
   handleSelectDynamicTime = (item: IDynamicTime) => {
-    this.props.onChange({ date: [item.startDate(), item.endDate()], type: item.value });
+    this.props.onChange({ dateStart: item.startDate(), dateEnd: item.endDate(), dateType: item.value });
     this.setState({ open: false });
   };
   state = {
@@ -27,15 +27,14 @@ class AnalyseRangePicker extends React.Component<Props> {
   };
 
   getShowDate = () => {
-    if (this.props.value.type) {
-      return '| ' + DYNAMIC_TIME.find(item => item.value === this.props.value.type).name;
+    if (this.props.value.dateType) {
+      return '| ' + DYNAMIC_TIME.find(item => item.value === this.props.value.dateType).name;
     } else {
       return '';
     }
   };
 
   render() {
-    const date = this.props.value.date.map(item => moment(item));
     return (
       <div>
         <RangePicker
@@ -46,7 +45,7 @@ class AnalyseRangePicker extends React.Component<Props> {
                 <Button
                   size='small'
                   key={item.value}
-                  type={this.props.value.type === item.value ? 'primary' : 'default'}
+                  type={this.props.value.dateType === item.value ? 'primary' : 'default'}
                   onClick={() => this.handleSelectDynamicTime(item)}
                 >
                   {item.name}
@@ -57,11 +56,10 @@ class AnalyseRangePicker extends React.Component<Props> {
           open={this.state.open}
           format='YYYY-MM-DD'
           onOpenChange={this.handleOpenChange}
-          value={date as RangePickerValue}
+          value={[moment(this.props.value.dateStart), moment(this.props.value.dateEnd)]}
           onChange={value => {
             this.setState({ open: false });
-            let date: number[] = (value as any).map((item: moment.Moment) => item.valueOf());
-            this.props.onChange({ date, type: '' });
+            this.props.onChange({ dateStart: value[0].valueOf(), dateEnd: value[1].valueOf(), dateType: '' });
           }}
         />
         <span>{this.getShowDate()}</span>

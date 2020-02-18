@@ -1,3 +1,5 @@
+import { getAnalysePath } from './../../utils/util';
+import { ROUTE_PATH } from './../../constants/constant';
 import { doGetEventAnalyse } from './../actions/analyse.action';
 import { message } from 'antd';
 import { put, takeEvery } from 'redux-saga/effects';
@@ -19,6 +21,7 @@ import {
   fetchReportInfo
 } from '@/api';
 import { select, call } from '@/utils';
+import { push } from 'connected-react-router';
 
 function* getReportList(action: ReturnType<typeof doGetReportList.request>): Generator {
   try {
@@ -44,10 +47,12 @@ function* addReport(action: ReturnType<typeof doAddReport.request>): Generator {
     const reportListParams = yield* select(state => state.report.reportListParams);
 
     const projectId = yield* select(state => state.project.projectInfo.id);
-    yield call(fetchReportAdd, { ...action.payload, projectId });
+    const { dateEnd, dateStart, dateType } = action.payload.data;
+    const response = yield* call(fetchReportAdd, { ...action.payload, projectId, dateEnd, dateStart, dateType });
     yield put(doAddReport.success());
     yield put(doGetReportList.request(reportListParams));
     message.success('保存成功');
+    yield put(push(getAnalysePath('EVENT', projectId, response.data.id)));
   } catch (error) {
     yield put(doAddReport.failure(error));
   }
@@ -56,7 +61,8 @@ function* addReport(action: ReturnType<typeof doAddReport.request>): Generator {
 function* updateReport(action: ReturnType<typeof doUpdateReport.request>): Generator {
   try {
     const reportListParams = yield* select(state => state.report.reportListParams);
-    yield call(fetchReportUpdate, action.payload);
+    const { dateEnd, dateStart, dateType } = action.payload.data;
+    yield call(fetchReportUpdate, { ...action.payload, dateEnd, dateStart, dateType });
     yield put(doUpdateReport.success());
     yield put(doGetReportList.request(reportListParams));
     message.success('保存成功');
