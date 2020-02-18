@@ -8,15 +8,15 @@ import ChartLine from '@/components/ChartLine';
 import DateParse from '@/components/DateParse';
 import { ClickParam } from 'antd/lib/menu';
 import AnalyseEventChart from '@/pages/analyse/components/AnalyseEventChart';
+import { IDate } from '@/types';
 
 interface Props {
   analyseParam: any;
   type: string;
-  dateEnd?: number;
-  dateStart?: number;
+  globalDate: IDate;
 }
 
-const BoardChart = ({ type, analyseParam, dateEnd, dateStart }: Props) => {
+const BoardChart = ({ type, analyseParam, globalDate }: Props) => {
   const [data, setdata] = React.useState<IEventAnalyseData>({
     list: [],
     dimension: '',
@@ -25,7 +25,7 @@ const BoardChart = ({ type, analyseParam, dateEnd, dateStart }: Props) => {
     type: 'LINE'
   });
   const [loading, setloading] = React.useState(false);
-
+  const { dateEnd, dateStart } = globalDate;
   React.useEffect(() => {
     setloading(true);
     const newParam = JSON.parse(JSON.stringify(analyseParam));
@@ -39,7 +39,7 @@ const BoardChart = ({ type, analyseParam, dateEnd, dateStart }: Props) => {
         setloading(false);
       });
     }
-  }, [analyseParam]);
+  }, [analyseParam, globalDate]);
 
   switch (type) {
     case 'EVENT':

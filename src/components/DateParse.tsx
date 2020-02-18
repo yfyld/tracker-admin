@@ -19,6 +19,10 @@ interface Props {
 }
 
 export default function DateParse({ dateStart, dateEnd, dateType }: Props) {
+  if (typeof dateStart === 'string') {
+    dateStart = Number(dateStart);
+    dateEnd = Number(dateEnd);
+  }
   const now = new Date().setHours(23, 59, 59, 999);
   let type = '';
   if (dateType === 'STATIC') {

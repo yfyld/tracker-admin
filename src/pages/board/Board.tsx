@@ -56,7 +56,7 @@ const BasicLayout = ({
   function generateDOM(reportList: IReportInfo[]) {
     return reportList.map(item => (
       <div key={item.id}>
-        <BoardPane reportInfo={item} onDeletePane={handleDeletePane} />
+        <BoardPane globalDate={globalDate} reportInfo={item} onDeletePane={handleDeletePane} />
       </div>
     ));
   }

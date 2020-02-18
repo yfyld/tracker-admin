@@ -9,15 +9,16 @@ import DateParse from '@/components/DateParse';
 import { ClickParam } from 'antd/lib/menu';
 import AnalyseEventChart from '@/pages/analyse/components/AnalyseEventChart';
 import BoardChart from './BoardChart';
+import { IDate } from '@/types';
 
 interface Props {
   reportInfo: IReportInfo;
   onDeletePane: (param: number) => any;
-  dateStart?: number;
-  dateEnd?: number;
+  globalDate: IDate;
 }
 
-const BoardPane = ({ reportInfo, onDeletePane, dateStart, dateEnd }: Props) => {
+const BoardPane = ({ reportInfo, onDeletePane, globalDate }: Props) => {
+  const { dateStart, dateEnd } = globalDate;
   const handleClickMenu = ({ key }: ClickParam) => {
     if (key === 'REMOVE') {
       onDeletePane(reportInfo.id);
@@ -52,7 +53,7 @@ const BoardPane = ({ reportInfo, onDeletePane, dateStart, dateEnd }: Props) => {
         </div>
       </div>
       <div className={style.body}>
-        <BoardChart type='EVENT' analyseParam={reportInfo.data} dateStart={dateStart} dateEnd={dateEnd}></BoardChart>
+        <BoardChart type='EVENT' analyseParam={reportInfo.data} globalDate={globalDate}></BoardChart>
       </div>
     </div>
   );

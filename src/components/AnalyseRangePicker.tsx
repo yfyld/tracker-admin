@@ -56,7 +56,9 @@ class AnalyseRangePicker extends React.Component<Props> {
           open={this.state.open}
           format='YYYY-MM-DD'
           onOpenChange={this.handleOpenChange}
-          value={[moment(this.props.value.dateStart), moment(this.props.value.dateEnd)]}
+          value={
+            this.props.value.dateStart ? [moment(this.props.value.dateStart), moment(this.props.value.dateEnd)] : []
+          }
           onChange={value => {
             this.setState({ open: false });
             this.props.onChange({ dateStart: value[0].valueOf(), dateEnd: value[1].valueOf(), dateType: '' });
