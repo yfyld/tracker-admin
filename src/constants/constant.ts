@@ -41,6 +41,7 @@ export const tailFormItemLayout = {
 
 export const ROUTE_PATH = {
   myBoard: '/my-board',
+  boardDetail: '/board',
   projectList: '/project-list',
   projectInfo: '/project/info',
   metadataList: '/project/metadata-list',

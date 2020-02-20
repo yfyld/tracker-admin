@@ -29,7 +29,8 @@ const getBarOptions = (data: IEventAnalyseData): ObjectMap => {
       trigger: 'axis'
     },
     legend: {
-      show: true
+      show: true,
+      bottom: 0
     },
     xAxis: {
       type: 'time',
@@ -118,24 +119,26 @@ const getBarOptions = (data: IEventAnalyseData): ObjectMap => {
 
 const getLineOptions = (data: IEventAnalyseData): ObjectMap => {
   const options: ObjectMap = {
-    dataZoom: [
-      {
-        show: true,
-        realtime: true,
-        start: 0,
-        end: 100
-      }
-    ],
+    // dataZoom: [
+    //   {
+    //     show: true,
+    //     realtime: true,
+    //     start: 0,
+    //     end: 100
+    //   }
+    // ],
     /*     minInterval: 28 * 86400000,
     maxInterval: 31 * 86400000, */
     grid: {
-      bottom: 80
+      bottom: 60,
+      top: 20
     },
     tooltip: {
       trigger: 'axis'
     },
     legend: {
-      show: true
+      show: true,
+      bottom: 0
     },
     xAxis: {
       type: 'time',

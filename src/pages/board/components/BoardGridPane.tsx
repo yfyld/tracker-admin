@@ -1,5 +1,5 @@
 import * as React from 'react';
-import style from './BoardPane.module.less';
+import style from './BoardGridPane.module.less';
 
 import { IReportInfo } from '@/api';
 import { Icon, Dropdown, Menu } from 'antd';
@@ -13,11 +13,11 @@ import { IDate } from '@/types';
 
 interface Props {
   reportInfo: IReportInfo;
-  onDeletePane: (param: number) => any;
+  onDeletePane?: (param: number) => any;
   globalDate: IDate;
 }
 
-const BoardPane = ({ reportInfo, onDeletePane, globalDate }: Props) => {
+const BoardGridPane = ({ reportInfo, onDeletePane, globalDate }: Props) => {
   const { dateStart, dateEnd } = globalDate;
   const handleClickMenu = ({ key }: ClickParam) => {
     if (key === 'REMOVE') {
@@ -59,4 +59,4 @@ const BoardPane = ({ reportInfo, onDeletePane, globalDate }: Props) => {
   );
 };
 
-export default BoardPane;
+export default BoardGridPane;

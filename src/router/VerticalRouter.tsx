@@ -5,6 +5,7 @@ import VerticalLayout from '@/components/VerticalLayout';
 import ProgressBar from '@/components/ProgressBar';
 import PrivateRoute from './PrivateRoute';
 import { ROUTE_PATH } from '@/constants';
+import BoardDetail from '@/pages/myBoard/BoardDetail';
 const ProjectList = React.lazy(() => import('@/pages/projectList/ProjectList'));
 const TeamList = React.lazy(() => import('@/pages/team/TeamList'));
 const TeamInfo = React.lazy(() => import('@/pages/team/TeamInfo'));
@@ -31,6 +32,7 @@ export default class VerticalRouter extends React.Component {
             <PrivateRoute exact path={ROUTE_PATH.teamList} component={TeamList} />
             <PrivateRoute exact path={ROUTE_PATH.teamInfo} component={TeamInfo} />
             <PrivateRoute exact path={ROUTE_PATH.myBoard} component={MyBoard} />
+            <PrivateRoute exact path={ROUTE_PATH.boardDetail} component={BoardDetail} />
           </Switch>
         </React.Suspense>
       </VerticalLayout>

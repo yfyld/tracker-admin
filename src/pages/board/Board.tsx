@@ -1,7 +1,7 @@
 import RGL from 'react-grid-layout';
 import * as React from 'react';
 
-import BoardPane from './components/BoardPane';
+import BoardGridPane from './components/BoardGridPane';
 import { connect } from 'react-redux';
 import style from './Board.module.less';
 import { IStoreState, IAction, IPageData, IDate } from '@/types';
@@ -56,7 +56,7 @@ const BasicLayout = ({
   function generateDOM(reportList: IReportInfo[]) {
     return reportList.map(item => (
       <div key={item.id}>
-        <BoardPane globalDate={globalDate} reportInfo={item} onDeletePane={handleDeletePane} />
+        <BoardGridPane globalDate={globalDate} reportInfo={item} onDeletePane={handleDeletePane} />
       </div>
     ));
   }
