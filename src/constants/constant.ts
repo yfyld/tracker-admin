@@ -46,6 +46,7 @@ export const ROUTE_PATH = {
   projectInfo: '/project/info',
   metadataList: '/project/metadata-list',
   analyseEvent: '/project/analyse/event',
+  analyseFunnel: '/project/analyse/funnel',
   board: '/project/board',
   reportList: '/project/report-list',
   draft: '/project/draft',

@@ -18,9 +18,19 @@ interface Props {
   fieldList: IListData<IFieldInfo>;
   indicators: IIndicatorInfo[];
   onChange: (param: IIndicatorInfo[]) => any;
+  hasType?: boolean;
+  addText?: string;
 }
 
-const Indicator = ({ indicators, activeMetadataList, activeMetadataListParams, onChange, fieldList }: Props) => {
+const Indicator = ({
+  indicators,
+  activeMetadataList,
+  activeMetadataListParams,
+  onChange,
+  fieldList,
+  hasType,
+  addText = '+添加指标'
+}: Props) => {
   function handleSelectMetadata(info: IMetadataInfo, index: number) {
     const newIndicators: IIndicatorInfo[] = JSON.parse(JSON.stringify(indicators));
     newIndicators[index].trackId = info.code;
@@ -104,16 +114,20 @@ const Indicator = ({ indicators, activeMetadataList, activeMetadataListParams, o
                   <Input value={indicatorInfo.metadataName} readOnly className={style.select} />
                 </Dropdown>
               </Col>
-              <Col span={1}>
-                <div className={style.center}>的</div>
-              </Col>
-              <Col span={3}>
-                <Select onChange={(val: string) => handleTypeChange(val, index)} value={indicatorInfo.type}>
-                  <Option value='SUM'>总次数</Option>
-                  <Option value='USER_SUM'>用户数</Option>
-                  <Option value='3'>人均次数</Option>
-                </Select>
-              </Col>
+              {hasType && (
+                <>
+                  <Col span={1}>
+                    <div className={style.center}>的</div>
+                  </Col>
+                  <Col span={3}>
+                    <Select onChange={(val: string) => handleTypeChange(val, index)} value={indicatorInfo.type}>
+                      <Option value='SUM'>总次数</Option>
+                      <Option value='USER_SUM'>用户数</Option>
+                      <Option value='3'>人均次数</Option>
+                    </Select>
+                  </Col>
+                </>
+              )}
 
               {indicators.length > 1 && (
                 <Col span={1}>
@@ -133,7 +147,7 @@ const Indicator = ({ indicators, activeMetadataList, activeMetadataListParams, o
           </div>
         ))}
       </div>
-      <a onClick={handleAdd}>+添加指标</a>
+      <a onClick={handleAdd}>{addText}</a>
     </div>
   );
 };

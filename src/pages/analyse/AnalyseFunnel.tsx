@@ -44,7 +44,7 @@ const AnalyseFunnel = ({
     <div>
       <AnalyseHeader data={{ ...eventAnalyseParam, projectId }}></AnalyseHeader>
       <Collapse defaultActiveKey={['1']}>
-        <Panel header='添加分析规则' key='1'>
+        <Panel header='添加漏斗分析规则' key='1'>
           <div>
             <div className={style.ruleTitle}>
               <span>指标:</span>
@@ -74,6 +74,7 @@ const AnalyseFunnel = ({
               <span>漏斗步骤:</span>
             </div>
             <Indicator
+              addText='+添加步骤'
               fieldList={fieldList}
               indicators={eventAnalyseParam.indicators}
               onChange={indicators => handleChange({ ...eventAnalyseParam, indicators })}
