@@ -88,6 +88,7 @@ const AnalyseEvent = ({
         <Row>
           <Col span={14}>
             <AnalyseRangePicker
+              pickerProps={{ allowClear: false }}
               onChange={time => handleChange({ ...eventAnalyseParam, ...time })}
               value={{
                 dateType: eventAnalyseParam.dateType,

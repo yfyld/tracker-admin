@@ -1,25 +1,48 @@
 import * as React from 'react';
-
+import style from './AnaluseRangePicker.module.less';
 import { DatePicker, Tag, Button } from 'antd';
 import moment from 'moment';
 import { DYNAMIC_TIME, IDynamicTime } from '@/constants';
-import { RangePickerValue } from 'antd/lib/date-picker/interface';
+import { RangePickerValue, RangePickerProps } from 'antd/lib/date-picker/interface';
 import { IDate } from '@/types';
 const RangePicker = DatePicker.RangePicker;
-interface Props {
+type Props = {
   value: IDate;
   onChange?: (param: IDate) => any;
-}
+  defalutShowIcon?: boolean;
+  pickerProps: RangePickerProps;
+};
 
 //需结合Form组件使用 不能使用函数组件
 class AnalyseRangePicker extends React.Component<Props> {
-  handleSelectDynamicTime = (item: IDynamicTime) => {
-    this.props.onChange({ dateStart: item.startDate(), dateEnd: item.endDate(), dateType: item.value });
-    this.setState({ open: false });
+  static defaultProps = {
+    pickerProps: {}
   };
   state = {
-    open: false
+    open: false,
+    showIcon: this.props.defalutShowIcon
   };
+  handleSelectDynamicTime = (item: IDynamicTime) => {
+    const newValue = { dateStart: item.startDate(), dateEnd: item.endDate(), dateType: item.value };
+    this.props.onChange(newValue);
+    this.setState({ open: false });
+    if (!newValue.dateStart) {
+      this.setState({ showIcon: true });
+    }
+  };
+
+  handlePickerChange = (value: RangePickerValue) => {
+    const newValue =
+      value && value[0]
+        ? { dateStart: value[0].valueOf(), dateEnd: value[1].valueOf(), dateType: '' }
+        : { dateStart: null, dateEnd: null, dateType: '' };
+    this.setState({ open: false });
+    this.props.onChange(newValue);
+    if (!newValue.dateStart) {
+      this.setState({ showIcon: true });
+    }
+  };
+
   handleOpenChange = (open: boolean) => {
     if (open) {
       this.setState({ open });
@@ -34,10 +57,17 @@ class AnalyseRangePicker extends React.Component<Props> {
     }
   };
 
+  handleShowCalendar = () => {
+    this.setState({ open: true, showIcon: false });
+  };
+
   render() {
-    return (
-      <div>
+    return this.state.showIcon ? (
+      <Button icon='calendar' onClick={this.handleShowCalendar}></Button>
+    ) : (
+      <div className={style.picker}>
         <RangePicker
+          {...this.props.pickerProps}
           renderExtraFooter={() => (
             <div>
               <h3>动态时间:</h3>
@@ -59,10 +89,7 @@ class AnalyseRangePicker extends React.Component<Props> {
           value={
             this.props.value.dateStart ? [moment(this.props.value.dateStart), moment(this.props.value.dateEnd)] : []
           }
-          onChange={value => {
-            this.setState({ open: false });
-            this.props.onChange({ dateStart: value[0].valueOf(), dateEnd: value[1].valueOf(), dateType: '' });
-          }}
+          onChange={this.handlePickerChange}
         />
         <span>{this.getShowDate()}</span>
       </div>

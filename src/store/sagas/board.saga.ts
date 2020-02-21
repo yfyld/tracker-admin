@@ -1,3 +1,4 @@
+import { doGetReportInfo } from './../actions/report.action';
 import { ROUTE_PATH } from '@/constants';
 
 import { doAppendReportToBoard, doChangeBoardGlobalDate } from './../actions/board.action';
@@ -9,7 +10,8 @@ import {
   doUpdateBoard,
   doDeleteBoard,
   doGetBoardInfo,
-  doGetMyBoardList
+  doGetMyBoardList,
+  doGetReportList
 } from '@/store/actions';
 import {
   fetchBoardList,
@@ -84,8 +86,11 @@ function* appendReportToBoard(action: ReturnType<typeof doAppendReportToBoard.re
     const projectId = yield* select(state => state.project.projectInfo.id);
     if (location.pathname === ROUTE_PATH.board) {
       yield put(doGetBoardInfo.request({ projectId, id: action.payload.boardIds[0] }));
+    } else if (location.pathname === ROUTE_PATH.reportList) {
+      const param = yield* select(state => state.report.reportListParams);
+      yield put(doGetReportList.request(param));
     } else {
-      //yield put(doGetReportInfo.request({ projectId, id: action.payload.reportId }));
+      yield put(doGetReportInfo.request({ projectId, id: action.payload.reportId }));
     }
   } catch (error) {
     yield put(doAppendReportToBoard.failure(error));

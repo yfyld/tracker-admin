@@ -10,6 +10,7 @@ import { IAction } from '@/types';
 import { bindActionCreators, Dispatch } from 'redux';
 import { doDeleteProject, doUpdateProject } from '@/store/actions';
 import ProjectUpdateModal from './ProjectUpdateModal';
+import { ROUTE_PATH } from '@/constants';
 const { Meta } = Card;
 const { confirm } = Modal;
 
@@ -60,7 +61,7 @@ const ProjectPane = ({ projectInfo, onDeleteProject, onUpdateProject }: Props) =
         onClose={setUpdateProjectVisible}
         onSubmit={onUpdateProject}
       ></ProjectUpdateModal>
-      <Link to={`/project/analyse-event?projectId=${projectInfo.id}`}>
+      <Link to={`${ROUTE_PATH.analyseEvent}?projectId=${projectInfo.id}`}>
         <Card
           style={{ width: 300 }}
           cover={<img alt='image' src={projectInfo.image || noimg} />}

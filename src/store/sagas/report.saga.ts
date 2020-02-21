@@ -52,7 +52,10 @@ function* addReport(action: ReturnType<typeof doAddReport.request>): Generator {
     yield put(doAddReport.success());
     yield put(doGetReportList.request(reportListParams));
     message.success('保存成功');
-    yield put(push(getAnalysePath('EVENT', projectId, response.data.id)));
+    const pathname = yield* select(state => state.router.location.pathname);
+    if (pathname !== ROUTE_PATH.reportList) {
+      yield put(push(getAnalysePath('EVENT', projectId, response.data.id)));
+    }
   } catch (error) {
     yield put(doAddReport.failure(error));
   }

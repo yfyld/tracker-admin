@@ -125,11 +125,16 @@ const BasicLayout = ({
           {boardInfo.name} <Icon type='edit' />
         </h2>
         <div className={style.btnBox}>
-          <AnalyseRangePicker value={globalDate} onChange={onChangeBoardGlobalDate}></AnalyseRangePicker>
-          <ButtonGroup>
-            {/* <Button icon='save'></Button> */}
-            <Button icon='calendar'></Button>
+          <AnalyseRangePicker
+            defalutShowIcon
+            value={globalDate}
+            onChange={onChangeBoardGlobalDate}
+          ></AnalyseRangePicker>
 
+          <ButtonGroup>
+            <Button icon='save'></Button>
+            <Button icon='delete'></Button>
+            <Button icon='reload'></Button>
             <Popover placement='bottom' content={content} title='添加报表'>
               <Button type='primary' icon='plus'></Button>
             </Popover>

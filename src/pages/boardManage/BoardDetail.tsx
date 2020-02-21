@@ -39,10 +39,13 @@ const BasicLayout = ({ boardInfo, globalDate, onChangeBoardGlobalDate }: Props) 
       <div className={style.header}>
         <h2 className={style.title}>{boardInfo.name}</h2>
         <div className={style.btnBox}>
-          <AnalyseRangePicker value={globalDate} onChange={onChangeBoardGlobalDate}></AnalyseRangePicker>
-          <ButtonGroup>
-            <Button icon='calendar'></Button>
-          </ButtonGroup>
+          {globalDate.dateStart ? (
+            <AnalyseRangePicker value={globalDate} onChange={onChangeBoardGlobalDate}></AnalyseRangePicker>
+          ) : (
+            <ButtonGroup>
+              <Button icon='calendar'></Button>
+            </ButtonGroup>
+          )}
         </div>
       </div>
       <div className={style.main}>

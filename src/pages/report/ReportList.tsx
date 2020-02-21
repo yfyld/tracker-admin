@@ -137,13 +137,14 @@ const ReportList = ({
                     style={{ width: 240 }}
                     mode='multiple'
                   >
-                    {boardList.list
-                      .filter(item => !record.boards.find(val => val.id === item.id))
-                      .map(item => (
-                        <Select.Option key={item.id} value={item.id}>
+                    {boardList.list.map(item => {
+                      const isExist = !!record.boards.find(val => val.id === item.id);
+                      return (
+                        <Select.Option key={item.id} value={item.id} disabled={isExist}>
                           {item.name}
                         </Select.Option>
-                      ))}
+                      );
+                    })}
                   </Select>
                   &nbsp;
                   <Button size='small' onClick={() => handleReportAppendBoard(record)}>
@@ -171,6 +172,9 @@ const ReportList = ({
     newRecord.id = null;
     newRecord.boards = null;
     newRecord.name = newRecord.name + '-copy';
+    newRecord.dateStart = Number(newRecord.dateStart);
+    newRecord.dateEnd = Number(newRecord.dateEnd);
+    newRecord.data = JSON.parse(newRecord.data);
     onAddReport(newRecord);
   }
 
