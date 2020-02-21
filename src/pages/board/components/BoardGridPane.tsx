@@ -16,9 +16,10 @@ interface Props {
   onDeletePane?: (param: number) => any;
   globalDate: IDate;
   editable?: boolean;
+  refresh?: number;
 }
 
-const BoardGridPane = ({ reportInfo, onDeletePane, globalDate, editable = true }: Props) => {
+const BoardGridPane = ({ reportInfo, onDeletePane, globalDate, editable = true, refresh = 1 }: Props) => {
   const { dateStart, dateEnd } = globalDate;
   const handleClickMenu = ({ key }: ClickParam) => {
     if (key === 'REMOVE') {
@@ -56,7 +57,7 @@ const BoardGridPane = ({ reportInfo, onDeletePane, globalDate, editable = true }
         )}
       </div>
       <div className={style.body}>
-        <BoardChart type='EVENT' analyseParam={reportInfo.data} globalDate={globalDate}></BoardChart>
+        <BoardChart refresh={refresh} type='EVENT' analyseParam={reportInfo.data} globalDate={globalDate}></BoardChart>
       </div>
     </div>
   );

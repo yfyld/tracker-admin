@@ -4,9 +4,9 @@ import * as React from 'react';
 import BoardGridPane from './components/BoardGridPane';
 import { connect } from 'react-redux';
 import style from './Board.module.less';
-import { IStoreState, IAction, IPageData, IDate } from '@/types';
+import { IStoreState, IAction, IPageData, IDate, IDeleteParam } from '@/types';
 import { bindActionCreators, Dispatch } from 'redux';
-import { Icon, Button, Popover, Drawer } from 'antd';
+import { Icon, Button, Popover, Drawer, Modal } from 'antd';
 import {
   IReportInfo,
   IBoardInfo,
@@ -20,11 +20,12 @@ import {
   doGetReportList,
   doAddReport,
   doAppendReportToBoard,
-  doChangeBoardGlobalDate
+  doChangeBoardGlobalDate,
+  doDeleteBoard
 } from '@/store/actions';
 import ReportDrawerContent from './components/ReportDrawerContent';
 import AnalyseRangePicker from '@/components/AnalyseRangePicker';
-
+const { confirm } = Modal;
 const ButtonGroup = Button.Group;
 
 const ReactGridLayout = RGL.WidthProvider(RGL);
@@ -39,6 +40,7 @@ interface Props {
   onAppendReportToBoard: (params: IReportAppendToBoard) => IAction;
   getReportList: (params: IReportListParam) => IAction;
   onChangeBoardGlobalDate: (params: IDate) => IAction;
+  onDeleteBoard: (params: IDeleteParam) => IAction;
 }
 
 const BasicLayout = ({
@@ -49,20 +51,22 @@ const BasicLayout = ({
   reportListParams,
   getReportList,
   onAppendReportToBoard,
-  onChangeBoardGlobalDate
+  onChangeBoardGlobalDate,
+  onDeleteBoard
 }: Props) => {
   const [addReportDrawerVisible, setaddReportDrawerVisible] = React.useState(false);
-
+  const [refresh, setrefresh] = React.useState(1);
   function generateDOM(reportList: IReportInfo[]) {
     return reportList.map(item => (
       <div key={item.id}>
-        <BoardGridPane globalDate={globalDate} reportInfo={item} onDeletePane={handleDeletePane} />
+        <BoardGridPane refresh={refresh} globalDate={globalDate} reportInfo={item} onDeletePane={handleDeletePane} />
       </div>
     ));
   }
 
   const handleDeletePane = (id: number) => {
     const newBoardInfo: IBoardInfo = JSON.parse(JSON.stringify(boardInfo));
+
     const index = newBoardInfo.reports.findIndex(item => item.id === id);
     if (index >= 0) {
       newBoardInfo.reports.splice(index, 1);
@@ -88,6 +92,19 @@ const BasicLayout = ({
   function handleAppendSubmit(info: IReportAppendToBoard) {
     onAppendReportToBoard(info);
     setaddReportDrawerVisible(false);
+  }
+
+  function handleDelete() {
+    const { id, projectId } = boardInfo;
+    confirm({
+      title: '提示',
+      content: '确认删除该看板',
+      okText: '确定',
+      cancelText: '取消',
+      onOk() {
+        onDeleteBoard({ id, projectId });
+      }
+    });
   }
 
   const content = (
@@ -132,9 +149,9 @@ const BasicLayout = ({
           ></AnalyseRangePicker>
 
           <ButtonGroup>
-            <Button icon='save'></Button>
-            <Button icon='delete'></Button>
-            <Button icon='reload'></Button>
+            {/* <Button icon='save'></Button> */}
+            <Button icon='delete' onClick={handleDelete}></Button>
+            <Button icon='reload' onClick={() => setrefresh(refresh + 1)}></Button>
             <Popover placement='bottom' content={content} title='添加报表'>
               <Button type='primary' icon='plus'></Button>
             </Popover>
@@ -165,7 +182,8 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
       onAppendReportToBoard: (params: IReportAppendToBoard) => {
         return doAppendReportToBoard.request(params);
       },
-      getReportList: (params: IReportListParam) => doGetReportList.request(params)
+      getReportList: (params: IReportListParam) => doGetReportList.request(params),
+      onDeleteBoard: params => doDeleteBoard.request(params)
     },
     dispatch
   );

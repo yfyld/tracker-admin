@@ -26,10 +26,11 @@ interface Props {
 }
 
 const BasicLayout = ({ boardInfo, globalDate, onChangeBoardGlobalDate }: Props) => {
+  const [refresh, setrefresh] = React.useState(1);
   function generateDOM(reportList: IReportInfo[]) {
     return reportList.map(item => (
       <div key={item.id}>
-        <BoardGridPane globalDate={globalDate} reportInfo={item} editable={false} />
+        <BoardGridPane globalDate={globalDate} refresh={refresh} reportInfo={item} editable={false} />
       </div>
     ));
   }
@@ -43,7 +44,7 @@ const BasicLayout = ({ boardInfo, globalDate, onChangeBoardGlobalDate }: Props) 
             <AnalyseRangePicker value={globalDate} onChange={onChangeBoardGlobalDate}></AnalyseRangePicker>
           ) : (
             <ButtonGroup>
-              <Button icon='calendar'></Button>
+              <Button icon='reload' onClick={() => setrefresh(refresh + 1)}></Button>
             </ButtonGroup>
           )}
         </div>

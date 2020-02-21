@@ -1,3 +1,4 @@
+import { IDeleteParam } from './../../types/index';
 import { createAsyncAction, createAction } from 'typesafe-actions';
 import { IPageData, IInfoParam, IDate } from '@/types';
 import * as actionType from '@/constants/actionType';
@@ -39,7 +40,7 @@ export const doDeleteBoard = createAsyncAction(
   actionType.DELETE_BOARD_REQUEST,
   actionType.DELETE_BOARD_SUCCESS,
   actionType.DELETE_BOARD_FAILURE
-)<number, undefined, Error>();
+)<IDeleteParam, undefined, Error>();
 
 export const doAppendReportToBoard = createAsyncAction(
   actionType.APPEND_REPORT_TO_BOARD_REQUEST,

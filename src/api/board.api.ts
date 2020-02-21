@@ -1,5 +1,5 @@
 import RGL from 'react-grid-layout';
-import { IPageQuery, IInfoParam } from './../types/index';
+import { IPageQuery, IInfoParam, IDeleteParam } from './../types/index';
 import { IReportInfo } from './report.api';
 import fetch from './http';
 import { IPageData } from '@/types';
@@ -60,6 +60,10 @@ export interface IMyBoardListItem {
   description: string;
 }
 
+export interface IBoardAddResponse {
+  id: number;
+}
+
 export function fetchBoardList(params: IBoardListParam) {
   return fetch.get<IPageData<IBoardInfo>>('/board/', params);
 }
@@ -69,15 +73,15 @@ export function fetchBoardInfo(params: IInfoParam) {
 }
 
 export function fetchBoardAdd(params: IBoardAddParam) {
-  return fetch.post('/board/', params);
+  return fetch.post<IBoardAddResponse>('/board/', params);
 }
 
 export function fetchBoardUpdate(params: IBoardUpdateParam) {
   return fetch.put('/board/', params);
 }
 
-export function fetchBoardDel(id: number) {
-  return fetch.delete(`/board/${id}`);
+export function fetchBoardDel(params: IDeleteParam) {
+  return fetch.delete(`/board`, params);
 }
 
 export function fetchReportAppendToBoard(params: IReportAppendToBoard) {

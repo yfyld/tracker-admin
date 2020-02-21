@@ -14,9 +14,10 @@ interface Props {
   analyseParam: any;
   type: string;
   globalDate: IDate;
+  refresh: number;
 }
 
-const BoardChart = ({ type, analyseParam, globalDate }: Props) => {
+const BoardChart = ({ type, analyseParam, globalDate, refresh }: Props) => {
   const [data, setdata] = React.useState<IEventAnalyseData>({
     list: [],
     dimension: '',
@@ -39,7 +40,7 @@ const BoardChart = ({ type, analyseParam, globalDate }: Props) => {
         setloading(false);
       });
     }
-  }, [analyseParam, globalDate]);
+  }, [analyseParam, globalDate, refresh]);
 
   switch (type) {
     case 'EVENT':
