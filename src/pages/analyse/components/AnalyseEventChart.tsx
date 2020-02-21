@@ -370,7 +370,7 @@ const getTableData = (data: IEventAnalyseData): TableColumnProps[] => {
       data.list.forEach(indicator => {});
     } else if (data.list.length === 1) {
       return data.list[0].data.map(item => ({
-        time: '',
+        time: item.time,
         key: item.time,
         pv: item.pv
       }));

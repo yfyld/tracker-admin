@@ -15,9 +15,10 @@ interface Props {
   reportInfo: IReportInfo;
   onDeletePane?: (param: number) => any;
   globalDate: IDate;
+  editable?: boolean;
 }
 
-const BoardGridPane = ({ reportInfo, onDeletePane, globalDate }: Props) => {
+const BoardGridPane = ({ reportInfo, onDeletePane, globalDate, editable = true }: Props) => {
   const { dateStart, dateEnd } = globalDate;
   const handleClickMenu = ({ key }: ClickParam) => {
     if (key === 'REMOVE') {
@@ -46,11 +47,13 @@ const BoardGridPane = ({ reportInfo, onDeletePane, globalDate }: Props) => {
             ></DateParse>
           </div>
         </h3>
-        <div className={style.menu}>
-          <Dropdown overlay={menu} placement='bottomLeft'>
-            <Icon type='menu' />
-          </Dropdown>
-        </div>
+        {editable && (
+          <div className={style.menu}>
+            <Dropdown overlay={menu} placement='bottomLeft'>
+              <Icon type='menu' />
+            </Dropdown>
+          </div>
+        )}
       </div>
       <div className={style.body}>
         <BoardChart type='EVENT' analyseParam={reportInfo.data} globalDate={globalDate}></BoardChart>

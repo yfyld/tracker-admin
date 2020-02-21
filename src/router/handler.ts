@@ -141,6 +141,15 @@ const handlers = {
         disable: state.board.boardInfo.id === Number(boardId)
       }
     ];
+  },
+  '/board': ({ search: { projectId, boardId } }: any, state: IStoreState): IHandler[] => {
+    return [
+      {
+        action: doGetBoardInfo.request({ projectId, id: boardId }),
+        ttl: CACHE_TIME,
+        disable: state.board.boardInfo.id === Number(boardId)
+      }
+    ];
   }
 };
 

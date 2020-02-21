@@ -29,7 +29,7 @@ const BasicLayout = ({ boardInfo, globalDate, onChangeBoardGlobalDate }: Props) 
   function generateDOM(reportList: IReportInfo[]) {
     return reportList.map(item => (
       <div key={item.id}>
-        <BoardGridPane globalDate={globalDate} reportInfo={item} />
+        <BoardGridPane globalDate={globalDate} reportInfo={item} editable={false} />
       </div>
     ));
   }
@@ -37,19 +37,24 @@ const BasicLayout = ({ boardInfo, globalDate, onChangeBoardGlobalDate }: Props) 
   return (
     <div className={style.wrapper}>
       <div className={style.header}>
-        <h2 className={style.title}>
-          {boardInfo.name} <Icon type='edit' />
-        </h2>
+        <h2 className={style.title}>{boardInfo.name}</h2>
         <div className={style.btnBox}>
           <AnalyseRangePicker value={globalDate} onChange={onChangeBoardGlobalDate}></AnalyseRangePicker>
           <ButtonGroup>
-            {/* <Button icon='save'></Button> */}
             <Button icon='calendar'></Button>
           </ButtonGroup>
         </div>
       </div>
       <div className={style.main}>
-        <ReactGridLayout key={boardInfo.id} className='layout' layout={boardInfo.layout} cols={24} rowHeight={30}>
+        <ReactGridLayout
+          key={boardInfo.id}
+          className='layout'
+          isDraggable={false}
+          isResizable={false}
+          layout={boardInfo.layout}
+          cols={24}
+          rowHeight={30}
+        >
           {generateDOM(boardInfo.reports)}
         </ReactGridLayout>
       </div>

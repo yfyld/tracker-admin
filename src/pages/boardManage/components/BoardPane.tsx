@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { IAction } from '@/types';
 import { bindActionCreators, Dispatch } from 'redux';
 import { doDeleteProject } from '@/store/actions';
+import { ROUTE_PATH } from '@/constants';
 const { Meta } = Card;
 const { confirm } = Modal;
 
@@ -34,7 +35,10 @@ const ProjectPane = ({ boardInfo, doDeleteProject }: Props) => {
     });
   };
   return (
-    <Link className={style.wrapper} to={`/project/board?projectId=${boardInfo.projectId}&boardId=${boardInfo.id}`}>
+    <Link
+      className={style.wrapper}
+      to={`${ROUTE_PATH.boardDetail}?projectId=${boardInfo.projectId}&boardId=${boardInfo.id}`}
+    >
       <Card
         style={{ width: 300 }}
         cover={<img alt='image' src={noimg} />}
