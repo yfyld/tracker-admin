@@ -67,6 +67,29 @@ export interface IEventAnalyseData {
   type: string;
 }
 
+export interface IFunnelAnalyseParam {
+  indicators: IIndicatorInfo[];
+  filter: IFilterInfo;
+  dimension: string;
+  type: string;
+  projectId: number;
+  dateType: string;
+  dateStart: number;
+  dateEnd: number;
+}
+
+export interface IFunnelAnalyseData {
+  list: IEventAnalyseDataItem[];
+  dimension: string;
+  dimensionValues: string[];
+  timeUnit: string;
+  type: string;
+}
+
 export function fetchEventAnalyseData(param: IEventAnalyseParam) {
   return fetch.post<IEventAnalyseData>('/analyse/event', { ...param, SHOW_LOADING: false });
+}
+
+export function fetchFunnelAnalyseData(param: IFunnelAnalyseParam) {
+  return fetch.post<IFunnelAnalyseData>('/analyse/funnel', { ...param, SHOW_LOADING: false });
 }

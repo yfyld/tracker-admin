@@ -1,9 +1,9 @@
 import { DYNAMIC_TIME } from './../../constants/constant';
 import { RangePickerValue } from 'antd/lib/date-picker/interface';
 import { IDate } from './../../types/index';
-import { IEventAnalyseData } from './../../api/analyse.api';
+import { IEventAnalyseData, IFunnelAnalyseData, IFunnelAnalyseParam } from './../../api/analyse.api';
 import { IEventAnalyseParam } from '@/api';
-import { doGetEventAnalyse } from './../actions/analyse.action';
+import { doGetEventAnalyse, doGetFunnelAnalyse } from './../actions/analyse.action';
 import { doResetStore } from '@/store/actions';
 import update from 'immutability-helper';
 import { getType } from 'typesafe-actions';
@@ -13,6 +13,10 @@ import moment from 'moment';
 export interface AnalyseState {
   eventAnalyseData: IEventAnalyseData;
   eventAnalyseParam: IEventAnalyseParam;
+
+  funnelAnalyseData: IFunnelAnalyseData;
+  funnelAnalyseParam: IFunnelAnalyseParam;
+
   analyseLoading: boolean;
 }
 
@@ -45,6 +49,33 @@ const initialState = (): AnalyseState => ({
     dateStart: DYNAMIC_TIME[1].startDate(),
     dateEnd: DYNAMIC_TIME[1].endDate(),
     dateType: DYNAMIC_TIME[1].value
+  },
+  funnelAnalyseData: { list: [], dimension: '', dimensionValues: [], timeUnit: 'DAY', type: 'LINE' },
+  funnelAnalyseParam: {
+    projectId: null,
+    indicators: [
+      {
+        trackId: '',
+        metadataCode: '',
+        metadataName: '所有事件',
+        type: 'SUM',
+        id: 1,
+        filter: {
+          filterType: 'OR',
+          filterValues: []
+        }
+      }
+    ],
+    dimension: '',
+    filter: {
+      filterType: 'OR',
+      filterValues: []
+    },
+
+    type: 'LINE',
+    dateStart: DYNAMIC_TIME[1].startDate(),
+    dateEnd: DYNAMIC_TIME[1].endDate(),
+    dateType: DYNAMIC_TIME[1].value
   }
 });
 
@@ -57,6 +88,14 @@ export const analyseReducer = (state: AnalyseState = initialState(), action: IAc
     case getType(doGetEventAnalyse.success):
       return update(state, {
         eventAnalyseData: { $set: action.payload },
+        analyseLoading: { $set: false }
+      });
+
+    case getType(doGetFunnelAnalyse.request):
+      return update(state, { funnelAnalyseParam: { $set: action.payload }, analyseLoading: { $set: true } });
+    case getType(doGetFunnelAnalyse.success):
+      return update(state, {
+        funnelAnalyseData: { $set: action.payload },
         analyseLoading: { $set: false }
       });
 
