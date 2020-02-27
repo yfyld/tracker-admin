@@ -18,6 +18,7 @@ export interface IIndicatorInfo {
   trackId: string;
   metadataCode: string;
   metadataName: string;
+  customName?: string;
   type: string;
   filter: IFilterInfo;
   id: number;
@@ -55,6 +56,7 @@ interface IEventAnalyseDataItem {
   key: string;
   metadataCode: string;
   metadataName: string;
+  customName?: string;
   data: IEventAnalyseDataItemDataItem[];
   compare: ICompareInfo;
 }
@@ -69,6 +71,7 @@ export interface IEventAnalyseData {
 
 export interface IFunnelAnalyseParam {
   indicators: IIndicatorInfo[];
+  indicatorType: string;
   filter: IFilterInfo;
   dimension: string;
   type: string;
@@ -78,8 +81,23 @@ export interface IFunnelAnalyseParam {
   dateEnd: number;
 }
 
+interface IFunnelAnalyseDataItemDataItem {
+  count: string;
+  key: string;
+  time: string;
+  [prop: string]: string | number;
+}
+interface IFunnelAnalyseDataItem {
+  key: string;
+  metadataCode: string;
+  metadataName: string;
+  customName?: string;
+  data: IFunnelAnalyseDataItemDataItem[];
+  count: string;
+}
+
 export interface IFunnelAnalyseData {
-  list: IEventAnalyseDataItem[];
+  list: IFunnelAnalyseDataItem[];
   dimension: string;
   dimensionValues: string[];
   timeUnit: string;

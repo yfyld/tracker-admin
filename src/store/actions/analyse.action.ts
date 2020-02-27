@@ -17,5 +17,5 @@ export const doGetFunnelAnalyse = createAsyncAction(
 
 export const doInitAnalyse = createAction(
   actionType.INIT_ANALYSE,
-  action => (param: { projectId: number; reportId: number }) => action(param)
+  action => (param: { projectId: number; reportId: number; type?: string; param?: any }) => action(param)
 );

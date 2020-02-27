@@ -30,7 +30,7 @@ const initialState = (): AnalyseState => ({
         trackId: '',
         metadataCode: '',
         metadataName: '所有事件',
-        type: 'SUM',
+        type: 'PV',
         id: 1,
         filter: {
           filterType: 'OR',
@@ -53,12 +53,13 @@ const initialState = (): AnalyseState => ({
   funnelAnalyseData: { list: [], dimension: '', dimensionValues: [], timeUnit: 'DAY', type: 'LINE' },
   funnelAnalyseParam: {
     projectId: null,
+    indicatorType: 'PV',
     indicators: [
       {
         trackId: '',
         metadataCode: '',
         metadataName: '所有事件',
-        type: 'SUM',
+        type: 'PV',
         id: 1,
         filter: {
           filterType: 'OR',
@@ -72,7 +73,7 @@ const initialState = (): AnalyseState => ({
       filterValues: []
     },
 
-    type: 'LINE',
+    type: 'FUNNEL',
     dateStart: DYNAMIC_TIME[1].startDate(),
     dateEnd: DYNAMIC_TIME[1].endDate(),
     dateType: DYNAMIC_TIME[1].value

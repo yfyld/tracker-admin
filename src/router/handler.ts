@@ -116,23 +116,27 @@ const handlers = {
         action: doGetFieldList.request(),
         ttl: CACHE_TIME,
         disable: state.metadata.fieldList.list.length > 0
-      },
+      }
+    ];
+  },
+  '/project/analyse/event': ({ search: { projectId, reportId } }: any, state: IStoreState): IHandler[] => {
+    return [
       {
-        action: doInitAnalyse({ projectId, reportId }),
+        action: doInitAnalyse({ projectId, reportId, type: 'EVENT' }),
         ttl: CACHE_TIME,
         disable: false
       }
     ];
   },
-  // '/project/analyse/event': ({ search: { projectId,reportId } }: any, state: IStoreState): IHandler[] => {
-  //   return [
-  //     {
-  //       action: doGetEventAnalyse.request({ ...state.analyse.eventAnalyseParam, projectId }),
-  //       ttl: CACHE_TIME,
-  //       disable: false
-  //     }
-  //   ];
-  // },
+  '/project/analyse/funnel': ({ search: { projectId, reportId } }: any, state: IStoreState): IHandler[] => {
+    return [
+      {
+        action: doInitAnalyse({ projectId, reportId, type: 'FUNNEL' }),
+        ttl: CACHE_TIME,
+        disable: false
+      }
+    ];
+  },
   '/project/board': ({ search: { projectId, boardId } }: any, state: IStoreState): IHandler[] => {
     return [
       {

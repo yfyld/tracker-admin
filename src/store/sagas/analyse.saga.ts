@@ -3,7 +3,7 @@ import { doGetEventAnalyse, doInitAnalyse, doGetFunnelAnalyse } from './../actio
 import { put, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
 import { select, call } from '@/utils';
-import { fetchEventAnalyseData } from '@/api';
+import { fetchEventAnalyseData, fetchFunnelAnalyseData } from '@/api';
 
 function* getEventAnalyseData(action: ReturnType<typeof doGetEventAnalyse.request>): Generator {
   try {
@@ -14,28 +14,41 @@ function* getEventAnalyseData(action: ReturnType<typeof doGetEventAnalyse.reques
   }
 }
 
-function* getFunnelAnalyseData(action: ReturnType<typeof doGetEventAnalyse.request>): Generator {
+function* getFunnelAnalyseData(action: ReturnType<typeof doGetFunnelAnalyse.request>): Generator {
   try {
-    const response = yield* call(fetchEventAnalyseData, action.payload);
-    yield put(doGetEventAnalyse.success(response.data));
+    const response = yield* call(fetchFunnelAnalyseData, action.payload);
+    yield put(doGetFunnelAnalyse.success(response.data));
   } catch (error) {
-    yield put(doGetEventAnalyse.failure(error));
+    yield put(doGetFunnelAnalyse.failure(error));
   }
 }
 
 function* initAnalyse(action: ReturnType<typeof doInitAnalyse>): Generator {
   try {
-    const eventAnalyseParam = yield* select(state => state.analyse.eventAnalyseParam);
-    const { projectId, reportId } = action.payload;
-    if (!action.payload.reportId) {
-      yield put(doGetEventAnalyse.request({ ...eventAnalyseParam, projectId }));
-    } else {
+    let { projectId, reportId, param, type } = action.payload;
+    if (reportId && !param) {
       yield put(
         doGetReportInfo.request({
           projectId,
           id: reportId
         })
       );
+      return;
+    }
+
+    switch (type) {
+      case 'EVENT': {
+        param = { ...(yield* select(state => state.analyse.eventAnalyseParam)), projectId };
+        yield put(doGetEventAnalyse.request(param));
+        break;
+      }
+      case 'FUNNEL': {
+        param = { ...(yield* select(state => state.analyse.funnelAnalyseParam)), projectId };
+        yield put(doGetFunnelAnalyse.request(param));
+        break;
+      }
+      default:
+        break;
     }
   } catch (error) {}
 }

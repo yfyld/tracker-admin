@@ -2,60 +2,64 @@ import { Icon, Collapse, Divider, Select, Input, Row, Col, Button, Spin } from '
 import React from 'react';
 import AnalyseRangePicker from '@/components/AnalyseRangePicker';
 import moment from 'moment';
-import style from './AnalyseEvent.module.less';
+import style from './AnalyseFunnel.module.less';
 import ReactEcharts from 'echarts-for-react';
 import Indicator from '@/components/Indicator';
 import Dimension from '@/components/Dimension';
 import Filter from '@/components/Filter';
 import AnalyseHeader from './components/AnalyseHeader';
-import { IReportInfo, IFieldInfo, IEventAnalyseData, IEventAnalyseParam } from '@/api';
+import { IReportInfo, IFieldInfo, IFunnelAnalyseData, IFunnelAnalyseParam } from '@/api';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { doAddReport, doUpdateReport, doGetEventAnalyse } from '@/store/actions';
+import { doAddReport, doUpdateReport, doGetFunnelAnalyse } from '@/store/actions';
 import { IAction, IStoreState, IListData, IDate } from '@/types';
 import { DYNAMIC_TIME } from '@/constants';
-import AnalyseEventChart from './components/AnalyseEventChart';
+import AnalyseFunnelChart from './components/AnalyseFunnelChart';
 const { Option } = Select;
 const { Panel } = Collapse;
 const { Group } = Input;
 interface Props {
   fieldList: IListData<IFieldInfo>;
-  onGetEventAnalyseData: (param: IEventAnalyseParam) => IAction;
+  onGetFunnelAnalyseData: (param: IFunnelAnalyseParam) => IAction;
   projectId: number;
-  eventAnalyseData: IEventAnalyseData;
-  eventAnalyseParam: IEventAnalyseParam;
+  funnelAnalyseData: IFunnelAnalyseData;
+  funnelAnalyseParam: IFunnelAnalyseParam;
   analyseLoading: boolean;
 }
 
 const AnalyseFunnel = ({
   analyseLoading,
   fieldList,
-  onGetEventAnalyseData,
+  onGetFunnelAnalyseData,
   projectId,
-  eventAnalyseData,
-  eventAnalyseParam
+  funnelAnalyseData,
+  funnelAnalyseParam
 }: Props) => {
-  const handleChange = (info: IEventAnalyseParam) => {
+  const handleChange = (info: IFunnelAnalyseParam) => {
     info.projectId = projectId;
-    onGetEventAnalyseData(info);
+    onGetFunnelAnalyseData(info);
   };
 
   return (
     <div>
-      <AnalyseHeader data={{ ...eventAnalyseParam, projectId }}></AnalyseHeader>
+      <AnalyseHeader data={{ ...funnelAnalyseParam, projectId }}></AnalyseHeader>
       <Collapse defaultActiveKey={['1']}>
         <Panel header='添加漏斗分析规则' key='1'>
           <div>
             <div className={style.ruleTitle}>
               <span>指标:</span>
             </div>
-            <div>
-              <Select value='SUM'>
-                <Option value='SUM'>总数</Option>
-              </Select>
 
-              {/* <Filter fieldList={fieldList} filterInfo={filter} /> */}
-            </div>
+            <Select
+              value={funnelAnalyseParam.indicatorType}
+              onChange={(indicatorType: string) => handleChange({ ...funnelAnalyseParam, indicatorType })}
+            >
+              <Option value='PV'>总数</Option>
+              <Option value='UV'> 用户数</Option>
+              <Option value='APV'>人均次数</Option>
+              <Option value='DPV'>日均次数</Option>
+              <Option value='DUV'>日均用户数</Option>
+            </Select>
           </div>
 
           <div>
@@ -63,9 +67,20 @@ const AnalyseFunnel = ({
               <span>维度:</span>
             </div>
             <Dimension
-              dimension={eventAnalyseParam.dimension}
+              dimension={funnelAnalyseParam.dimension}
               fieldList={fieldList}
-              onChange={dimension => handleChange({ ...eventAnalyseParam, dimension })}
+              onChange={dimension => handleChange({ ...funnelAnalyseParam, dimension })}
+            />
+          </div>
+
+          <div>
+            <div className={style.ruleTitle}>
+              <span>筛选:</span>
+            </div>
+            <Filter
+              fieldList={fieldList}
+              filterInfo={funnelAnalyseParam.filter}
+              onChange={filter => handleChange({ ...funnelAnalyseParam, filter })}
             />
           </div>
 
@@ -75,9 +90,10 @@ const AnalyseFunnel = ({
             </div>
             <Indicator
               addText='+添加步骤'
+              hasCustomName
               fieldList={fieldList}
-              indicators={eventAnalyseParam.indicators}
-              onChange={indicators => handleChange({ ...eventAnalyseParam, indicators })}
+              indicators={funnelAnalyseParam.indicators}
+              onChange={indicators => handleChange({ ...funnelAnalyseParam, indicators })}
             />
           </div>
         </Panel>
@@ -87,11 +103,11 @@ const AnalyseFunnel = ({
         <Row>
           <Col span={14}>
             <AnalyseRangePicker
-              onChange={time => handleChange({ ...eventAnalyseParam, ...time })}
+              onChange={time => handleChange({ ...funnelAnalyseParam, ...time })}
               value={{
-                dateType: eventAnalyseParam.dateType,
-                dateEnd: eventAnalyseParam.dateEnd,
-                dateStart: eventAnalyseParam.dateStart
+                dateType: funnelAnalyseParam.dateType,
+                dateEnd: funnelAnalyseParam.dateEnd,
+                dateStart: funnelAnalyseParam.dateStart
               }}
             />
           </Col>
@@ -99,31 +115,20 @@ const AnalyseFunnel = ({
             <Group compact>
               <Select
                 style={{ width: '33%' }}
-                value={eventAnalyseParam.type}
-                onChange={(type: string) => handleChange({ ...eventAnalyseParam, type })}
+                value={funnelAnalyseParam.type}
+                onChange={(type: string) => handleChange({ ...funnelAnalyseParam, type })}
               >
-                <Option value='LINE'>折线图</Option>
-                <Option value='PIE'>饼图</Option>
+                <Option value='FUNNEL'>漏斗图</Option>
+                <Option value='LIST'>列表</Option>
                 <Option value='TABLE'>表格</Option>
-                <Option value='TEXT'>数值</Option>
               </Select>
-              <Select
-                style={{ width: '33%' }}
-                value={eventAnalyseParam.timeUnit}
-                onChange={(timeUnit: string) => handleChange({ ...eventAnalyseParam, timeUnit })}
-              >
-                <Option value='HOUR'>按小时</Option>
-                <Option value='DAY'>按天</Option>
-                <Option value='WEEK'>按周</Option>
-                <Option value='MONTH'>按月</Option>
-                <Option value='YEAR'>按年</Option>
-              </Select>
+
               <Button icon='download'>导出</Button>
             </Group>
           </Col>
         </Row>
         <Spin spinning={analyseLoading}>
-          <AnalyseEventChart data={eventAnalyseData}></AnalyseEventChart>
+          <AnalyseFunnelChart data={funnelAnalyseData}></AnalyseFunnelChart>
         </Spin>
         <div></div>
       </div>
@@ -134,12 +139,12 @@ const AnalyseFunnel = ({
 const mapStateToProps = (state: IStoreState) => {
   const { fieldList } = state.metadata;
   const projectId = state.project.projectInfo.id;
-  const { eventAnalyseData, eventAnalyseParam, analyseLoading } = state.analyse;
+  const { funnelAnalyseData, funnelAnalyseParam, analyseLoading } = state.analyse;
   return {
     fieldList,
     projectId,
-    eventAnalyseData,
-    eventAnalyseParam,
+    funnelAnalyseData,
+    funnelAnalyseParam,
     analyseLoading
   };
 };
@@ -147,7 +152,7 @@ const mapStateToProps = (state: IStoreState) => {
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
-      onGetEventAnalyseData: (param: IEventAnalyseParam) => doGetEventAnalyse.request(param)
+      onGetFunnelAnalyseData: (param: IFunnelAnalyseParam) => doGetFunnelAnalyse.request(param)
     },
     dispatch
   );

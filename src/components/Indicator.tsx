@@ -20,6 +20,7 @@ interface Props {
   onChange: (param: IIndicatorInfo[]) => any;
   hasType?: boolean;
   addText?: string;
+  hasCustomName?: boolean;
 }
 
 const Indicator = ({
@@ -29,7 +30,8 @@ const Indicator = ({
   onChange,
   fieldList,
   hasType,
-  addText = '+添加指标'
+  addText = '+添加指标',
+  hasCustomName = false
 }: Props) => {
   function handleSelectMetadata(info: IMetadataInfo, index: number) {
     const newIndicators: IIndicatorInfo[] = JSON.parse(JSON.stringify(indicators));
@@ -48,6 +50,12 @@ const Indicator = ({
   function handleTypeChange(value: string, index: number) {
     const newIndicators: IIndicatorInfo[] = JSON.parse(JSON.stringify(indicators));
     newIndicators[index].type = value;
+    onChange(newIndicators);
+  }
+
+  function handleNameChange(value: string, index: number) {
+    const newIndicators: IIndicatorInfo[] = JSON.parse(JSON.stringify(indicators));
+    newIndicators[index].customName = value;
     onChange(newIndicators);
   }
 
@@ -78,7 +86,7 @@ const Indicator = ({
       <div>
         {indicators.map((indicatorInfo, index) => (
           <div key={indicatorInfo.id}>
-            <Row className={style.item}>
+            <Row className={style.item} gutter={10}>
               <Col span={1}>
                 <div className={style.center}>
                   <Tag color='gold'>{index + 1}</Tag>
@@ -114,6 +122,15 @@ const Indicator = ({
                   <Input value={indicatorInfo.metadataName} readOnly className={style.select} />
                 </Dropdown>
               </Col>
+              {hasCustomName && (
+                <Col span={3}>
+                  <Input
+                    defaultValue={indicatorInfo.customName}
+                    placeholder='自定义名称'
+                    onBlur={event => handleNameChange(event.target.value, index)}
+                  />
+                </Col>
+              )}
               {hasType && (
                 <>
                   <Col span={1}>
