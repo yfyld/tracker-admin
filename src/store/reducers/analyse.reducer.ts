@@ -74,9 +74,9 @@ const initialState = (): AnalyseState => ({
     },
 
     type: 'FUNNEL',
-    dateStart: DYNAMIC_TIME[1].startDate(),
-    dateEnd: DYNAMIC_TIME[1].endDate(),
-    dateType: DYNAMIC_TIME[1].value
+    dateStart: DYNAMIC_TIME[8].startDate(),
+    dateEnd: DYNAMIC_TIME[8].endDate(),
+    dateType: DYNAMIC_TIME[8].value
   }
 });
 

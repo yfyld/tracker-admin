@@ -82,18 +82,23 @@ export interface IFunnelAnalyseParam {
 }
 
 interface IFunnelAnalyseDataItemDataItem {
-  count: string;
-  key: string;
   time: string;
-  [prop: string]: string | number;
+  data: IFunnelDataItem[];
+}
+
+interface IFunnelDataItem {
+  count: number;
+  conversionRate?: number;
+  key: string;
+  metadataName: string;
+  metadataCode: string;
+  customName?: string;
 }
 interface IFunnelAnalyseDataItem {
   key: string;
-  metadataCode: string;
-  metadataName: string;
-  customName?: string;
+  dimension: string;
   data: IFunnelAnalyseDataItemDataItem[];
-  count: string;
+  allData: IFunnelDataItem[];
 }
 
 export interface IFunnelAnalyseData {
