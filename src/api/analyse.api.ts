@@ -83,7 +83,8 @@ export interface IFunnelAnalyseParam {
 
 interface IFunnelAnalyseDataItemDataItem {
   time: string;
-  data: IFunnelDataItem[];
+  conversionRateMap: { [prop: string]: number };
+  steps: IFunnelDataItem[];
 }
 
 interface IFunnelDataItem {
@@ -99,6 +100,7 @@ interface IFunnelAnalyseDataItem {
   dimension: string;
   data: IFunnelAnalyseDataItemDataItem[];
   allData: IFunnelDataItem[];
+  conversionRateMap: { [prop: string]: number };
 }
 
 export interface IFunnelAnalyseData {
@@ -106,6 +108,7 @@ export interface IFunnelAnalyseData {
   dimension: string;
   dimensionValues: string[];
   timeUnit: string;
+  conversionRate: number;
   type: string;
 }
 

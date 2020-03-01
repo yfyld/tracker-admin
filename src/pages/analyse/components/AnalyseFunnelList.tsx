@@ -10,7 +10,7 @@ interface Props {
   data: IFunnelAnalyseData;
 }
 
-const getOptions = (data: IFunnelAnalyseData): ObjectMap => {
+const getOptions = (data: IFunnelAnalyseData, step: string): ObjectMap => {
   const options: ObjectMap = {
     grid: {
       bottom: 60,
@@ -63,7 +63,7 @@ const getOptions = (data: IFunnelAnalyseData): ObjectMap => {
       data: item.data.map(val => {
         return {
           name: val.time,
-          value: [val.time, 11]
+          value: [val.time, val.conversionRateMap[step]]
         };
       })
     });
@@ -73,6 +73,7 @@ const getOptions = (data: IFunnelAnalyseData): ObjectMap => {
 };
 
 const AnalyseFunnelList = ({ data }: Props) => {
+  const [step, setstep] = React.useState('_ALL');
   const hasData = !!data.list.find(item => item.data.length > 0);
 
   if (!hasData) {
@@ -81,7 +82,21 @@ const AnalyseFunnelList = ({ data }: Props) => {
 
   return (
     <div>
-      <ReactEcharts option={getOptions(data)} theme='ts' notMerge={true} lazyUpdate={true} />
+      <div>
+        {data.list[0].allData.map((item, index) => (
+          <div key={item.key}>
+            {index === 0 ? (
+              <span onClick={() => setstep('_ALL')}>总转化率:{data.conversionRate}%</span>
+            ) : (
+              <span onClick={() => setstep(item.key)}>转化率:{item.conversionRate}%</span>
+            )}
+            <p>
+              {item.customName || item.metadataName}({item.count})
+            </p>
+          </div>
+        ))}
+      </div>
+      <ReactEcharts option={getOptions(data, step)} theme='ts' notMerge={true} lazyUpdate={true} />
     </div>
   );
 };

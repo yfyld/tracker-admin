@@ -54,31 +54,81 @@ const getOptions = (data: IFunnelAnalyseData): ObjectMap => {
 
 interface TableColumnProps {
   key: string;
-  pv: number;
   time: string;
+  [prop: string]: any;
 }
 
 const getColumns = (data: IFunnelAnalyseData) => {
   let columns: ColumnProps<TableColumnProps>[] = [
     {
-      title: '日期',
+      title: '',
       key: 'time',
       dataIndex: 'time',
       fixed: 'left',
       width: 200,
       defaultSortOrder: 'descend',
       sorter: (a, b) => new Date(a.time).getTime() - new Date(b.time).getTime(),
-      render: (text: number) => moment(text).format(getFormatByTimeUnit(data.timeUnit))
+      render: (text: string) => {
+        if (/\d/.test(text)) {
+          return moment(text).format(getFormatByTimeUnit(data.timeUnit));
+        }
+        return text;
+      }
     }
   ];
+
+  data.list[0].allData.forEach((item, index) => {
+    if (index === 0) {
+      columns.push({
+        title: '总转化率',
+        key: item.key,
+        dataIndex: item.key + '_count',
+        render: (text, record) => (
+          <div>
+            {record[item.key + '_count']} <span>({record[item.key + '_rate']})</span>
+          </div>
+        )
+      });
+    } else {
+      columns.push({
+        title: `第一步(${item.customName || item.metadataName})`,
+        key: item.key,
+        dataIndex: item.key + '_count',
+        render: (text, record) => (
+          <div>
+            {record[item.key + '_count']} <span>({record[item.key + '_rate']})</span>
+          </div>
+        )
+      });
+    }
+  });
 
   return columns;
 };
 
 const getTableData = (data: IFunnelAnalyseData): TableColumnProps[] => {
-  const dataBydateMap: { [prop: string]: TableColumnProps } = {};
+  const tableData = data.list.map(item => {
+    return {
+      key: item.dimension,
+      time: item.dimension,
+      ...item.allData.reduce((total: { [props: string]: any }, step) => {
+        total[step.key + '_count'] = step.count;
+        total[step.key + '_rate'] = step.conversionRate;
+        return total;
+      }, {}),
+      children: item.data.map(member => ({
+        key: member.time,
+        time: member.time,
+        ...member.steps.reduce((total: { [props: string]: any }, step) => {
+          total[step.key + '_count'] = step.count;
+          total[step.key + '_rate'] = step.conversionRate;
+          return total;
+        }, {})
+      }))
+    };
+  });
 
-  return Object.values(dataBydateMap);
+  return tableData;
 };
 
 const AnalyseFunnelChart = ({ data }: Props) => {
