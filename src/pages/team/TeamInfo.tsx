@@ -13,7 +13,7 @@ interface Props {
 const TeamInfo = ({ teamInfo }: Props) => {
   return (
     <div>
-      <h3>
+      {/* <h3>
         <AvatarText info={teamInfo.creator} />
         {teamInfo.name}
       </h3>
@@ -21,7 +21,10 @@ const TeamInfo = ({ teamInfo }: Props) => {
         {teamInfo.members.map(member => (
           <AvatarText key={member.id} size='mini' color='#999' info={member} />
         ))}
-      </div>
+      </div> */}
+      <h2>
+        <strong>{teamInfo.name}</strong>团队项目
+      </h2>
       <ProjectList></ProjectList>
     </div>
   );
