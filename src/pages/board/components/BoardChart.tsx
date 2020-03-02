@@ -1,7 +1,15 @@
 import * as React from 'react';
 import style from './BoardChart.module.less';
 
-import { IReportInfo, fetchEventAnalyseData, IEventAnalyseData, IEventAnalyseParam } from '@/api';
+import {
+  IReportInfo,
+  fetchEventAnalyseData,
+  IEventAnalyseData,
+  IEventAnalyseParam,
+  IFunnelAnalyseData,
+  IFunnelAnalyseParam,
+  fetchFunnelAnalyseData
+} from '@/api';
 import { Icon, Dropdown, Menu, Spin } from 'antd';
 import { Link } from 'react-router-dom';
 import ChartLine from '@/components/ChartLine';
@@ -9,6 +17,7 @@ import DateParse from '@/components/DateParse';
 import { ClickParam } from 'antd/lib/menu';
 import AnalyseEventChart from '@/pages/analyse/components/AnalyseEventChart';
 import { IDate } from '@/types';
+import AnalyseFunnelChart from '@/pages/analyse/components/AnalyseFunnelChart';
 
 interface Props {
   analyseParam: any;
@@ -18,7 +27,7 @@ interface Props {
 }
 
 const BoardChart = ({ type, analyseParam, globalDate, refresh }: Props) => {
-  const [data, setdata] = React.useState<IEventAnalyseData>({
+  const [data, setdata] = React.useState<IEventAnalyseData | IFunnelAnalyseData>({
     list: [],
     dimension: '',
     dimensionValues: [],
@@ -29,16 +38,36 @@ const BoardChart = ({ type, analyseParam, globalDate, refresh }: Props) => {
   const { dateEnd, dateStart } = globalDate;
   React.useEffect(() => {
     setloading(true);
-    const newParam = JSON.parse(JSON.stringify(analyseParam));
-    if (type === 'EVENT') {
-      let newParam: IEventAnalyseParam = JSON.parse(JSON.stringify(analyseParam));
-      if (dateEnd && dateStart) {
-        newParam = { ...newParam, dateEnd, dateStart, dateType: '' };
-      }
-      fetchEventAnalyseData(newParam).then(res => {
-        setdata(res.data);
-        setloading(false);
-      });
+    switch (type) {
+      case 'EVENT':
+        {
+          let newParam: IEventAnalyseParam = JSON.parse(JSON.stringify(analyseParam));
+          if (dateEnd && dateStart) {
+            newParam = { ...newParam, dateEnd, dateStart, dateType: '' };
+          }
+          fetchEventAnalyseData(newParam).then(res => {
+            setdata(res.data);
+            setloading(false);
+          });
+        }
+
+        break;
+      case 'FUNNEL':
+        {
+          let newParam: IFunnelAnalyseParam = JSON.parse(JSON.stringify(analyseParam));
+          if (dateEnd && dateStart) {
+            newParam = { ...newParam, dateEnd, dateStart, dateType: '' };
+          }
+          fetchFunnelAnalyseData(newParam).then(res => {
+            setdata(res.data);
+            setloading(false);
+          });
+        }
+
+        break;
+
+      default:
+        break;
     }
   }, [analyseParam, globalDate, refresh]);
 
@@ -49,8 +78,14 @@ const BoardChart = ({ type, analyseParam, globalDate, refresh }: Props) => {
           <AnalyseEventChart data={data as IEventAnalyseData}></AnalyseEventChart>
         </Spin>
       );
-
+    case 'FUNNEL':
+      return (
+        <Spin spinning={loading}>
+          <AnalyseFunnelChart data={data as IFunnelAnalyseData}></AnalyseFunnelChart>
+        </Spin>
+      );
     default:
+      return <div>无效数据</div>;
       break;
   }
 };

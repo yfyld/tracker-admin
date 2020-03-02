@@ -51,17 +51,16 @@ function* getReportInfo(action: ReturnType<typeof doGetReportInfo.request>): Gen
 
 function* addReport(action: ReturnType<typeof doAddReport.request>): Generator {
   try {
-    const reportListParams = yield* select(state => state.report.reportListParams);
-
     const projectId = yield* select(state => state.project.projectInfo.id);
     const { dateEnd, dateStart, dateType } = action.payload.data;
     const response = yield* call(fetchReportAdd, { ...action.payload, projectId, dateEnd, dateStart, dateType });
     yield put(doAddReport.success());
+    const reportListParams = yield* select(state => state.report.reportListParams);
     yield put(doGetReportList.request(reportListParams));
     message.success('保存成功');
     const pathname = yield* select(state => state.router.location.pathname);
     if (pathname !== ROUTE_PATH.reportList) {
-      yield put(push(getAnalysePath('EVENT', projectId, response.data.id)));
+      yield put(push(getAnalysePath(action.payload.type, projectId, response.data.id)));
     }
   } catch (error) {
     yield put(doAddReport.failure(error));

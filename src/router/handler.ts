@@ -107,11 +107,7 @@ const handlers = {
           !!state.metadata.activeMetadataList.list.length &&
           projectId === state.metadata.activeMetadataListParams.projectId
       },
-      {
-        action: doResetReportInfo('EVENT'),
-        ttl: CACHE_TIME,
-        disable: false
-      },
+
       {
         action: doGetFieldList.request(),
         ttl: CACHE_TIME,
@@ -125,6 +121,11 @@ const handlers = {
         action: doInitAnalyse({ projectId, reportId, type: 'EVENT' }),
         ttl: CACHE_TIME,
         disable: false
+      },
+      {
+        action: doResetReportInfo('EVENT'),
+        ttl: CACHE_TIME,
+        disable: false
       }
     ];
   },
@@ -132,6 +133,11 @@ const handlers = {
     return [
       {
         action: doInitAnalyse({ projectId, reportId, type: 'FUNNEL' }),
+        ttl: CACHE_TIME,
+        disable: false
+      },
+      {
+        action: doResetReportInfo('FUNNEL'),
         ttl: CACHE_TIME,
         disable: false
       }

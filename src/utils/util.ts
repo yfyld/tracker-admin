@@ -135,7 +135,8 @@ export const getAnalysePath = (type: string, projectId: number, reportId: number
   switch (type) {
     case 'EVENT':
       return ROUTE_PATH.analyseEvent + search;
-
+    case 'FUNNEL':
+      return ROUTE_PATH.analyseFunnel + search;
     default:
       break;
   }

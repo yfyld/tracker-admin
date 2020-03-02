@@ -61,9 +61,9 @@ const Indicator = ({
   function handleAdd() {
     const newIndicators: IIndicatorInfo[] = JSON.parse(JSON.stringify(indicators));
     newIndicators.push({
-      metadataCode: null,
+      metadataCode: '_ALL_METADATA',
       metadataName: '所有事件',
-      type: 'SUM',
+      type: 'PV',
       id: Date.now(),
       filter: {
         filterType: 'AND',

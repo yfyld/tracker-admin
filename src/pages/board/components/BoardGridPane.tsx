@@ -61,7 +61,12 @@ const BoardGridPane = ({ reportInfo, onDeletePane, globalDate, onSetPane, editab
         )}
       </div>
       <div className={style.body}>
-        <BoardChart refresh={refresh} type='EVENT' analyseParam={reportInfo.data} globalDate={globalDate}></BoardChart>
+        <BoardChart
+          refresh={refresh}
+          type={reportInfo.type}
+          analyseParam={reportInfo.data}
+          globalDate={globalDate}
+        ></BoardChart>
       </div>
     </div>
   );

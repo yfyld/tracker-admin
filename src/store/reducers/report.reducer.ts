@@ -19,18 +19,18 @@ const eventAnalyseInital = (type?: string): IReportInfo => {
       projectId: null,
       description: '描述',
       type: 'EVENT',
-      data: '{}',
+      data: {},
       dateStart: null,
       dateEnd: null,
       dateType: null
     };
-  } else {
+  } else if (type === 'FUNNEL') {
     return {
-      name: '事件分析',
+      name: '漏斗分析',
       projectId: null,
       description: '描述',
-      type: 'EVENT',
-      data: '{}',
+      type: 'FUNNEL',
+      data: {},
       dateStart: null,
       dateEnd: null,
       dateType: null
