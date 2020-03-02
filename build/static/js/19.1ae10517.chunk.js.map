@@ -1,0 +1,1 @@
+{"version":3,"sources":["pages/admin/RoleManage.tsx"],"names":["RoleManage"],"mappings":"wHAAA,2BAMeA,UAJI,WACjB,OAAO","file":"static/js/19.1ae10517.chunk.js","sourcesContent":["import React from 'react';\n\nconst RoleManage = () => {\n  return <div>222222</div>;\n};\n\nexport default RoleManage;\n"],"sourceRoot":""}

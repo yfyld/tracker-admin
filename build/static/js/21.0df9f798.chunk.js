@@ -1,2 +1,0 @@
-(window["webpackJsonptracker-web"]=window["webpackJsonptracker-web"]||[]).push([[21],{1040:function(e,n,r){"use strict";r.r(n);var t=r(0),a=r.n(t);n.default=function(){return a.a.createElement("div",null,"11111111111111")}}}]);
-//# sourceMappingURL=21.0df9f798.chunk.js.map
