@@ -15,7 +15,6 @@ export interface IFilterInfo {
 }
 
 export interface IIndicatorInfo {
-  trackId: string;
   metadataCode: string;
   metadataName: string;
   customName?: string;
@@ -37,7 +36,7 @@ export interface IEventAnalyseParam {
 }
 
 interface IEventAnalyseDataItemDataItem {
-  pv: number;
+  count: number;
   key: string;
   time: string;
   [prop: string]: string | number;

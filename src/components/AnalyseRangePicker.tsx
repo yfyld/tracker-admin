@@ -7,7 +7,7 @@ import { RangePickerValue, RangePickerProps } from 'antd/lib/date-picker/interfa
 import { IDate } from '@/types';
 const RangePicker = DatePicker.RangePicker;
 type Props = {
-  value: IDate;
+  value?: IDate;
   onChange?: (param: IDate) => any;
   defalutShowIcon?: boolean;
   pickerProps: RangePickerProps;

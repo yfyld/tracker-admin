@@ -70,11 +70,22 @@ function* addReport(action: ReturnType<typeof doAddReport.request>): Generator {
 
 function* updateReport(action: ReturnType<typeof doUpdateReport.request>): Generator {
   try {
-    const reportListParams = yield* select(state => state.report.reportListParams);
     const { dateEnd, dateStart, dateType } = action.payload.data;
     yield call(fetchReportUpdate, { ...action.payload, dateEnd, dateStart, dateType });
     yield put(doUpdateReport.success());
-    yield put(doGetReportList.request(reportListParams));
+    const pathname = yield* select(state => state.router.location.pathname);
+    const boardId = yield* select(state => state.board.boardInfo.id);
+    if (pathname === ROUTE_PATH.board) {
+      yield put(
+        doGetBoardInfo.request({
+          projectId: action.payload.projectId,
+          id: boardId
+        })
+      );
+    } else {
+      const reportListParams = yield* select(state => state.report.reportListParams);
+      yield put(doGetReportList.request(reportListParams));
+    }
     message.success('保存成功');
   } catch (error) {
     yield put(doUpdateReport.failure(error));

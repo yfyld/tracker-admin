@@ -13,7 +13,8 @@ import {
   IBoardUpdateParam,
   IReportListParam,
   IReportAddParam,
-  IReportAppendToBoard
+  IReportAppendToBoard,
+  IReportUpdateParam
 } from '@/api';
 import {
   doUpdateBoard,
@@ -21,10 +22,12 @@ import {
   doAddReport,
   doAppendReportToBoard,
   doChangeBoardGlobalDate,
-  doDeleteBoard
+  doDeleteBoard,
+  doUpdateReport
 } from '@/store/actions';
 import ReportDrawerContent from './components/ReportDrawerContent';
 import AnalyseRangePicker from '@/components/AnalyseRangePicker';
+import ReportUpdateModel from './components/ReportUpdateModel';
 const { confirm } = Modal;
 const ButtonGroup = Button.Group;
 
@@ -41,6 +44,7 @@ interface Props {
   getReportList: (params: IReportListParam) => IAction;
   onChangeBoardGlobalDate: (params: IDate) => IAction;
   onDeleteBoard: (params: IDeleteParam) => IAction;
+  onUpdateReport: (params: IReportUpdateParam) => IAction;
 }
 
 const BasicLayout = ({
@@ -52,14 +56,24 @@ const BasicLayout = ({
   getReportList,
   onAppendReportToBoard,
   onChangeBoardGlobalDate,
-  onDeleteBoard
+  onDeleteBoard,
+  onUpdateReport
 }: Props) => {
   const [addReportDrawerVisible, setaddReportDrawerVisible] = React.useState(false);
   const [refresh, setrefresh] = React.useState(1);
+  const [updateReportModelVisible, setupdateReportModelVisible] = React.useState(false);
+  const [curReportInfo, setcurReportInfo] = React.useState<IReportInfo>(null);
+
   function generateDOM(reportList: IReportInfo[]) {
     return reportList.map(item => (
       <div key={item.id}>
-        <BoardGridPane refresh={refresh} globalDate={globalDate} reportInfo={item} onDeletePane={handleDeletePane} />
+        <BoardGridPane
+          onSetPane={handlePaneUpdate}
+          refresh={refresh}
+          globalDate={globalDate}
+          reportInfo={item}
+          onDeletePane={handleDeletePane}
+        />
       </div>
     ));
   }
@@ -118,8 +132,23 @@ const BasicLayout = ({
     </div>
   );
 
+  const handleReportUpdateSubmit = (param: IReportUpdateParam) => {
+    onUpdateReport(param);
+  };
+  function handlePaneUpdate(info: IReportInfo) {
+    setupdateReportModelVisible(true);
+    setcurReportInfo(info);
+  }
   return (
     <div className={style.wrapper}>
+      {curReportInfo && (
+        <ReportUpdateModel
+          orginInfo={curReportInfo}
+          visible={updateReportModelVisible}
+          onClose={setupdateReportModelVisible}
+          onSubmit={handleReportUpdateSubmit}
+        ></ReportUpdateModel>
+      )}
       <Drawer
         title='报表列表'
         width={300}
@@ -136,7 +165,6 @@ const BasicLayout = ({
           onSubmit={handleAppendSubmit}
         ></ReportDrawerContent>
       </Drawer>
-
       <div className={style.header}>
         <h2 className={style.title}>
           {boardInfo.name} <Icon type='edit' />
@@ -182,6 +210,7 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
       onAppendReportToBoard: (params: IReportAppendToBoard) => {
         return doAppendReportToBoard.request(params);
       },
+      onUpdateReport: (params: IReportUpdateParam) => doUpdateReport.request(params),
       getReportList: (params: IReportListParam) => doGetReportList.request(params),
       onDeleteBoard: params => doDeleteBoard.request(params)
     },

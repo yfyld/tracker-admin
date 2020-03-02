@@ -28,7 +28,8 @@ const AnalyseHeader = ({ reportInfo, handleUpdateReport, handleAddReport, data }
   };
 
   const handleSaveAs = () => {
-    handleAddReport({ ...newReportInfo, data });
+    const { id, ...newInfo } = newReportInfo;
+    handleAddReport({ ...newInfo, data });
   };
 
   const handleAppand = () => {

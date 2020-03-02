@@ -27,8 +27,7 @@ const initialState = (): AnalyseState => ({
     projectId: null,
     indicators: [
       {
-        trackId: '',
-        metadataCode: '',
+        metadataCode: '_ALL_METADATA',
         metadataName: '所有事件',
         type: 'PV',
         id: 1,
@@ -56,8 +55,7 @@ const initialState = (): AnalyseState => ({
     indicatorType: 'PV',
     indicators: [
       {
-        trackId: '',
-        metadataCode: '',
+        metadataCode: '_ALL_METADATA',
         metadataName: '所有事件',
         type: 'PV',
         id: 1,

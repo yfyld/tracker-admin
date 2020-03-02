@@ -35,7 +35,6 @@ const Indicator = ({
 }: Props) => {
   function handleSelectMetadata(info: IMetadataInfo, index: number) {
     const newIndicators: IIndicatorInfo[] = JSON.parse(JSON.stringify(indicators));
-    newIndicators[index].trackId = info.code;
     newIndicators[index].metadataCode = info.code;
     newIndicators[index].metadataName = info.name;
     onChange(newIndicators);
@@ -62,7 +61,6 @@ const Indicator = ({
   function handleAdd() {
     const newIndicators: IIndicatorInfo[] = JSON.parse(JSON.stringify(indicators));
     newIndicators.push({
-      trackId: null,
       metadataCode: null,
       metadataName: '所有事件',
       type: 'SUM',
@@ -80,6 +78,11 @@ const Indicator = ({
     newIndicators.splice(index, 1);
     onChange(newIndicators);
   }
+
+  const allMetadata = {
+    name: '所有事件',
+    code: '_ALL_METADATA'
+  } as IMetadataInfo;
 
   return (
     <div className={style.wrapper}>
@@ -106,10 +109,17 @@ const Indicator = ({
                       </div>
 
                       <div className={style.metadataBox}>
+                        <span
+                          onClick={() => handleSelectMetadata(allMetadata, index)}
+                          className={allMetadata.code === indicatorInfo.metadataCode ? style.active : ''}
+                          key={allMetadata.code}
+                        >
+                          所有事件
+                        </span>
                         {activeMetadataList.list.map(item => (
                           <span
                             onClick={() => handleSelectMetadata(item, index)}
-                            className='app-pointer'
+                            className={item.code === indicatorInfo.metadataCode ? style.active : ''}
                             key={item.code}
                           >
                             {item.name}
@@ -138,9 +148,11 @@ const Indicator = ({
                   </Col>
                   <Col span={3}>
                     <Select onChange={(val: string) => handleTypeChange(val, index)} value={indicatorInfo.type}>
-                      <Option value='SUM'>总次数</Option>
-                      <Option value='USER_SUM'>用户数</Option>
-                      <Option value='3'>人均次数</Option>
+                      <Option value='PV'>总次数</Option>
+                      <Option value='UV'>用户数</Option>
+                      <Option value='APV'>人均次数</Option>
+                      <Option value='DPV'>日均次数</Option>
+                      <Option value='DUV'>日均用户数</Option>
                     </Select>
                   </Col>
                 </>

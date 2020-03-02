@@ -38,12 +38,12 @@ function* initAnalyse(action: ReturnType<typeof doInitAnalyse>): Generator {
 
     switch (type) {
       case 'EVENT': {
-        param = { ...(yield* select(state => state.analyse.eventAnalyseParam)), projectId };
+        param = param || { ...(yield* select(state => state.analyse.eventAnalyseParam)), projectId };
         yield put(doGetEventAnalyse.request(param));
         break;
       }
       case 'FUNNEL': {
-        param = { ...(yield* select(state => state.analyse.funnelAnalyseParam)), projectId };
+        param = param || { ...(yield* select(state => state.analyse.funnelAnalyseParam)), projectId };
         yield put(doGetFunnelAnalyse.request(param));
         break;
       }

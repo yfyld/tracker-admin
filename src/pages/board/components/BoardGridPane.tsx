@@ -17,18 +17,22 @@ interface Props {
   globalDate: IDate;
   editable?: boolean;
   refresh?: number;
+  onSetPane?: (param: IReportInfo) => any;
 }
 
-const BoardGridPane = ({ reportInfo, onDeletePane, globalDate, editable = true, refresh = 1 }: Props) => {
+const BoardGridPane = ({ reportInfo, onDeletePane, globalDate, onSetPane, editable = true, refresh = 1 }: Props) => {
   const { dateStart, dateEnd } = globalDate;
   const handleClickMenu = ({ key }: ClickParam) => {
     if (key === 'REMOVE') {
       onDeletePane(reportInfo.id);
     }
+    if (key === 'UPDATE') {
+      onSetPane(reportInfo);
+    }
   };
   const menu = (
     <Menu onClick={handleClickMenu}>
-      <Menu.Item>设置</Menu.Item>
+      <Menu.Item key='UPDATE'>设置</Menu.Item>
       <Menu.Item>
         <Link to={`/project/analyse/event?reportId=${reportInfo.id}&projectId=${reportInfo.projectId}`}>编辑</Link>
       </Menu.Item>

@@ -77,7 +77,7 @@ const getBarOptions = (data: IEventAnalyseData): ObjectMap => {
               .map(val => {
                 return {
                   name: item.metadataName + '/' + dimension,
-                  value: [val.time, Number(val.pv)]
+                  value: [val.time, Number(val.count)]
                 };
               })
           });
@@ -93,7 +93,7 @@ const getBarOptions = (data: IEventAnalyseData): ObjectMap => {
             .map(val => {
               return {
                 name: data.list[0].metadataName + '/' + dimension,
-                value: [val.time, Number(val.pv)]
+                value: [val.time, Number(val.count)]
               };
             })
         });
@@ -107,7 +107,7 @@ const getBarOptions = (data: IEventAnalyseData): ObjectMap => {
         data: item.data.map(val => {
           return {
             name: item.metadataName,
-            value: [val.time, Number(val.pv)]
+            value: [val.time, Number(val.count)]
           };
         })
       });
@@ -185,7 +185,7 @@ const getLineOptions = (data: IEventAnalyseData): ObjectMap => {
               .map(val => {
                 return {
                   name: item.metadataName + '/' + dimension,
-                  value: [val.time, Number(val.pv)]
+                  value: [val.time, Number(val.count)]
                 };
               })
           });
@@ -201,7 +201,7 @@ const getLineOptions = (data: IEventAnalyseData): ObjectMap => {
             .map(val => {
               return {
                 name: data.list[0].metadataName + '/' + dimension,
-                value: [val.time, Number(val.pv)]
+                value: [val.time, Number(val.count)]
               };
             })
         });
@@ -215,7 +215,7 @@ const getLineOptions = (data: IEventAnalyseData): ObjectMap => {
         data: item.data.map(val => {
           return {
             name: item.metadataName,
-            value: [val.time, Number(val.pv)]
+            value: [val.time, Number(val.count)]
           };
         })
       });
@@ -248,7 +248,7 @@ const getPieOptions = (data: IEventAnalyseData): ObjectMap => {
             name: item.metadataName + '/' + dimension,
             value: item.data.reduce((total, val) => {
               if (val[data.dimension] === dimension) {
-                total += Number(val.pv);
+                total += Number(val.count);
               }
               return total;
             }, 0)
@@ -267,7 +267,7 @@ const getPieOptions = (data: IEventAnalyseData): ObjectMap => {
           name: dimension,
           value: data.list[0].data.reduce((total, item) => {
             if (item[data.dimension] === dimension) {
-              total += Number(item.pv);
+              total += Number(item.count);
             }
             return total;
           }, 0)
@@ -280,7 +280,7 @@ const getPieOptions = (data: IEventAnalyseData): ObjectMap => {
       data: data.list.map(item => ({
         name: item.metadataName,
         value: item.data.reduce((total, val) => {
-          total += Number(val.pv);
+          total += Number(val.count);
           return total;
         }, 0)
       }))
@@ -304,7 +304,7 @@ const getOptions = (data: IEventAnalyseData) => {
 
 interface TableColumnProps {
   key: string;
-  pv: number;
+  count: number;
   time: string;
 }
 
@@ -325,9 +325,9 @@ const getColumns = (data: IEventAnalyseData) => {
   if (data.dimension) {
     if (data.list.length > 1) {
       columns.push({
-        key: 'pv',
+        key: 'count',
         title: '总次数',
-        dataIndex: 'pv'
+        dataIndex: 'count'
       });
     } else {
       columns = columns.concat(
@@ -349,9 +349,9 @@ const getColumns = (data: IEventAnalyseData) => {
       );
     } else {
       columns.push({
-        key: 'pv',
+        key: 'count',
         title: '总次数',
-        dataIndex: 'pv'
+        dataIndex: 'count'
       });
     }
   }
@@ -372,7 +372,7 @@ const getTableData = (data: IEventAnalyseData): TableColumnProps[] => {
       return data.list[0].data.map(item => ({
         time: item.time,
         key: item.time,
-        pv: item.pv
+        count: item.count
       }));
     }
 
