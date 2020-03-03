@@ -41,7 +41,7 @@ interface Props {
   onSave: (params: IBoardUpdateParam) => IAction;
   reportListParams: IReportListParam;
   onAppendReportToBoard: (params: IReportAppendToBoard) => IAction;
-  getReportList: (params: IReportListParam) => IAction;
+  onGetReportList: (params: IReportListParam) => IAction;
   onChangeBoardGlobalDate: (params: IDate) => IAction;
   onDeleteBoard: (params: IDeleteParam) => IAction;
   onUpdateReport: (params: IReportUpdateParam) => IAction;
@@ -53,7 +53,7 @@ const BasicLayout = ({
   onSave,
   globalDate,
   reportListParams,
-  getReportList,
+  onGetReportList,
   onAppendReportToBoard,
   onChangeBoardGlobalDate,
   onDeleteBoard,
@@ -98,7 +98,7 @@ const BasicLayout = ({
 
   function handleOpenReportDrawer() {
     if (reportList.list.length === 0) {
-      getReportList({ page: 1, pageSize: 100, projectId: boardInfo.projectId });
+      onGetReportList({ page: 1, pageSize: 100, projectId: boardInfo.projectId });
     }
     setaddReportDrawerVisible(true);
   }
@@ -158,7 +158,7 @@ const BasicLayout = ({
         visible={addReportDrawerVisible}
       >
         <ReportDrawerContent
-          onSearch={name => getReportList({ page: 1, pageSize: 100, projectId: boardInfo.projectId, name })}
+          onSearch={name => onGetReportList({ page: 1, pageSize: 100, projectId: boardInfo.projectId, name })}
           reportList={reportList}
           name={reportListParams.name}
           boardId={boardInfo.id}
@@ -211,7 +211,7 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
         return doAppendReportToBoard.request(params);
       },
       onUpdateReport: (params: IReportUpdateParam) => doUpdateReport.request(params),
-      getReportList: (params: IReportListParam) => doGetReportList.request(params),
+      onGetReportList: (params: IReportListParam) => doGetReportList.request(params),
       onDeleteBoard: params => doDeleteBoard.request(params)
     },
     dispatch

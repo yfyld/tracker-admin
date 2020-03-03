@@ -10,6 +10,7 @@ import { ClickParam } from 'antd/lib/menu';
 import AnalyseEventChart from '@/pages/analyse/components/AnalyseEventChart';
 import BoardChart from './BoardChart';
 import { IDate } from '@/types';
+import { getAnalysePath } from '@/utils';
 
 interface Props {
   reportInfo: IReportInfo;
@@ -34,7 +35,7 @@ const BoardGridPane = ({ reportInfo, onDeletePane, globalDate, onSetPane, editab
     <Menu onClick={handleClickMenu}>
       <Menu.Item key='UPDATE'>设置</Menu.Item>
       <Menu.Item>
-        <Link to={`/project/analyse/event?reportId=${reportInfo.id}&projectId=${reportInfo.projectId}`}>编辑</Link>
+        <Link to={getAnalysePath(reportInfo.type, reportInfo.projectId, reportInfo.id)}>编辑</Link>
       </Menu.Item>
       <Menu.Item key='REMOVE'>删除</Menu.Item>
     </Menu>
