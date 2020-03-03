@@ -1,10 +1,11 @@
 import * as React from 'react';
 import ReactEcharts, { ObjectMap } from 'echarts-for-react';
-import { Table } from 'antd';
+import { Table, Row, Col } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import { IEventAnalyseParam, IFunnelAnalyseData } from '@/api';
 import moment from 'moment';
 import { getFormatByTimeUnit } from '@/utils';
+import style from './AnalyseFunnelList.module.less';
 
 interface Props {
   data: IFunnelAnalyseData;
@@ -82,21 +83,31 @@ const AnalyseFunnelList = ({ data }: Props) => {
 
   return (
     <div>
-      <div>
-        {data.list[0].allData.map((item, index) => (
-          <div key={item.key}>
-            {index === 0 ? (
-              <span onClick={() => setstep('_ALL')}>总转化率:{data.conversionRate}%</span>
-            ) : (
-              <span onClick={() => setstep(item.key)}>转化率:{item.conversionRate}%</span>
-            )}
-            <p>
-              {item.customName || item.metadataName}({item.count})
-            </p>
+      <Row gutter={10}>
+        <Col span={8}>
+          <div>
+            {data.list[0].allData.map((item, index) => (
+              <div key={item.key}>
+                {index === 0 ? (
+                  <div className={style.arrow} onClick={() => setstep('_ALL')}>
+                    总转化率:{data.conversionRate}%
+                  </div>
+                ) : (
+                  <div className={style.arrow} onClick={() => setstep(item.key)}>
+                    转化率:{item.conversionRate}%
+                  </div>
+                )}
+                <div className={style.block}>
+                  {item.customName || item.metadataName}({item.count})
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <ReactEcharts option={getOptions(data, step)} theme='ts' notMerge={true} lazyUpdate={true} />
+        </Col>
+        <Col span={16}>
+          <ReactEcharts option={getOptions(data, step)} theme='ts' notMerge={true} lazyUpdate={true} />
+        </Col>
+      </Row>
     </div>
   );
 };
