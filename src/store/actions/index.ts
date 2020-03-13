@@ -5,3 +5,5 @@ export * from './board.action';
 export * from './report.action';
 export * from './team.action';
 export * from './analyse.action';
+export * from './permission.action';
+export * from './role.action';

@@ -6,9 +6,12 @@ import reportSagas from './report.saga';
 import boardSagas from './board.saga';
 import teamSagas from './team.saga';
 import analyseSagas from './analyse.saga';
+import permissionSagas from './permission.saga';
+import roleSaga from './role.saga';
+
 function* sagas() {
   yield all(
-    [appSagas, projectSagas, metadataSagas, reportSagas, boardSagas, teamSagas, analyseSagas].map(effect =>
+    [appSagas, projectSagas, metadataSagas, reportSagas, boardSagas, teamSagas, analyseSagas, permissionSagas, roleSaga].map(effect =>
       fork(effect)
     )
   );

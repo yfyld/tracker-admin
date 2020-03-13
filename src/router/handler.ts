@@ -12,7 +12,9 @@ import {
   doGetProjectList,
   doGetActiveMetadataList,
   doGetReportList,
-  doGetEventAnalyse
+  doGetUserList,
+  doGetPermission,
+  doGetRole
 } from '@/store/actions';
 
 const handlers = {
@@ -160,7 +162,34 @@ const handlers = {
         disable: state.board.boardInfo.id === Number(boardId)
       }
     ];
-  }
+  },
+  '/admin/user-manage': ({ search: {} }: any, state: IStoreState): IHandler[] => {
+    return [
+      {
+        action: doGetUserList.request(state.app.userListParams),
+        ttl: CACHE_TIME,
+        disable: false
+      }
+    ];
+  },
+  '/admin/permission-manage': ({ search: {} }: any, state: IStoreState): IHandler[] => {
+    return [
+      {
+        action: doGetPermission.request(state.permission.permissionListParams),
+        ttl: CACHE_TIME,
+        disable: false
+      }
+    ];
+  },
+  '/admin/role-manage': ({ search: {} }: any, state: IStoreState): IHandler[] => {
+    return [
+      {
+        action: doGetRole.request(state.role.roleListParams),
+        ttl: CACHE_TIME,
+        disable: false
+      }
+    ];
+  },
 };
 
 export default handlers;

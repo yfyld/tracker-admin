@@ -1,11 +1,18 @@
-import { doGetUserList } from './../actions/app.action';
-import { IUserList } from './../../api/app.api';
+import { doEditUser, doGetUserList, doGetUserRoles, doSignup } from './../actions/app.action';
+import { IUpdateUserRoles, IUserList, IUserListParam, IUserRole, IBaseUser } from './../../api/app.api';
 import update from 'immutability-helper';
 import { getType } from 'typesafe-actions';
 import { IAction, IMenuItem } from '@/types';
 //import * as Api from "@/api"
 
-import { doLogin, doChangeLoadingStatus, doResetStore, doGetUserInfo, doChangeCollapsed } from '@/store/actions';
+import {
+  doLogin,
+  doChangeLoadingStatus,
+  doResetStore,
+  doGetUserInfo,
+  doChangeCollapsed,
+  doGetRolePermissions, doEditRole, doPutUser, doEditPermission
+} from '@/store/actions';
 import { ADD_BROAD } from '@/constants';
 import { IUserInfo } from '@/api';
 
@@ -17,6 +24,9 @@ export interface AppState {
   loading: boolean;
   loadingText: string;
   collapsed: boolean;
+  userListParams: IUserListParam;
+  userRoles: IUserRole[];
+  updateUserItem: IBaseUser,
 }
 
 const initialState = (): AppState => ({
@@ -32,7 +42,16 @@ const initialState = (): AppState => ({
   token: '',
   loading: false,
   loadingText: '加载中',
-  collapsed: false
+  collapsed: false,
+  userListParams: { page: 1, pageSize: 20, nickname: '', username: '' },
+  userRoles: [],
+  updateUserItem: {
+    id: null,
+    username: '',
+    nickname: '',
+    email: '',
+    mobile: null
+  }
 });
 
 export const appReducer = (state: AppState = initialState(), action: IAction): AppState => {
@@ -56,9 +75,25 @@ export const appReducer = (state: AppState = initialState(), action: IAction): A
         userInfo: { $set: action.payload }
       });
 
+    case getType(doGetUserList.request):
+      return update(state, {
+        userListParams: { $set: action.payload }
+      });
     case getType(doGetUserList.success):
       return update(state, {
         userList: { $set: action.payload }
+      });
+    case getType(doGetUserRoles.success):
+      return update(state, {
+        userRoles: { $set: action.payload }
+      });
+    case getType(doPutUser.request):
+      return update(state, {
+        updateUserItem: { $set: action.payload }
+      });
+    case getType(doEditUser):
+      return update(state, {
+        updateUserItem: { $set: action.payload }
       });
     case getType(doChangeLoadingStatus):
       return update(state, {

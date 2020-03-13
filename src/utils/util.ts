@@ -141,3 +141,5 @@ export const getAnalysePath = (type: string, projectId: number, reportId: number
       break;
   }
 };
+
+export const trimAll = (value: string): string => value.replace(/\s+/g,'');

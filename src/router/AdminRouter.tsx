@@ -6,7 +6,7 @@ import ProgressBar from '@/components/ProgressBar';
 import PrivateRoute from './PrivateRoute';
 import { ROUTE_PATH } from '@/constants';
 
-const PermissionMange = React.lazy(() => import('@/pages/admin/PermissionMange'));
+const PermissionManage = React.lazy(() => import('@/pages/admin/PermissionManage'));
 const RoleManage = React.lazy(() => import('@/pages/admin/RoleManage'));
 const UserManage = React.lazy(() => import('@/pages/admin/UserManage'));
 export default class AdminRouter extends React.Component {
@@ -23,7 +23,7 @@ export default class AdminRouter extends React.Component {
           }
         >
           <Switch>
-            <PrivateRoute exact path={ROUTE_PATH.permissionManage} component={PermissionMange} />
+            <PrivateRoute exact path={ROUTE_PATH.permissionManage} component={PermissionManage} />
             <PrivateRoute exact path={ROUTE_PATH.roleManage} component={RoleManage} />
             <PrivateRoute exact path={ROUTE_PATH.userManage} component={UserManage} />
             <PrivateRoute path='*' component={UserManage} />
