@@ -1,14 +1,19 @@
 import { DYNAMIC_TIME } from './../../constants/constant';
 import { RangePickerValue } from 'antd/lib/date-picker/interface';
 import { IDate } from './../../types/index';
-import { IEventAnalyseData, IFunnelAnalyseData, IFunnelAnalyseParam } from './../../api/analyse.api';
+import {
+  IEventAnalyseData,
+  IFunnelAnalyseData,
+  IFunnelAnalyseParam,
+  IPathAnalyseData,
+  IPathAnalyseParam
+} from './../../api/analyse.api';
 import { IEventAnalyseParam } from '@/api';
 import { doGetEventAnalyse, doGetFunnelAnalyse } from './../actions/analyse.action';
 import { doResetStore } from '@/store/actions';
 import update from 'immutability-helper';
 import { getType } from 'typesafe-actions';
 import { IAction, IPageData } from '@/types';
-import moment from 'moment';
 
 export interface AnalyseState {
   eventAnalyseData: IEventAnalyseData;
@@ -16,6 +21,9 @@ export interface AnalyseState {
 
   funnelAnalyseData: IFunnelAnalyseData;
   funnelAnalyseParam: IFunnelAnalyseParam;
+
+  pathAnalyseData: IPathAnalyseData;
+  pathAnalyseParam: IPathAnalyseParam;
 
   analyseLoading: boolean;
 }
@@ -51,6 +59,34 @@ const initialState = (): AnalyseState => ({
   },
   funnelAnalyseData: { list: [], dimension: '', dimensionValues: [], timeUnit: 'DAY', type: 'LINE', conversionRate: 0 },
   funnelAnalyseParam: {
+    projectId: null,
+    indicatorType: 'PV',
+    indicators: [
+      {
+        metadataCode: '_ALL_METADATA',
+        metadataName: '所有事件',
+        type: 'PV',
+        id: 1,
+        filter: {
+          filterType: 'OR',
+          filterValues: []
+        }
+      }
+    ],
+    dimension: '',
+    filter: {
+      filterType: 'OR',
+      filterValues: []
+    },
+
+    type: 'FUNNEL',
+    dateStart: DYNAMIC_TIME[8].startDate(),
+    dateEnd: DYNAMIC_TIME[8].endDate(),
+    dateType: DYNAMIC_TIME[8].value
+  },
+
+  pathAnalyseData: { list: [], dimension: '', dimensionValues: [], timeUnit: 'DAY', type: 'LINE', conversionRate: 0 },
+  pathAnalyseParam: {
     projectId: null,
     indicatorType: 'PV',
     indicators: [

@@ -143,6 +143,20 @@ const handlers = {
       }
     ];
   },
+  '/project/analyse/path': ({ search: { projectId, reportId } }: any, state: IStoreState): IHandler[] => {
+    return [
+      {
+        action: doInitAnalyse({ projectId, reportId, type: 'PATH' }),
+        ttl: CACHE_TIME,
+        disable: false
+      },
+      {
+        action: doResetReportInfo('PATH'),
+        ttl: CACHE_TIME,
+        disable: false
+      }
+    ];
+  },
   '/project/board': ({ search: { projectId, boardId } }: any, state: IStoreState): IHandler[] => {
     return [
       {

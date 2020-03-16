@@ -39,6 +39,11 @@ export const menuDataSelector = createSelector(projectIdSelector, boardListSelec
           key: `/project/analyse/funnel?projectId=${id}`,
           icon: 'setting',
           name: '漏斗分析'
+        },
+        {
+          key: `/project/analyse/path?projectId=${id}`,
+          icon: 'setting',
+          name: '路径分析'
         }
       ]
     },

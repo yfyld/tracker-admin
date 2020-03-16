@@ -35,6 +35,17 @@ const eventAnalyseInital = (type?: string): IReportInfo => {
       dateEnd: null,
       dateType: null
     };
+  } else if (type === 'PATH') {
+    return {
+      name: '路径分析',
+      projectId: null,
+      description: '描述',
+      type: 'FUNNEL',
+      data: {},
+      dateStart: null,
+      dateEnd: null,
+      dateType: null
+    };
   }
 };
 

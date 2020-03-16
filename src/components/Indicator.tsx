@@ -21,6 +21,7 @@ interface Props {
   hasType?: boolean;
   addText?: string;
   hasCustomName?: boolean;
+  type?: string;
 }
 
 const Indicator = ({
@@ -31,7 +32,8 @@ const Indicator = ({
   fieldList,
   hasType,
   addText = '+添加指标',
-  hasCustomName = false
+  hasCustomName = false,
+  type = null
 }: Props) => {
   function handleSelectMetadata(info: IMetadataInfo, index: number) {
     const newIndicators: IIndicatorInfo[] = JSON.parse(JSON.stringify(indicators));
@@ -116,15 +118,22 @@ const Indicator = ({
                         >
                           所有事件
                         </span>
-                        {activeMetadataList.list.map(item => (
-                          <span
-                            onClick={() => handleSelectMetadata(item, index)}
-                            className={item.code === indicatorInfo.metadataCode ? style.active : ''}
-                            key={item.code}
-                          >
-                            {item.name}
-                          </span>
-                        ))}
+                        {activeMetadataList.list
+                          .filter(item => {
+                            if (!type) {
+                              return true;
+                            }
+                            return item.type === type;
+                          })
+                          .map(item => (
+                            <span
+                              onClick={() => handleSelectMetadata(item, index)}
+                              className={item.code === indicatorInfo.metadataCode ? style.active : ''}
+                              key={item.code}
+                            >
+                              {item.name}
+                            </span>
+                          ))}
                       </div>
                     </div>
                   }

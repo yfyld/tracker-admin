@@ -111,6 +111,9 @@ export interface IFunnelAnalyseData {
   type: string;
 }
 
+export interface IPathAnalyseParam {}
+export interface IPathAnalyseData {}
+
 export function fetchEventAnalyseData(param: IEventAnalyseParam) {
   return fetch.post<IEventAnalyseData>('/analyse/event', { ...param, SHOW_LOADING: false });
 }

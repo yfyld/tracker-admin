@@ -8,6 +8,8 @@ import { ROUTE_PATH } from '@/constants';
 const MetadataList = React.lazy(() => import('@/pages/metadata/MetadataList'));
 const AnalyseEvent = React.lazy(() => import('@/pages/analyse/AnalyseEvent'));
 const AnalyseFunnel = React.lazy(() => import('@/pages/analyse/AnalyseFunnel'));
+const AnalysePath = React.lazy(() => import('@/pages/analyse/AnalysePath'));
+
 const Board = React.lazy(() => import('@/pages/board/Board'));
 const ReportList = React.lazy(() => import('@/pages/report/ReportList'));
 const Project = React.lazy(() => import('@/pages/project/Project'));
@@ -29,6 +31,8 @@ export default class Routes extends React.Component {
             <Route exact path={ROUTE_PATH.metadataList} component={MetadataList} />
             <Route exact path={ROUTE_PATH.analyseEvent} component={AnalyseEvent} />
             <Route exact path={ROUTE_PATH.analyseFunnel} component={AnalyseFunnel} />
+            <Route exact path={ROUTE_PATH.analysePath} component={AnalysePath} />
+
             <Route exact path={ROUTE_PATH.board} component={Board} />
             <Route exact path={ROUTE_PATH.projectInfo} component={Project} />
             <Route exact path={ROUTE_PATH.reportList} component={ReportList} />

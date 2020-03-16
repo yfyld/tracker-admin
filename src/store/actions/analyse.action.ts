@@ -1,7 +1,13 @@
-import { IEventAnalyseData, IFunnelAnalyseParam, IFunnelAnalyseData } from './../../api/analyse.api';
 import { createAsyncAction, createAction } from 'typesafe-actions';
 import * as actionType from '@/constants/actionType';
-import { IEventAnalyseParam } from '@/api';
+import {
+  IEventAnalyseParam,
+  IPathAnalyseParam,
+  IPathAnalyseData,
+  IEventAnalyseData,
+  IFunnelAnalyseParam,
+  IFunnelAnalyseData
+} from '@/api';
 
 export const doGetEventAnalyse = createAsyncAction(
   actionType.EVENT_ANALYSE_REQUEST,
@@ -14,6 +20,12 @@ export const doGetFunnelAnalyse = createAsyncAction(
   actionType.FUNNEL_ANALYSE_SUCCESS,
   actionType.FUNNEL_ANALYSE_FAILURE
 )<IFunnelAnalyseParam, IFunnelAnalyseData, Error>();
+
+export const doGetPathAnalyse = createAsyncAction(
+  actionType.PATH_ANALYSE_REQUEST,
+  actionType.PATH_ANALYSE_SUCCESS,
+  actionType.PATH_ANALYSE_FAILURE
+)<IPathAnalyseParam, IPathAnalyseData, Error>();
 
 export const doInitAnalyse = createAction(
   actionType.INIT_ANALYSE,

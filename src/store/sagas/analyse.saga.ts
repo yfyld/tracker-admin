@@ -1,5 +1,5 @@
 import { doGetReportInfo } from './../actions/report.action';
-import { doGetEventAnalyse, doInitAnalyse, doGetFunnelAnalyse } from './../actions/analyse.action';
+import { doGetEventAnalyse, doInitAnalyse, doGetFunnelAnalyse, doGetPathAnalyse } from './../actions/analyse.action';
 import { put, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
 import { select, call } from '@/utils';
@@ -45,6 +45,12 @@ function* initAnalyse(action: ReturnType<typeof doInitAnalyse>): Generator {
       case 'FUNNEL': {
         param = param || { ...(yield* select(state => state.analyse.funnelAnalyseParam)), projectId };
         yield put(doGetFunnelAnalyse.request(param));
+        break;
+      }
+
+      case 'PATH': {
+        param = param || { ...(yield* select(state => state.analyse.pathAnalyseParam)), projectId };
+        yield put(doGetPathAnalyse.request(param));
         break;
       }
       default:
