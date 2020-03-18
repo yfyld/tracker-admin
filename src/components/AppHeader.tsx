@@ -65,7 +65,7 @@ const AppHeader = ({ collapsed, onChangeCollapsed, userInfo, alone = false, proj
               <Link key='project' to='/project-list'>
                 项目列表
               </Link>,
-              <Link key='seting' to='/admin'>
+              <Link key='seting' to='/admin/user-manage'>
                 设置
               </Link>,
               <Dropdown key='menu' overlay={menu}>
