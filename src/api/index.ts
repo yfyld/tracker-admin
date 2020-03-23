@@ -6,3 +6,5 @@ export * from './report.api';
 export * from './team.api';
 export * from './user.api';
 export * from './analyse.api';
+export * from './permission.api';
+export * from './role.api';

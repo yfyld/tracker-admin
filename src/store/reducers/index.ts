@@ -9,6 +9,8 @@ import { teamReducer, TeamState } from './team.reducer';
 import { analyseReducer, AnalyseState } from './analyse.reducer';
 import { RouterState, connectRouter } from 'connected-react-router';
 import { history } from '@/utils';
+import { permissionReducer, PermissionState } from '@/store/reducers/permission.reducer';
+import { roleReducer, RoleState } from '@/store/reducers/role.reducer';
 export interface IStoreState {
   app: AppState;
   router: RouterState;
@@ -18,6 +20,8 @@ export interface IStoreState {
   report: ReportState;
   team: TeamState;
   analyse: AnalyseState;
+  permission: PermissionState;
+  role: RoleState;
 }
 
 const reducers = combineReducers({
@@ -28,6 +32,8 @@ const reducers = combineReducers({
   report: reportReducer,
   team: teamReducer,
   analyse: analyseReducer,
+  permission: permissionReducer,
+  role: roleReducer,
   router: connectRouter(history)
 });
 

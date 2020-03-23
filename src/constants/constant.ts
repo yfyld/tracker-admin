@@ -147,3 +147,8 @@ export const DYNAMIC_TIME: IDynamicTime[] = [
     value: 'LAST_YEAR'
   }
 ];
+
+export const permissionTypeDescription = ['', '接口', '路由', '功能'];
+
+export const roleTypeDescription = ['', '超管', '项目管理员', '平台用户'];
+

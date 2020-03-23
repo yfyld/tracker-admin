@@ -112,6 +112,9 @@ const ProjectList = ({ projectList, onGetProjectList, projectListParams, onDelet
     });
   };
 
+  console.log('------');
+  console.log(projectList);
+
   return (
     <div className={style.wrapper}>
       {shouldUpdateProject && (

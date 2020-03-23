@@ -1,11 +1,32 @@
-import { doGetUserList } from './../actions/app.action';
+import { doGetUserList, doGetUserRoles, doPutUserRoles, doSignup } from './../actions/app.action';
 import { put, takeEvery, delay } from 'redux-saga/effects';
 
 import { getType } from 'typesafe-actions';
 import { mapLocationIntoActions, call, select } from '@/utils';
 
-import { doLogin, doGetUserInfo, doResetStore } from '@/store/actions';
-import { fetchLogin, fetchUserInfo, fetchUserList } from '@/api';
+import {
+  doLogin,
+  doGetUserInfo,
+  doResetStore,
+  doAddProject,
+  doGetProjectList,
+  doPutRole,
+  doGetRole, doGetRolePermissions, doUpdateRolePermissions, doPutUser, doDeletePermission, doGetPermission, doDeleteUser
+} from '@/store/actions';
+import {
+  fetchSignIn,
+  fetchProjectAdd,
+  fetchSignUp,
+  fetchUserInfo,
+  fetchUserList,
+  fetchPutRole,
+  fetchGetRolePermissions,
+  fetchPutRolePermissions,
+  fetchPutUser,
+  fetchGetUserRoles,
+  fetchPutUserRoles,
+  fetchDeletePermission, fetchDeleteUser
+} from '@/api';
 
 import { message } from 'antd';
 import { push } from 'connected-react-router';
@@ -32,7 +53,7 @@ function* triggerFetchOnLocation(): Generator {
 
 function* login(action: ReturnType<typeof doLogin.request>): Generator {
   try {
-    const response = yield* call(fetchLogin, action.payload);
+    const response = yield* call(fetchSignIn, action.payload);
     yield put(doLogin.success(response.data));
     message.success('登录成功');
 
@@ -63,15 +84,68 @@ function* getUserList(action: ReturnType<typeof doGetUserList.request>): Generat
   }
 }
 
+function* addUser(action: ReturnType<typeof doSignup.request>): Generator {
+  try {
+    const response = yield* call(fetchSignUp, action.payload);
+    yield put(doSignup.success(response.data));
+    yield put(doGetUserList.request({ page: 1, pageSize: 20 }));
+  } catch (error) {
+    yield put(doGetUserList.failure(error));
+  }
+}
+
 function* resetStore(action: ReturnType<typeof doResetStore>): Generator {
   window.localStorage.removeItem('token');
   updateToken('');
 }
 
+function* updateUser(action: ReturnType<typeof doPutUser.request>): Generator {
+  try {
+    yield* call(fetchPutUser, action.payload);
+    yield put(doPutUser.success());
+    yield put(doGetUserList.request({ page: 1, pageSize: 20 }));
+  } catch (error) {
+    yield put(doPutUser.failure(error));
+  }
+}
+
+function* getUserRoles(action: ReturnType<typeof doGetUserRoles.request>): Generator {
+  try {
+    const response = yield* call(fetchGetUserRoles, action.payload);
+    yield put(doGetUserRoles.success(response.data));
+  } catch (error) {
+    yield put(doGetUserRoles.failure(error));
+  }
+}
+
+function* updateUserRole(action: ReturnType<typeof doPutUserRoles.request>): Generator {
+  try {
+    yield* call(fetchPutUserRoles, action.payload);
+    yield put(doPutUserRoles.success());
+  } catch (error) {
+    yield put(doPutUserRoles.failure(error));
+  }
+}
+
+function* deleteUser(action: ReturnType<typeof doDeleteUser.request>): Generator {
+  try {
+    yield* call(fetchDeleteUser, action.payload);
+    yield put(doDeleteUser.success());
+    yield put(doGetUserList.request({ page: 1, pageSize: 20 }));
+  } catch (error) {
+    yield put(doDeleteUser.failure(error));
+  }
+}
+
 export default function* watchApp() {
   yield takeEvery(getType(doLogin.request), login);
+  yield takeEvery(getType(doSignup.request), addUser);
   yield takeEvery(getType(doGetUserInfo.request), getUserInfo);
   yield takeEvery(getType(doGetUserList.request), getUserList);
+  yield takeEvery(getType(doPutUser.request), updateUser);
+  yield takeEvery(getType(doGetUserRoles.request), getUserRoles);
+  yield takeEvery(getType(doPutUserRoles.request), updateUserRole);
+  yield takeEvery(getType(doDeleteUser.request), deleteUser);
   yield takeEvery('@@router/LOCATION_CHANGE', triggerFetchOnLocation);
   yield takeEvery(getType(doResetStore), resetStore);
 }
