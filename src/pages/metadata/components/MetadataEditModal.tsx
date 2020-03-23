@@ -90,6 +90,11 @@ const MetadataEditModel = (props: Props) => {
             </Select>
           )}
         </Form.Item>
+        <Form.Item label='URL'>
+          {getFieldDecorator('url', {
+            initialValue: props.defaultValue.url
+          })(<TextArea placeholder='请输入埋点所在页面地址' />)}
+        </Form.Item>
         <Form.Item label='事件备注'>
           {getFieldDecorator('description', {
             initialValue: props.defaultValue.description

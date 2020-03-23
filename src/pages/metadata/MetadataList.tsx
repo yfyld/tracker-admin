@@ -140,6 +140,11 @@ const MetadataList = ({
       }
     },
     {
+      key: 'url',
+      title: 'URL',
+      dataIndex: 'url'
+    },
+    {
       key: 'description',
       title: '备注',
       dataIndex: 'description'

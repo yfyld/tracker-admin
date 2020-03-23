@@ -41,49 +41,41 @@ const AnalyseEvent = ({
   };
 
   return (
-    <div>
+    <div className={style.wrapper}>
       <AnalyseHeader data={{ ...eventAnalyseParam, projectId }}></AnalyseHeader>
-      <Collapse defaultActiveKey={['1']}>
-        <Panel header='添加分析规则' key='1'>
+      <div className={style.rule}>
+        <div className={style.ruleSection}>
+          <span className={style.ruleTitle}>指标:</span>
           <div>
-            <div className={style.ruleTitle}>
-              <span>指标:</span>
-            </div>
-            <div>
-              <Indicator
-                hasType
-                fieldList={fieldList}
-                indicators={eventAnalyseParam.indicators}
-                onChange={indicators => handleChange({ ...eventAnalyseParam, indicators })}
-              />
-
-              {/* <Filter fieldList={fieldList} filterInfo={filter} /> */}
-            </div>
-          </div>
-
-          <div>
-            <div className={style.ruleTitle}>
-              <span>维度:</span>
-            </div>
-            <Dimension
-              dimension={eventAnalyseParam.dimension}
+            <Indicator
+              hasType
               fieldList={fieldList}
-              onChange={dimension => handleChange({ ...eventAnalyseParam, dimension })}
+              indicators={eventAnalyseParam.indicators}
+              onChange={indicators => handleChange({ ...eventAnalyseParam, indicators })}
             />
-          </div>
 
-          <div>
-            <div className={style.ruleTitle}>
-              <span>筛选:</span>
-            </div>
-            <Filter
-              fieldList={fieldList}
-              filterInfo={eventAnalyseParam.filter}
-              onChange={filter => handleChange({ ...eventAnalyseParam, filter })}
-            />
+            {/* <Filter fieldList={fieldList} filterInfo={filter} /> */}
           </div>
-        </Panel>
-      </Collapse>
+        </div>
+
+        <div className={style.ruleSection}>
+          <span className={style.ruleTitle}>纬度:</span>
+          <Dimension
+            dimension={eventAnalyseParam.dimension}
+            fieldList={fieldList}
+            onChange={dimension => handleChange({ ...eventAnalyseParam, dimension })}
+          />
+        </div>
+
+        <div className={style.ruleSection}>
+          <span className={style.ruleTitle}>筛选:</span>
+          <Filter
+            fieldList={fieldList}
+            filterInfo={eventAnalyseParam.filter}
+            onChange={filter => handleChange({ ...eventAnalyseParam, filter })}
+          />
+        </div>
+      </div>
 
       <div className={style.preview}>
         <Row>

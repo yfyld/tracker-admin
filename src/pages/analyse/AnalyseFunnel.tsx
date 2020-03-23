@@ -41,63 +41,53 @@ const AnalyseFunnel = ({
   };
 
   return (
-    <div>
+    <div className={style.wrapper}>
       <AnalyseHeader data={{ ...funnelAnalyseParam, projectId }}></AnalyseHeader>
-      <Collapse defaultActiveKey={['1']}>
-        <Panel header='添加漏斗分析规则' key='1'>
-          <div>
-            <div className={style.ruleTitle}>
-              <span>指标:</span>
-            </div>
+      <div className={style.rule}>
+        <div className={style.ruleSection}>
+          <span className={style.ruleTitle}>指标:</span>
 
-            <Select
-              value={funnelAnalyseParam.indicatorType}
-              onChange={(indicatorType: string) => handleChange({ ...funnelAnalyseParam, indicatorType })}
-            >
-              <Option value='PV'>总数</Option>
-              <Option value='UV'> 用户数</Option>
-              <Option value='APV'>人均次数</Option>
-              <Option value='DPV'>日均次数</Option>
-              <Option value='DUV'>日均用户数</Option>
-            </Select>
-          </div>
+          <Select
+            value={funnelAnalyseParam.indicatorType}
+            onChange={(indicatorType: string) => handleChange({ ...funnelAnalyseParam, indicatorType })}
+          >
+            <Option value='PV'>总数</Option>
+            <Option value='UV'> 用户数</Option>
+            <Option value='APV'>人均次数</Option>
+            <Option value='DPV'>日均次数</Option>
+            <Option value='DUV'>日均用户数</Option>
+          </Select>
+        </div>
 
-          <div>
-            <div className={style.ruleTitle}>
-              <span>维度:</span>
-            </div>
-            <Dimension
-              dimension={funnelAnalyseParam.dimension}
-              fieldList={fieldList}
-              onChange={dimension => handleChange({ ...funnelAnalyseParam, dimension })}
-            />
-          </div>
+        <div className={style.ruleSection}>
+          <span className={style.ruleTitle}>纬度:</span>
+          <Dimension
+            dimension={funnelAnalyseParam.dimension}
+            fieldList={fieldList}
+            onChange={dimension => handleChange({ ...funnelAnalyseParam, dimension })}
+          />
+        </div>
 
-          <div>
-            <div className={style.ruleTitle}>
-              <span>筛选:</span>
-            </div>
-            <Filter
-              fieldList={fieldList}
-              filterInfo={funnelAnalyseParam.filter}
-              onChange={filter => handleChange({ ...funnelAnalyseParam, filter })}
-            />
-          </div>
+        <div className={style.ruleSection}>
+          <span className={style.ruleTitle}>筛选:</span>
+          <Filter
+            fieldList={fieldList}
+            filterInfo={funnelAnalyseParam.filter}
+            onChange={filter => handleChange({ ...funnelAnalyseParam, filter })}
+          />
+        </div>
 
-          <div>
-            <div className={style.ruleTitle}>
-              <span>漏斗步骤:</span>
-            </div>
-            <Indicator
-              addText='+添加步骤'
-              hasCustomName
-              fieldList={fieldList}
-              indicators={funnelAnalyseParam.indicators}
-              onChange={indicators => handleChange({ ...funnelAnalyseParam, indicators })}
-            />
-          </div>
-        </Panel>
-      </Collapse>
+        <div className={style.ruleSection}>
+          <span className={style.ruleTitle}>漏斗步骤:</span>
+          <Indicator
+            addText='+添加步骤'
+            hasCustomName
+            fieldList={fieldList}
+            indicators={funnelAnalyseParam.indicators}
+            onChange={indicators => handleChange({ ...funnelAnalyseParam, indicators })}
+          />
+        </div>
+      </div>
 
       <div className={style.preview}>
         <Row>
@@ -130,7 +120,6 @@ const AnalyseFunnel = ({
         <Spin spinning={analyseLoading}>
           <AnalyseFunnelChart data={funnelAnalyseData}></AnalyseFunnelChart>
         </Spin>
-        <div></div>
       </div>
     </div>
   );

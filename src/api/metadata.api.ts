@@ -18,6 +18,7 @@ export interface IMetadataInfo {
   projectId: number;
   log: number;
   recentLog: number;
+  url?: string;
 }
 
 export interface IMetadataListParam extends IPageQuery {
@@ -53,6 +54,7 @@ export interface IMetadataUpdateParam {
   tags?: number[];
   newTags?: string[];
   projectId: number;
+  url?: string;
 }
 
 export interface ITagListParam extends IPageQuery {

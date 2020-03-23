@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Select, Row, Col, Icon, AutoComplete } from 'antd';
+import { Select, Row, Col, Icon, AutoComplete, Button } from 'antd';
 import style from './Filter.module.less';
 import { IListData } from '@/types';
 import { IFieldInfo, IFilterInfo, IFilterValue } from '@/api';
@@ -75,7 +75,9 @@ const Filter = ({ fieldList, filterInfo, onChange }: Props) => {
         <div className={style.wrapper}>
           {filterInfo.filterValues.length > 1 && (
             <div className={style.type}>
-              <button onClick={handleChangeFilterType}>{filterInfo.filterType === 'AND' ? '且' : '或'}</button>
+              <Button size='small' onClick={handleChangeFilterType}>
+                {filterInfo.filterType === 'AND' ? '且' : '或'}
+              </Button>
               <div className={style.line}></div>
             </div>
           )}
@@ -143,7 +145,7 @@ const Filter = ({ fieldList, filterInfo, onChange }: Props) => {
                   )}
                 <Col span={1}>
                   <div onClick={() => handleClose(index)} className={'app-link ' + style.close}>
-                    <Icon type='close' />
+                    <Icon type='minus-circle' />
                   </div>
                 </Col>
               </Row>
@@ -151,7 +153,10 @@ const Filter = ({ fieldList, filterInfo, onChange }: Props) => {
           </div>
         </div>
       )}
-      <a onClick={handleAdd}>+添加筛选</a>
+      <a onClick={handleAdd} className={style.add}>
+        <Icon type='plus-square' />
+        添加筛选
+      </a>
     </div>
   );
 };

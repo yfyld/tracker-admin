@@ -1,15 +1,31 @@
-.ruleTitle {
-  .clearfix();
-  > span:nth-child(1) {
-    float: left;
-  }
-  > span:nth-child(2) {
-    float: right;
-  }
-}
-
 .preview {
   margin-top: 30px;
   background-color: #fff;
   padding: 20px;
+  min-height: 400px;
+}
+
+.wrapper {
+  background: #fff;
+}
+
+.ruleSection {
+  padding-left: 90px;
+  position: relative;
+  padding-bottom: 15px;
+  padding-top: 15px;
+  border-bottom: 1px solid @border;
+  &:hover {
+    background: #dfecfb;
+  }
+}
+.ruleTitle {
+  position: absolute;
+  width: 65px;
+  text-align: justify;
+  display: block;
+
+  text-align-last: justify;
+  left: 20px;
+  top: 15px;
 }

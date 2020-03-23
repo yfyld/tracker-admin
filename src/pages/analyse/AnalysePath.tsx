@@ -41,78 +41,57 @@ const AnalyseFunnel = ({
   };
 
   return (
-    <div>
+    <div className={style.wrapper}>
       <AnalyseHeader data={{ ...funnelAnalyseParam, projectId }}></AnalyseHeader>
-      <Collapse defaultActiveKey={['1']}>
-        <Panel header='路径分析规则' key='1'>
+      <div className={style.rule}>
+        <div className={style.ruleSection}>
+          <span className={style.ruleTitle}>指标:</span>
+          <Select
+            style={{ width: 100 }}
+            value={funnelAnalyseParam.indicatorType}
+            onChange={(indicatorType: string) => handleChange({ ...funnelAnalyseParam, indicatorType })}
+          >
+            <Option value='PV'>总数</Option>
+            <Option value='UV'> 用户数</Option>
+            <Option value='APV'>人均次数</Option>
+            <Option value='DPV'>日均次数</Option>
+            <Option value='DUV'>日均用户数</Option>
+          </Select>
+        </div>
+
+        <div className={style.ruleSection}>
+          <span className={style.ruleTitle}>筛选:</span>
+          <Filter
+            fieldList={fieldList}
+            filterInfo={funnelAnalyseParam.filter}
+            onChange={filter => handleChange({ ...funnelAnalyseParam, filter })}
+          />
+        </div>
+
+        <div className={style.ruleSection}>
+          <span className={style.ruleTitle}>页面池:</span>
+          <Indicator
+            addText='+添加页面'
+            hasCustomName
+            type='PAGE'
+            fieldList={fieldList}
+            indicators={funnelAnalyseParam.indicators}
+            onChange={indicators => handleChange({ ...funnelAnalyseParam, indicators })}
+          />
+        </div>
+
+        <div className={style.ruleSection}>
+          <span className={style.ruleTitle}>路径:</span>
           <div>
-            <div className={style.ruleTitle}>
-              <span>指标:</span>
-            </div>
-
-            <Select
-              value={funnelAnalyseParam.indicatorType}
-              onChange={(indicatorType: string) => handleChange({ ...funnelAnalyseParam, indicatorType })}
-            >
-              <Option value='PV'>总数</Option>
-              <Option value='UV'> 用户数</Option>
-              <Option value='APV'>人均次数</Option>
-              <Option value='DPV'>日均次数</Option>
-              <Option value='DUV'>日均用户数</Option>
-            </Select>
+            安师大发>sdfsdf>sdfsdf>asdfasdffasf> <Button size='small'>编辑</Button>
+            <Button size='small'>删除</Button>
           </div>
-
-          {/* <div>
-            <div className={style.ruleTitle}>
-              <span>维度:</span>
-            </div>
-            <Dimension
-              dimension={funnelAnalyseParam.dimension}
-              fieldList={fieldList}
-              onChange={dimension => handleChange({ ...funnelAnalyseParam, dimension })}
-            />
-          </div> */}
-
           <div>
-            <div className={style.ruleTitle}>
-              <span>筛选:</span>
-            </div>
-            <Filter
-              fieldList={fieldList}
-              filterInfo={funnelAnalyseParam.filter}
-              onChange={filter => handleChange({ ...funnelAnalyseParam, filter })}
-            />
+            安师大发>sdfsdf>sdfsdf>asdfasdffasf> <Button size='small'>编辑</Button>
+            <Button size='small'>删除</Button>
           </div>
-
-          <div>
-            <div className={style.ruleTitle}>
-              <span>页面池:</span>
-            </div>
-            <Indicator
-              addText='+添加页面'
-              hasCustomName
-              type='PAGE'
-              fieldList={fieldList}
-              indicators={funnelAnalyseParam.indicators}
-              onChange={indicators => handleChange({ ...funnelAnalyseParam, indicators })}
-            />
-          </div>
-
-          <div>
-            <div className={style.ruleTitle}>
-              <span>路径:</span>
-            </div>
-            <div>
-              安师大发>sdfsdf>sdfsdf>asdfasdffasf> <button>编辑</button>
-              <button>删除</button>
-            </div>
-            <div>
-              安师大发>sdfsdf>sdfsdf>asdfasdffasf> <button>编辑</button>
-              <button>删除</button>
-            </div>
-          </div>
-        </Panel>
-      </Collapse>
+        </div>
+      </div>
 
       <div className={style.preview}>
         <Row>
@@ -133,8 +112,7 @@ const AnalyseFunnel = ({
                 value={funnelAnalyseParam.type}
                 onChange={(type: string) => handleChange({ ...funnelAnalyseParam, type })}
               >
-                <Option value='FUNNEL'>漏斗图</Option>
-                <Option value='LIST'>列表</Option>
+                <Option value='FUNNEL'>桑椹图</Option>
                 <Option value='TABLE'>表格</Option>
               </Select>
 
