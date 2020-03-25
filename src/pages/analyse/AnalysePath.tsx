@@ -1,55 +1,56 @@
 import { Icon, Collapse, Divider, Select, Input, Row, Col, Button, Spin } from 'antd';
 import React from 'react';
 import AnalyseRangePicker from '@/components/AnalyseRangePicker';
-import moment from 'moment';
-import style from './AnalyseFunnel.module.less';
-import ReactEcharts from 'echarts-for-react';
+
+import style from './Analyse.module.less';
+
 import Indicator from '@/components/Indicator';
-import Dimension from '@/components/Dimension';
+import PathData from '@/components/PathData';
+
 import Filter from '@/components/Filter';
 import AnalyseHeader from './components/AnalyseHeader';
-import { IReportInfo, IFieldInfo, IFunnelAnalyseData, IFunnelAnalyseParam } from '@/api';
+import { IReportInfo, IFieldInfo, IPathAnalyseData, IPathAnalyseParam } from '@/api';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { doAddReport, doUpdateReport, doGetFunnelAnalyse } from '@/store/actions';
+import { doAddReport, doUpdateReport, doGetPathAnalyse } from '@/store/actions';
 import { IAction, IStoreState, IListData, IDate } from '@/types';
 import { DYNAMIC_TIME } from '@/constants';
-import AnalyseFunnelChart from './components/AnalyseFunnelChart';
+import AnalysePathChart from './components/AnalysePathChart';
 const { Option } = Select;
 const { Panel } = Collapse;
 const { Group } = Input;
 interface Props {
   fieldList: IListData<IFieldInfo>;
-  onGetFunnelAnalyseData: (param: IFunnelAnalyseParam) => IAction;
+  onGetPathAnalyseData: (param: IPathAnalyseParam) => IAction;
   projectId: number;
-  funnelAnalyseData: IFunnelAnalyseData;
-  funnelAnalyseParam: IFunnelAnalyseParam;
+  pathAnalyseData: IPathAnalyseData;
+  pathAnalyseParam: IPathAnalyseParam;
   analyseLoading: boolean;
 }
 
-const AnalyseFunnel = ({
+const AnalysePath = ({
   analyseLoading,
   fieldList,
-  onGetFunnelAnalyseData,
+  onGetPathAnalyseData,
   projectId,
-  funnelAnalyseData,
-  funnelAnalyseParam
+  pathAnalyseData,
+  pathAnalyseParam
 }: Props) => {
-  const handleChange = (info: IFunnelAnalyseParam) => {
+  const handleChange = (info: IPathAnalyseParam) => {
     info.projectId = projectId;
-    onGetFunnelAnalyseData(info);
+    onGetPathAnalyseData(info);
   };
 
   return (
     <div className={style.wrapper}>
-      <AnalyseHeader data={{ ...funnelAnalyseParam, projectId }}></AnalyseHeader>
+      <AnalyseHeader data={{ ...pathAnalyseParam, projectId }}></AnalyseHeader>
       <div className={style.rule}>
         <div className={style.ruleSection}>
           <span className={style.ruleTitle}>指标:</span>
           <Select
             style={{ width: 100 }}
-            value={funnelAnalyseParam.indicatorType}
-            onChange={(indicatorType: string) => handleChange({ ...funnelAnalyseParam, indicatorType })}
+            value={pathAnalyseParam.indicatorType}
+            onChange={(indicatorType: string) => handleChange({ ...pathAnalyseParam, indicatorType })}
           >
             <Option value='PV'>总数</Option>
             <Option value='UV'> 用户数</Option>
@@ -63,8 +64,8 @@ const AnalyseFunnel = ({
           <span className={style.ruleTitle}>筛选:</span>
           <Filter
             fieldList={fieldList}
-            filterInfo={funnelAnalyseParam.filter}
-            onChange={filter => handleChange({ ...funnelAnalyseParam, filter })}
+            filterInfo={pathAnalyseParam.filter}
+            onChange={filter => handleChange({ ...pathAnalyseParam, filter })}
           />
         </div>
 
@@ -75,21 +76,18 @@ const AnalyseFunnel = ({
             hasCustomName
             type='PAGE'
             fieldList={fieldList}
-            indicators={funnelAnalyseParam.indicators}
-            onChange={indicators => handleChange({ ...funnelAnalyseParam, indicators })}
+            indicators={pathAnalyseParam.indicators}
+            onChange={indicators => handleChange({ ...pathAnalyseParam, indicators })}
           />
         </div>
 
         <div className={style.ruleSection}>
           <span className={style.ruleTitle}>路径:</span>
-          <div>
-            安师大发>sdfsdf>sdfsdf>asdfasdffasf> <Button size='small'>编辑</Button>
-            <Button size='small'>删除</Button>
-          </div>
-          <div>
-            安师大发>sdfsdf>sdfsdf>asdfasdffasf> <Button size='small'>编辑</Button>
-            <Button size='small'>删除</Button>
-          </div>
+          <PathData
+            indicators={pathAnalyseParam.indicators}
+            pathsData={pathAnalyseParam.pathsData}
+            onChange={pathsData => handleChange({ ...pathAnalyseParam, pathsData })}
+          ></PathData>
         </div>
       </div>
 
@@ -97,11 +95,11 @@ const AnalyseFunnel = ({
         <Row>
           <Col span={14}>
             <AnalyseRangePicker
-              onChange={time => handleChange({ ...funnelAnalyseParam, ...time })}
+              onChange={time => handleChange({ ...pathAnalyseParam, ...time })}
               value={{
-                dateType: funnelAnalyseParam.dateType,
-                dateEnd: funnelAnalyseParam.dateEnd,
-                dateStart: funnelAnalyseParam.dateStart
+                dateType: pathAnalyseParam.dateType,
+                dateEnd: pathAnalyseParam.dateEnd,
+                dateStart: pathAnalyseParam.dateStart
               }}
             />
           </Col>
@@ -109,8 +107,8 @@ const AnalyseFunnel = ({
             <Group compact>
               <Select
                 style={{ width: '33%' }}
-                value={funnelAnalyseParam.type}
-                onChange={(type: string) => handleChange({ ...funnelAnalyseParam, type })}
+                value={pathAnalyseParam.type}
+                onChange={(type: string) => handleChange({ ...pathAnalyseParam, type })}
               >
                 <Option value='FUNNEL'>桑椹图</Option>
                 <Option value='TABLE'>表格</Option>
@@ -120,9 +118,7 @@ const AnalyseFunnel = ({
             </Group>
           </Col>
         </Row>
-        <Spin spinning={analyseLoading}>
-          <AnalyseFunnelChart data={funnelAnalyseData}></AnalyseFunnelChart>
-        </Spin>
+        <Spin spinning={analyseLoading}>1212</Spin>
         <div></div>
       </div>
     </div>
@@ -132,12 +128,12 @@ const AnalyseFunnel = ({
 const mapStateToProps = (state: IStoreState) => {
   const { fieldList } = state.metadata;
   const projectId = state.project.projectInfo.id;
-  const { funnelAnalyseData, funnelAnalyseParam, analyseLoading } = state.analyse;
+  const { pathAnalyseData, pathAnalyseParam, analyseLoading } = state.analyse;
   return {
     fieldList,
     projectId,
-    funnelAnalyseData,
-    funnelAnalyseParam,
+    pathAnalyseData,
+    pathAnalyseParam,
     analyseLoading
   };
 };
@@ -145,9 +141,9 @@ const mapStateToProps = (state: IStoreState) => {
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
-      onGetFunnelAnalyseData: (param: IFunnelAnalyseParam) => doGetFunnelAnalyse.request(param)
+      onGetPathAnalyseData: (param: IPathAnalyseParam) => doGetPathAnalyse.request(param)
     },
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(AnalyseFunnel);
+export default connect(mapStateToProps, mapDispatchToProps)(AnalysePath);

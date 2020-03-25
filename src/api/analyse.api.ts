@@ -111,8 +111,26 @@ export interface IFunnelAnalyseData {
   type: string;
 }
 
-export interface IPathAnalyseParam {}
-export interface IPathAnalyseData {}
+export interface IPathDataInfo {
+  id: number;
+  paths: number[];
+}
+
+export interface IPathAnalyseParam {
+  indicators: IIndicatorInfo[];
+  filter: IFilterInfo;
+  indicatorType: string;
+  pathsData: IPathDataInfo[];
+  type: string;
+  projectId: number;
+  dateType: string;
+  dateStart: number;
+  dateEnd: number;
+}
+export interface IPathAnalyseData {
+  list: any[];
+  type: string;
+}
 
 export function fetchEventAnalyseData(param: IEventAnalyseParam) {
   return fetch.post<IEventAnalyseData>('/analyse/event', { ...param, SHOW_LOADING: false });

@@ -1,7 +1,6 @@
 import { IPageQuery } from './../types/index';
 import { IPageData } from '@/types';
 import fetch from './http';
-import { IRolePermission, IUpdateRolePermissions } from '@/api/role.api';
 
 export interface IUserInfoParam {}
 
@@ -63,8 +62,8 @@ export interface IUserRole {
 }
 
 export interface IUpdateUserRoles {
-  userId: number,
-  roleIds: number[]
+  userId: number;
+  roleIds: number[];
 }
 
 export type IUserList = IPageData<IUserListItem>;

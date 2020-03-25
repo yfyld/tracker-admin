@@ -9,7 +9,7 @@ import {
   IPathAnalyseParam
 } from './../../api/analyse.api';
 import { IEventAnalyseParam } from '@/api';
-import { doGetEventAnalyse, doGetFunnelAnalyse } from './../actions/analyse.action';
+import { doGetEventAnalyse, doGetFunnelAnalyse, doGetPathAnalyse } from './../actions/analyse.action';
 import { doResetStore } from '@/store/actions';
 import update from 'immutability-helper';
 import { getType } from 'typesafe-actions';
@@ -85,7 +85,7 @@ const initialState = (): AnalyseState => ({
     dateType: DYNAMIC_TIME[8].value
   },
 
-  pathAnalyseData: { list: [], dimension: '', dimensionValues: [], timeUnit: 'DAY', type: 'LINE', conversionRate: 0 },
+  pathAnalyseData: { list: [], type: 'LINE' },
   pathAnalyseParam: {
     projectId: null,
     indicatorType: 'PV',
@@ -101,11 +101,13 @@ const initialState = (): AnalyseState => ({
         }
       }
     ],
-    dimension: '',
+
     filter: {
       filterType: 'OR',
       filterValues: []
     },
+
+    pathsData: [],
 
     type: 'FUNNEL',
     dateStart: DYNAMIC_TIME[8].startDate(),
@@ -131,6 +133,14 @@ export const analyseReducer = (state: AnalyseState = initialState(), action: IAc
     case getType(doGetFunnelAnalyse.success):
       return update(state, {
         funnelAnalyseData: { $set: action.payload },
+        analyseLoading: { $set: false }
+      });
+
+    case getType(doGetPathAnalyse.request):
+      return update(state, { pathAnalyseParam: { $set: action.payload }, analyseLoading: { $set: true } });
+    case getType(doGetPathAnalyse.success):
+      return update(state, {
+        pathAnalyseData: { $set: action.payload },
         analyseLoading: { $set: false }
       });
 
