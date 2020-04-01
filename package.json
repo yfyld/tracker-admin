@@ -131,9 +131,14 @@
     }
   },
   "lint-staged": {
-    "src/**/*.{js,vue,ts}": [
+    "src/**/*.{js,vue,ts,tsx}": [
       "npm run lint",
       "git add"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
     ]
   },
   "config": {
