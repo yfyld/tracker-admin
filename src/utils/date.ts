@@ -1,3 +1,11 @@
+import _dayjs from 'dayjs';
+
+import weekOfYear from 'dayjs/plugin/weekOfYear';
+import('dayjs/locale/zh-cn');
+_dayjs.extend(weekOfYear);
+_dayjs.locale('zh-cn');
+
+export const dayjs = _dayjs;
 /**
 
 获取本周、本季度、本月、上月的开端日期、停止日期
@@ -116,9 +124,11 @@ export function getFormatByTimeUnit(type: string) {
     case 'DAY':
       return 'YYYY-MM-DD(dddd)';
     case 'WEEK':
-      return 'YYYY-MM-DD(DDD)';
+      return 'YYYY-MM-DD(w)';
     case 'MONTH':
       return 'YYYY-MM';
+    case 'YEAR':
+      return 'YYYY';
     default:
       return 'YYYY-MM-DD';
   }

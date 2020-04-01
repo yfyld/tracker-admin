@@ -3,8 +3,8 @@ import ReactEcharts, { ObjectMap } from 'echarts-for-react';
 import { Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import { IEventAnalyseParam, IEventAnalyseData } from '@/api';
-import moment from 'moment';
-import { getFormatByTimeUnit } from '@/utils';
+
+import { getFormatByTimeUnit, dayjs } from '@/utils';
 
 interface Props {
   data: IEventAnalyseData;
@@ -179,6 +179,8 @@ const getLineOptions = (data: IEventAnalyseData): ObjectMap => {
         data.dimensionValues.forEach(dimension => {
           options.series.push({
             type: 'line',
+            symbolSize: '2',
+
             name: item.metadataName + '/' + dimension,
             data: item.data
               .filter(val => val[data.dimension] === dimension)
@@ -195,6 +197,8 @@ const getLineOptions = (data: IEventAnalyseData): ObjectMap => {
       data.dimensionValues.forEach(dimension => {
         options.series.push({
           type: 'line',
+          symbolSize: '2',
+
           name: dimension,
           data: data.list[0].data
             .filter(val => val[data.dimension] === dimension)
@@ -211,6 +215,8 @@ const getLineOptions = (data: IEventAnalyseData): ObjectMap => {
     data.list.forEach(item => {
       options.series.push({
         type: 'line',
+        symbolSize: '2',
+
         name: item.metadataName,
         data: item.data.map(val => {
           return {
@@ -318,7 +324,7 @@ const getColumns = (data: IEventAnalyseData) => {
       width: 200,
       defaultSortOrder: 'descend',
       sorter: (a, b) => new Date(a.time).getTime() - new Date(b.time).getTime(),
-      render: (text: number) => moment(text).format(getFormatByTimeUnit(data.timeUnit))
+      render: (text: number) => dayjs(text).format(getFormatByTimeUnit(data.timeUnit))
     }
   ];
 
