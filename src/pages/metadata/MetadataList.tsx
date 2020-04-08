@@ -2,11 +2,24 @@ import * as React from 'react';
 import style from './MetadataList.module.less';
 import { connect } from 'react-redux';
 import { IStoreState, IAction, IPageData } from '@/types';
-import { doGetMetadataList, doDeleteMetadata, doEnableMetadata, doDisableMetadata } from '@/store/actions';
+import {
+  doGetMetadataList,
+  doDeleteMetadata,
+  doEnableMetadata,
+  doDisableMetadata,
+  doAddMetadataByExcel
+} from '@/store/actions';
 import { bindActionCreators, Dispatch } from 'redux';
-import { Table, Button, Modal, Drawer, Tag, Upload, Icon } from 'antd';
+import { Table, Button, Modal, Drawer, Tag, Upload, Icon, Avatar } from 'antd';
 import { PaginationConfig, SorterResult, ColumnProps, ColumnFilterItem } from 'antd/lib/table';
-import { IMetadataListParam, IMetadataInfo, ITagInfo, EMetadataType } from '@/api';
+import {
+  IMetadataListParam,
+  IMetadataInfo,
+  ITagInfo,
+  EMetadataType,
+  fetchMetadataAddByExcel,
+  IMetadataAddByExcelParam
+} from '@/api';
 import MetadataAddModal from './components/MetadataAddModal';
 import MetadataEditModal from './components/MetadataEditModal';
 import TagManagement from './components/TagManagement';
@@ -14,6 +27,7 @@ import MetadataListForm from './components/MetadataListForm';
 import { tagListFiltersSelector } from '@/store/selectors';
 import { UploadChangeParam } from 'antd/lib/upload';
 import { UploadFile } from 'antd/lib/upload/interface';
+import config from '@/config';
 const { confirm } = Modal;
 
 interface Props {
@@ -21,6 +35,7 @@ interface Props {
   onDeleteMetadata: (params: number) => IAction;
   onEnableMetadata: (params: number) => IAction;
   onDisableMetadata: (params: number) => IAction;
+  onAddMetadataByExcel: (params: IMetadataAddByExcelParam) => IAction;
   metadataList: IPageData<IMetadataInfo>;
   metadataListParams: IMetadataListParam;
   tagListFilters: ColumnFilterItem[];
@@ -34,7 +49,9 @@ const MetadataList = ({
   onEnableMetadata,
   onDisableMetadata,
   metadataListParams,
-  tagListFilters
+  tagListFilters,
+  onAddMetadataByExcel,
+  projectId
 }: Props) => {
   const [addMetadataVisible, setAddMetadataVisible] = React.useState(false);
   const [editMetadataVisible, setEditMetadataVisible] = React.useState(false);
@@ -241,7 +258,11 @@ const MetadataList = ({
     setEditMetadataVisible(true);
   };
 
-  const handleImportChange = (info: UploadChangeParam<UploadFile<any>>) => {};
+  const handleImportChange = (info: UploadChangeParam<UploadFile<any>>) => {
+    if (info.file.status === 'done') {
+      onAddMetadataByExcel({ path: info.file.response.result.path, projectId });
+    }
+  };
 
   return (
     <div className={style.wrapper}>
@@ -266,7 +287,12 @@ const MetadataList = ({
           <MetadataListForm defaultValue={metadataListParams} onSubmit={onGetMetadataList}></MetadataListForm>
         </div>
         <div className='app-fr'>
-          <Upload style={{ display: 'inline-block' }} action={'http://'} onChange={handleImportChange}>
+          <Upload
+            showUploadList={false}
+            style={{ display: 'inline-block' }}
+            action={config.baseURL + '/common/upload'}
+            onChange={handleImportChange}
+          >
             <Button>
               <Icon type='upload' /> 导入元数据
             </Button>
@@ -298,6 +324,9 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
       },
       onDisableMetadata: params => {
         return doDisableMetadata.request(params);
+      },
+      onAddMetadataByExcel: params => {
+        return doAddMetadataByExcel.request(params);
       }
     },
     dispatch

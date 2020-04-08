@@ -1,4 +1,4 @@
-import { doGetTagList, doUpdateTag, doAddTag, doDelTag } from './../actions/metadata.action';
+import { doGetTagList, doUpdateTag, doAddTag, doDelTag, doAddMetadataByExcel } from './../actions/metadata.action';
 import { put, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
 import {
@@ -22,7 +22,8 @@ import {
   fetchTagList,
   fetchTagAdd,
   fetchTagDel,
-  fetchTagUpdate
+  fetchTagUpdate,
+  fetchMetadataAddByExcel
 } from '@/api';
 import { select, call } from '@/utils';
 
@@ -55,6 +56,20 @@ function* addMetadata(action: ReturnType<typeof doAddMetadata.request>): Generat
     yield put(doGetTagList.request({ projectId, page: 1, pageSize: 1000 }));
   } catch (error) {
     yield put(doAddMetadata.failure(error));
+  }
+}
+
+function* addMetadataByExcel(action: ReturnType<typeof doAddMetadataByExcel.request>): Generator {
+  try {
+    const metadataListParams = yield* select(state => state.metadata.metadataListParams);
+    yield call(fetchMetadataAddByExcel, action.payload);
+    yield put(doAddMetadataByExcel.success());
+    yield put(doGetMetadataList.request(metadataListParams));
+    // 因为可能会新增标签，所以需要重新获取一下
+    const projectId = yield* select(state => state.project.projectInfo.id);
+    yield put(doGetTagList.request({ projectId, page: 1, pageSize: 1000 }));
+  } catch (error) {
+    yield put(doAddMetadataByExcel.failure(error));
   }
 }
 
@@ -169,6 +184,8 @@ export default function* watchMetadata() {
   yield takeEvery(getType(doGetMetadataList.request), getMetadataList);
   yield takeEvery(getType(doGetActiveMetadataList.request), getActiveMetadataList);
   yield takeEvery(getType(doAddMetadata.request), addMetadata);
+  yield takeEvery(getType(doAddMetadataByExcel.request), addMetadataByExcel);
+
   yield takeEvery(getType(doUpdateMetadata.request), updateMetadata);
   yield takeEvery(getType(doDeleteMetadata.request), deleteMetadata);
   yield takeEvery(getType(doEnableMetadata.request), enableMetadata);

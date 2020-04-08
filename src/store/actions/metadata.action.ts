@@ -1,5 +1,12 @@
 import { IDeleteParam, IListData } from './../../types/index';
-import { IFieldInfo, ITagAddParam, ITagUpdateParam, ITagListParam, ITagList } from './../../api/metadata.api';
+import {
+  IFieldInfo,
+  ITagAddParam,
+  ITagUpdateParam,
+  ITagListParam,
+  ITagList,
+  IMetadataAddByExcelParam
+} from './../../api/metadata.api';
 import { createAsyncAction } from 'typesafe-actions';
 import { IPageData } from '@/types';
 import * as actionType from '@/constants/actionType';
@@ -16,6 +23,12 @@ export const doAddMetadata = createAsyncAction(
   actionType.ADD_METADATA_SUCCESS,
   actionType.ADD_METADATA_FAILURE
 )<IMetadataAddParam, undefined, Error>();
+
+export const doAddMetadataByExcel = createAsyncAction(
+  actionType.ADD_METADATA_BY_EXCEL_REQUEST,
+  actionType.ADD_METADATA_BY_EXCEL_SUCCESS,
+  actionType.ADD_METADATA_BY_EXCEL_FAILURE
+)<IMetadataAddByExcelParam, undefined, Error>();
 
 export const doUpdateMetadata = createAsyncAction(
   actionType.UPDATE_METADATA_REQUEST,

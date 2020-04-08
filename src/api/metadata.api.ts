@@ -90,8 +90,18 @@ export interface IFieldInfo {
   recommend: string[];
 }
 
+export interface IMetadataAddByExcelParam {
+  url?: string;
+  path?: string;
+  projectId: number;
+}
+
 export function fetchMetadataList(params: IMetadataListParam) {
   return fetch.get<IPageData<IMetadataInfo>>('/metadata/', params);
+}
+
+export function fetchMetadataAddByExcel(params: IMetadataAddByExcelParam) {
+  return fetch.post('/metadata/upload', params);
 }
 
 export function fetchMetadataAdd(params: IMetadataAddParam) {
