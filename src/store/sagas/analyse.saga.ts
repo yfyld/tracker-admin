@@ -3,7 +3,7 @@ import { doGetEventAnalyse, doInitAnalyse, doGetFunnelAnalyse, doGetPathAnalyse 
 import { put, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
 import { select, call } from '@/utils';
-import { fetchEventAnalyseData, fetchFunnelAnalyseData } from '@/api';
+import { fetchEventAnalyseData, fetchFunnelAnalyseData, fetchPathAnalyseData } from '@/api';
 
 function* getEventAnalyseData(action: ReturnType<typeof doGetEventAnalyse.request>): Generator {
   try {
@@ -20,6 +20,15 @@ function* getFunnelAnalyseData(action: ReturnType<typeof doGetFunnelAnalyse.requ
     yield put(doGetFunnelAnalyse.success(response.data));
   } catch (error) {
     yield put(doGetFunnelAnalyse.failure(error));
+  }
+}
+
+function* getPathAnalyseData(action: ReturnType<typeof doGetPathAnalyse.request>): Generator {
+  try {
+    const response = yield* call(fetchPathAnalyseData, action.payload);
+    yield put(doGetPathAnalyse.success(response.data));
+  } catch (error) {
+    yield put(doGetPathAnalyse.failure(error));
   }
 }
 
@@ -62,5 +71,6 @@ function* initAnalyse(action: ReturnType<typeof doInitAnalyse>): Generator {
 export default function* watchAnalyse() {
   yield takeEvery(getType(doGetEventAnalyse.request), getEventAnalyseData);
   yield takeEvery(getType(doGetFunnelAnalyse.request), getFunnelAnalyseData);
+  yield takeEvery(getType(doGetPathAnalyse.request), getPathAnalyseData);
   yield takeEvery(getType(doInitAnalyse), initAnalyse);
 }

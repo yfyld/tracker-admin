@@ -49,7 +49,6 @@ const AnalyseEvent = ({
           <div>
             <Indicator
               hasType
-              fieldList={fieldList}
               indicators={eventAnalyseParam.indicators}
               onChange={indicators => handleChange({ ...eventAnalyseParam, indicators })}
             />

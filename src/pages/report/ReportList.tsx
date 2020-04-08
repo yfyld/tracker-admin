@@ -13,6 +13,7 @@ import BoardAppendReportModal from '@/components/BoardAppendReportModal';
 import { boardListFiltersSelector, boardListMapSelector } from '@/store/selectors';
 import { Link } from 'react-router-dom';
 import { ROUTE_PATH } from '@/constants';
+import { getAnalysePath } from '@/utils';
 const { confirm } = Modal;
 interface Props {
   onGetReportList: (params: IReportListParam) => IAction;
@@ -115,7 +116,7 @@ const ReportList = ({
       render: (text: string, record) => (
         <span>
           <Tooltip title='编辑'>
-            <Link to={`${ROUTE_PATH.analyseEvent}?projectId=${record.projectId}&reportId=${record.id}`}>
+            <Link to={getAnalysePath(record.type, record.projectId, record.id)}>
               <Icon type='edit' />
             </Link>
           </Tooltip>

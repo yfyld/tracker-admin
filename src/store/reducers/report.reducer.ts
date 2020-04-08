@@ -40,7 +40,7 @@ const eventAnalyseInital = (type?: string): IReportInfo => {
       name: '路径分析',
       projectId: null,
       description: '描述',
-      type: 'FUNNEL',
+      type: 'PATH',
       data: {},
       dateStart: null,
       dateEnd: null,

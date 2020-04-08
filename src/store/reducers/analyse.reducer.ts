@@ -38,7 +38,7 @@ const initialState = (): AnalyseState => ({
         metadataCode: '_ALL_METADATA',
         metadataName: '所有事件',
         type: 'PV',
-        id: 1,
+        id: '1',
         filter: {
           filterType: 'OR',
           filterValues: []
@@ -66,7 +66,7 @@ const initialState = (): AnalyseState => ({
         metadataCode: '_ALL_METADATA',
         metadataName: '所有事件',
         type: 'PV',
-        id: 1,
+        id: '1',
         filter: {
           filterType: 'OR',
           filterValues: []
@@ -85,7 +85,7 @@ const initialState = (): AnalyseState => ({
     dateType: DYNAMIC_TIME[8].value
   },
 
-  pathAnalyseData: { list: [], type: 'LINE' },
+  pathAnalyseData: { data: [], links: [], indicatorType: '' },
   pathAnalyseParam: {
     projectId: null,
     indicatorType: 'PV',
@@ -94,7 +94,7 @@ const initialState = (): AnalyseState => ({
         metadataCode: '_ALL_METADATA',
         metadataName: '所有事件',
         type: 'PV',
-        id: 1,
+        id: '1',
         filter: {
           filterType: 'OR',
           filterValues: []
@@ -107,9 +107,9 @@ const initialState = (): AnalyseState => ({
       filterValues: []
     },
 
-    pathsData: [],
+    childPageData: [],
 
-    type: 'FUNNEL',
+    type: 'PATH',
     dateStart: DYNAMIC_TIME[8].startDate(),
     dateEnd: DYNAMIC_TIME[8].endDate(),
     dateType: DYNAMIC_TIME[8].value

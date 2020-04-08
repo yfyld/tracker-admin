@@ -82,7 +82,6 @@ const AnalyseFunnel = ({
           <Indicator
             addText='+添加步骤'
             hasCustomName
-            fieldList={fieldList}
             indicators={funnelAnalyseParam.indicators}
             onChange={indicators => handleChange({ ...funnelAnalyseParam, indicators })}
           />

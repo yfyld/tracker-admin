@@ -11,7 +11,7 @@ export interface IMetadataInfo {
   id: number;
   name: string;
   code: string;
-  type: string;
+  type: EMetadataType;
   description: string;
   status: number;
   tags: ITagInfo[];

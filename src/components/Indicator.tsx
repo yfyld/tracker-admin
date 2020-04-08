@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { Tag, Select, Row, Col, Icon, Popover, Input, Dropdown, Divider } from 'antd';
 import style from './Indicator.module.less';
-import { IMetadataInfo, IMetadataListParam, IIndicatorInfo, IFieldInfo, IFilterInfo } from '@/api';
+import { IMetadataInfo, IMetadataListParam, IIndicatorInfo, IFieldInfo, IFilterInfo, ITagList } from '@/api';
 import { IPageData, IAction, IStoreState, IListData } from '@/types';
 import { connect } from 'react-redux';
 
 import { bindActionCreators, Dispatch } from 'redux';
 import Filter from './Filter';
+import { v4 as uuidv4 } from 'uuid';
+import { doGetActiveMetadataList } from '../store/actions';
 const { Option, OptGroup } = Select;
 
 const { Search } = Input;
@@ -17,11 +19,13 @@ interface Props {
   index?: number;
   fieldList: IListData<IFieldInfo>;
   indicators: IIndicatorInfo[];
-  onChange: (param: IIndicatorInfo[]) => any;
+  onChange: (param: IIndicatorInfo[], changedValue?: IIndicatorInfo) => any;
   hasType?: boolean;
   addText?: string;
   hasCustomName?: boolean;
-  type?: string;
+  type?: number;
+  tagList: ITagList;
+  onGetActiveMetadataList: (param: IMetadataListParam) => IAction;
 }
 
 const Indicator = ({
@@ -33,13 +37,20 @@ const Indicator = ({
   hasType,
   addText = '+添加指标',
   hasCustomName = false,
-  type = null
+  type = null,
+  tagList,
+  onGetActiveMetadataList
 }: Props) => {
+  const [metadataparam, setmetadataparam] = React.useState({ ...activeMetadataListParams });
+  React.useEffect(() => {
+    setmetadataparam(activeMetadataListParams);
+  }, [activeMetadataListParams]);
+
   function handleSelectMetadata(info: IMetadataInfo, index: number) {
     const newIndicators: IIndicatorInfo[] = JSON.parse(JSON.stringify(indicators));
     newIndicators[index].metadataCode = info.code;
     newIndicators[index].metadataName = info.name;
-    onChange(newIndicators);
+    onChange(newIndicators, indicators[index]);
   }
 
   function handleFilterChange(info: IFilterInfo, index: number) {
@@ -66,7 +77,7 @@ const Indicator = ({
       metadataCode: '_ALL_METADATA',
       metadataName: '所有事件',
       type: 'PV',
-      id: Date.now(),
+      id: uuidv4(),
       filter: {
         filterType: 'AND',
         filterValues: []
@@ -78,7 +89,11 @@ const Indicator = ({
   function handleRemove(index: number) {
     const newIndicators: IIndicatorInfo[] = JSON.parse(JSON.stringify(indicators));
     newIndicators.splice(index, 1);
-    onChange(newIndicators);
+    onChange(newIndicators, indicators[index]);
+  }
+
+  function handleSearch(param: IMetadataListParam) {
+    onGetActiveMetadataList(param);
   }
 
   const allMetadata = {
@@ -102,11 +117,26 @@ const Indicator = ({
                   overlay={
                     <div className={style.content}>
                       <div onClick={e => e.stopPropagation()}>
-                        <Search placeholder='搜索事件' onSearch={value => console.log(value)} style={{ width: 200 }} />
-                        <Select style={{ width: 200 }}>
-                          <Option value='1'>标签1</Option>
-                          <Option value='2'>标签2</Option>
-                          <Option value='3'>标签3</Option>
+                        <Search
+                          placeholder='搜索事件'
+                          value={metadataparam.name}
+                          onChange={e => setmetadataparam({ ...metadataparam, name: e.target.value })}
+                          onSearch={name => handleSearch({ ...metadataparam, name })}
+                          style={{ width: 200 }}
+                        />
+                        &nbsp;
+                        <Select
+                          placeholder='根据标签筛选'
+                          style={{ width: 200 }}
+                          mode='multiple'
+                          value={metadataparam.tags ? metadataparam.tags.split(',').map(item => Number(item)) : []}
+                          onChange={(tags: number[]) => handleSearch({ ...metadataparam, tags: tags.join(',') })}
+                        >
+                          {tagList.list.map(item => (
+                            <Option key={item.id} value={item.id}>
+                              {item.name}
+                            </Option>
+                          ))}
                         </Select>
                       </div>
 
@@ -118,6 +148,7 @@ const Indicator = ({
                         >
                           所有事件
                         </span>
+
                         {activeMetadataList.list
                           .filter(item => {
                             if (!type) {
@@ -191,13 +222,21 @@ const Indicator = ({
 };
 
 const mapStateToProps = (state: IStoreState) => {
-  const { activeMetadataList, activeMetadataListParams } = state.metadata;
+  const { activeMetadataList, activeMetadataListParams, tagList, fieldList } = state.metadata;
   return {
     activeMetadataList,
-    activeMetadataListParams
+    activeMetadataListParams,
+    tagList,
+    fieldList
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IAction>) => bindActionCreators({}, dispatch);
+const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
+  bindActionCreators(
+    {
+      onGetActiveMetadataList: param => doGetActiveMetadataList.request(param)
+    },
+    dispatch
+  );
 
 export default connect(mapStateToProps, mapDispatchToProps)(Indicator);

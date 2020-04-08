@@ -6,7 +6,7 @@ export interface IFilterValue {
   key: string;
   type: string;
   value: any;
-  id: number;
+  id: string;
 }
 
 export interface IFilterInfo {
@@ -20,7 +20,7 @@ export interface IIndicatorInfo {
   customName?: string;
   type: string;
   filter: IFilterInfo;
-  id: number;
+  id: string;
 }
 
 export interface IEventAnalyseParam {
@@ -111,25 +111,49 @@ export interface IFunnelAnalyseData {
   type: string;
 }
 
-export interface IPathDataInfo {
-  id: number;
-  paths: number[];
+export interface IChildPageInfo {
+  id: string;
+  key: string;
+  filter: IFilterInfo;
+}
+
+export interface IChildPageData {
+  parentId: string;
+  key: string;
+  children: IChildPageInfo[];
 }
 
 export interface IPathAnalyseParam {
   indicators: IIndicatorInfo[];
   filter: IFilterInfo;
   indicatorType: string;
-  pathsData: IPathDataInfo[];
+  childPageData: IChildPageData[];
   type: string;
   projectId: number;
   dateType: string;
   dateStart: number;
   dateEnd: number;
 }
+
 export interface IPathAnalyseData {
-  list: any[];
-  type: string;
+  data: IPathAnalyseDataDataItem[];
+  links: IPathAnalyseDataLinksItem[];
+  indicatorType: string;
+}
+
+export interface IPathAnalyseDataDataItem {
+  id: string;
+  name: string;
+  value: number;
+}
+
+export interface IPathAnalyseDataLinksItem {
+  source: string;
+  target: string;
+  value: number;
+  conversionRate: number;
+  sourceName: string;
+  targetName: string;
 }
 
 export function fetchEventAnalyseData(param: IEventAnalyseParam) {
@@ -138,4 +162,8 @@ export function fetchEventAnalyseData(param: IEventAnalyseParam) {
 
 export function fetchFunnelAnalyseData(param: IFunnelAnalyseParam) {
   return fetch.post<IFunnelAnalyseData>('/analyse/funnel', { ...param, SHOW_LOADING: false });
+}
+
+export function fetchPathAnalyseData(param: IPathAnalyseParam) {
+  return fetch.post<IPathAnalyseData>('/analyse/path', { ...param, SHOW_LOADING: false });
 }

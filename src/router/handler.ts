@@ -114,6 +114,11 @@ const handlers = {
         action: doGetFieldList.request(),
         ttl: CACHE_TIME,
         disable: state.metadata.fieldList.list.length > 0
+      },
+      {
+        action: doGetTagList.request({ page: 1, pageSize: 1000, projectId: projectId }),
+        ttl: CACHE_TIME,
+        disable: state.metadata.tagList.list.length && projectId === state.metadata.tagList.list[0].projectId
       }
     ];
   },
@@ -203,7 +208,7 @@ const handlers = {
         disable: false
       }
     ];
-  },
+  }
 };
 
 export default handlers;

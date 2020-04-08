@@ -137,9 +137,11 @@ export const getAnalysePath = (type: string, projectId: number, reportId: number
       return ROUTE_PATH.analyseEvent + search;
     case 'FUNNEL':
       return ROUTE_PATH.analyseFunnel + search;
+    case 'PATH':
+      return ROUTE_PATH.analysePath + search;
     default:
       break;
   }
 };
 
-export const trimAll = (value: string): string => value.replace(/\s+/g,'');
+export const trimAll = (value: string): string => value.replace(/\s+/g, '');

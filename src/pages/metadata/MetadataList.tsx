@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { IStoreState, IAction, IPageData } from '@/types';
 import { doGetMetadataList, doDeleteMetadata, doEnableMetadata, doDisableMetadata } from '@/store/actions';
 import { bindActionCreators, Dispatch } from 'redux';
-import { Table, Button, Modal, Drawer, Tag } from 'antd';
+import { Table, Button, Modal, Drawer, Tag, Upload, Icon } from 'antd';
 import { PaginationConfig, SorterResult, ColumnProps, ColumnFilterItem } from 'antd/lib/table';
 import { IMetadataListParam, IMetadataInfo, ITagInfo, EMetadataType } from '@/api';
 import MetadataAddModal from './components/MetadataAddModal';
@@ -12,6 +12,8 @@ import MetadataEditModal from './components/MetadataEditModal';
 import TagManagement from './components/TagManagement';
 import MetadataListForm from './components/MetadataListForm';
 import { tagListFiltersSelector } from '@/store/selectors';
+import { UploadChangeParam } from 'antd/lib/upload';
+import { UploadFile } from 'antd/lib/upload/interface';
 const { confirm } = Modal;
 
 interface Props {
@@ -239,6 +241,8 @@ const MetadataList = ({
     setEditMetadataVisible(true);
   };
 
+  const handleImportChange = (info: UploadChangeParam<UploadFile<any>>) => {};
+
   return (
     <div className={style.wrapper}>
       <MetadataAddModal visible={addMetadataVisible} onClose={setAddMetadataVisible}></MetadataAddModal>
@@ -262,6 +266,12 @@ const MetadataList = ({
           <MetadataListForm defaultValue={metadataListParams} onSubmit={onGetMetadataList}></MetadataListForm>
         </div>
         <div className='app-fr'>
+          <Upload style={{ display: 'inline-block' }} action={'http://'} onChange={handleImportChange}>
+            <Button>
+              <Icon type='upload' /> 导入元数据
+            </Button>
+          </Upload>
+          &nbsp;
           <Button onClick={() => setAddMetadataVisible(true)}>新增元数据</Button>
           &nbsp;
           <Button onClick={() => setTagDrawerVisible(true)}>标签管理</Button>

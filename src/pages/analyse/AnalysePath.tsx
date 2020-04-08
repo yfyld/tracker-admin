@@ -9,7 +9,7 @@ import PathData from '@/components/PathData';
 
 import Filter from '@/components/Filter';
 import AnalyseHeader from './components/AnalyseHeader';
-import { IReportInfo, IFieldInfo, IPathAnalyseData, IPathAnalyseParam } from '@/api';
+import { IReportInfo, IFieldInfo, IPathAnalyseData, IPathAnalyseParam, EMetadataType, IIndicatorInfo } from '@/api';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { doAddReport, doUpdateReport, doGetPathAnalyse } from '@/store/actions';
@@ -36,8 +36,14 @@ const AnalysePath = ({
   pathAnalyseData,
   pathAnalyseParam
 }: Props) => {
-  const handleChange = (info: IPathAnalyseParam) => {
+  const handleChange = (info: IPathAnalyseParam, indicator?: IIndicatorInfo) => {
     info.projectId = projectId;
+    if (indicator) {
+      info.childPageData = info.childPageData.filter(item => item.parentId !== indicator.id);
+      for (let i in info.childPageData) {
+        info.childPageData[i].children = info.childPageData[i].children.filter(item => item.id !== indicator.id);
+      }
+    }
     onGetPathAnalyseData(info);
   };
 
@@ -74,19 +80,19 @@ const AnalysePath = ({
           <Indicator
             addText='+添加页面'
             hasCustomName
-            type='PAGE'
-            fieldList={fieldList}
+            type={EMetadataType.page}
             indicators={pathAnalyseParam.indicators}
-            onChange={indicators => handleChange({ ...pathAnalyseParam, indicators })}
+            onChange={(indicators, indicator) => handleChange({ ...pathAnalyseParam, indicators }, indicator)}
           />
         </div>
 
         <div className={style.ruleSection}>
-          <span className={style.ruleTitle}>路径:</span>
+          <span className={style.ruleTitle}>父级页:</span>
           <PathData
+            fieldList={fieldList}
             indicators={pathAnalyseParam.indicators}
-            pathsData={pathAnalyseParam.pathsData}
-            onChange={pathsData => handleChange({ ...pathAnalyseParam, pathsData })}
+            childPageData={pathAnalyseParam.childPageData}
+            onChange={childPageData => handleChange({ ...pathAnalyseParam, childPageData: childPageData })}
           ></PathData>
         </div>
       </div>
@@ -105,20 +111,13 @@ const AnalysePath = ({
           </Col>
           <Col span={6} offset={4}>
             <Group compact>
-              <Select
-                style={{ width: '33%' }}
-                value={pathAnalyseParam.type}
-                onChange={(type: string) => handleChange({ ...pathAnalyseParam, type })}
-              >
-                <Option value='FUNNEL'>桑椹图</Option>
-                <Option value='TABLE'>表格</Option>
-              </Select>
-
               <Button icon='download'>导出</Button>
             </Group>
           </Col>
         </Row>
-        <Spin spinning={analyseLoading}>1212</Spin>
+        <Spin spinning={analyseLoading}>
+          <AnalysePathChart data={pathAnalyseData}></AnalysePathChart>
+        </Spin>
         <div></div>
       </div>
     </div>

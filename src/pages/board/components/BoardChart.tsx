@@ -8,7 +8,10 @@ import {
   IEventAnalyseParam,
   IFunnelAnalyseData,
   IFunnelAnalyseParam,
-  fetchFunnelAnalyseData
+  fetchFunnelAnalyseData,
+  IPathAnalyseData,
+  fetchPathAnalyseData,
+  IPathAnalyseParam
 } from '@/api';
 import { Icon, Dropdown, Menu, Spin } from 'antd';
 import { Link } from 'react-router-dom';
@@ -18,6 +21,7 @@ import { ClickParam } from 'antd/lib/menu';
 import AnalyseEventChart from '@/pages/analyse/components/AnalyseEventChart';
 import { IDate } from '@/types';
 import AnalyseFunnelChart from '@/pages/analyse/components/AnalyseFunnelChart';
+import AnalysePathChart from '@/pages/analyse/components/AnalysePathChart';
 
 interface Props {
   analyseParam: any;
@@ -27,13 +31,7 @@ interface Props {
 }
 
 const BoardChart = ({ type, analyseParam, globalDate, refresh }: Props) => {
-  const [data, setdata] = React.useState<IEventAnalyseData | IFunnelAnalyseData>({
-    list: [],
-    dimension: '',
-    dimensionValues: [],
-    timeUnit: 'DAY',
-    type: 'LINE'
-  });
+  const [data, setdata] = React.useState<IEventAnalyseData | IFunnelAnalyseData | IPathAnalyseData>(null);
   const [loading, setloading] = React.useState(false);
   const { dateEnd, dateStart } = globalDate;
   React.useEffect(() => {
@@ -63,6 +61,18 @@ const BoardChart = ({ type, analyseParam, globalDate, refresh }: Props) => {
             setloading(false);
           });
         }
+        break;
+      case 'PATH':
+        {
+          let newParam: IPathAnalyseParam = JSON.parse(JSON.stringify(analyseParam));
+          if (dateEnd && dateStart) {
+            newParam = { ...newParam, dateEnd, dateStart, dateType: '' };
+          }
+          fetchPathAnalyseData(newParam).then(res => {
+            setdata(res.data);
+            setloading(false);
+          });
+        }
 
         break;
 
@@ -70,6 +80,14 @@ const BoardChart = ({ type, analyseParam, globalDate, refresh }: Props) => {
         break;
     }
   }, [analyseParam, globalDate, refresh]);
+
+  if (!data) {
+    return (
+      <Spin spinning={true}>
+        <div style={{ width: '100%', height: '100%' }}></div>
+      </Spin>
+    );
+  }
 
   switch (type) {
     case 'EVENT':
@@ -82,6 +100,12 @@ const BoardChart = ({ type, analyseParam, globalDate, refresh }: Props) => {
       return (
         <Spin spinning={loading}>
           <AnalyseFunnelChart data={data as IFunnelAnalyseData}></AnalyseFunnelChart>
+        </Spin>
+      );
+    case 'PATH':
+      return (
+        <Spin spinning={loading}>
+          <AnalysePathChart data={data as IPathAnalyseData}></AnalysePathChart>
         </Spin>
       );
     default:

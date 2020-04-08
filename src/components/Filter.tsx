@@ -4,6 +4,7 @@ import style from './Filter.module.less';
 import { IListData } from '@/types';
 import { IFieldInfo, IFilterInfo, IFilterValue } from '@/api';
 import { SelectValue } from 'antd/lib/select';
+import { v4 as uuidv4 } from 'uuid';
 const { Option, OptGroup } = Select;
 
 interface Props {
@@ -58,7 +59,7 @@ const Filter = ({ fieldList, filterInfo, onChange }: Props) => {
       type: null,
       key: null,
       value: null,
-      id: Date.now()
+      id: uuidv4()
     });
     onChange(newFilterInfo);
   };
@@ -84,7 +85,7 @@ const Filter = ({ fieldList, filterInfo, onChange }: Props) => {
           <div className={style.form}>
             {filterInfo.filterValues.map((filter, index) => (
               <Row gutter={16} key={filter.id}>
-                <Col span={3}>
+                <Col span={5}>
                   <Select value={filter.key} onChange={(val: string) => handleFieldChange(val, index)}>
                     {fieldList.list.map(field => (
                       <Option value={field.value} key={field.value}>
