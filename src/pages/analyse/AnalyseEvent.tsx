@@ -49,7 +49,7 @@ const AnalyseEvent = ({
             <Indicator
               hasType
               indicators={eventAnalyseParam.indicators}
-              onChange={indicators => handleChange({ ...eventAnalyseParam, indicators })}
+              onChange={(indicators) => handleChange({ ...eventAnalyseParam, indicators })}
             />
 
             {/* <Filter fieldList={fieldList} filterInfo={filter} /> */}
@@ -60,7 +60,7 @@ const AnalyseEvent = ({
           <span className={style.ruleTitle}>纬度:</span>
           <Dimension
             dimension={eventAnalyseParam.dimension}
-            onChange={dimension => handleChange({ ...eventAnalyseParam, dimension })}
+            onChange={(dimension) => handleChange({ ...eventAnalyseParam, dimension })}
           />
         </div>
 
@@ -68,7 +68,7 @@ const AnalyseEvent = ({
           <span className={style.ruleTitle}>筛选:</span>
           <Filter
             filterInfo={eventAnalyseParam.filter}
-            onChange={filter => handleChange({ ...eventAnalyseParam, filter })}
+            onChange={(filter) => handleChange({ ...eventAnalyseParam, filter })}
           />
         </div>
       </div>
@@ -78,7 +78,7 @@ const AnalyseEvent = ({
           <Col span={14}>
             <AnalyseRangePicker
               pickerProps={{ allowClear: false }}
-              onChange={time => handleChange({ ...eventAnalyseParam, ...time })}
+              onChange={(time) => handleChange({ ...eventAnalyseParam, ...time })}
               value={{
                 dateType: eventAnalyseParam.dateType,
                 dateEnd: eventAnalyseParam.dateEnd,
@@ -113,8 +113,12 @@ const AnalyseEvent = ({
             </Group>
           </Col>
         </Row>
+        <br />
+        <br />
         <Spin spinning={analyseLoading}>
-          <AnalyseEventChart data={eventAnalyseData}></AnalyseEventChart>
+          <div style={{ height: 600 }}>
+            <AnalyseEventChart data={eventAnalyseData}></AnalyseEventChart>
+          </div>
         </Spin>
         <div></div>
       </div>

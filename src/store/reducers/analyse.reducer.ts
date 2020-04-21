@@ -87,7 +87,7 @@ const initialState = (): AnalyseState => ({
       filterValues: []
     },
 
-    type: 'FUNNEL',
+    type: 'LIST',
     dateStart: DYNAMIC_TIME[8].startDate(),
     dateEnd: DYNAMIC_TIME[8].endDate(),
     dateType: DYNAMIC_TIME[8].value

@@ -6,8 +6,9 @@ import { IEventAnalyseParam, IEventAnalyseData } from '@/api';
 
 import style from './AnalyseEventChart.module.less';
 
-import { getFormatByTimeUnit, dayjs } from '@/utils';
+import { getFormatByTimeUnit, dayjs, getIndicatorTypeCname } from '@/utils';
 import { COLOR } from '@/constants';
+import NoData from '@/components/NoData';
 
 interface Props {
   data: IEventAnalyseData;
@@ -413,38 +414,42 @@ const AnalyseEventChart = ({ data }: Props) => {
   const hasData = !!data.list.find((item) => item.data.length > 0);
 
   if (!hasData) {
-    return <div>暂无数据</div>;
+    return <NoData></NoData>;
   }
 
-  const compare = data.list.map((item) => (
-    <div key={item.key} className={style.compareItem}>
-      <p>{item.metadataName}</p>
-      <p>
-        合计: <strong>{Number(item.compare.yoyCurrent)} </strong>{' '}
-      </p>
-      <p>
-        同比:
-        <span style={{ color: Number(item.compare.qoqPercentage) > 0 ? COLOR.success : COLOR.danger }}>
-          {' '}
-          {item.compare.yoyPercentage === 'NaN' ? '--' : Math.floor(Number(item.compare.yoyPercentage) * 100) + '%'}
-        </span>
-        &emsp; 环比:
-        <span style={{ color: Number(item.compare.qoqPercentage) > 0 ? COLOR.success : COLOR.danger }}>
-          {item.compare.qoqPercentage === 'NaN' ? '--' : Math.floor(Number(item.compare.qoqPercentage) * 100) + '%'}
-        </span>
-      </p>
+  const compare = (
+    <div className={style.compare}>
+      {data.list.map((item) => (
+        <div key={item.key} className={style.compareItem}>
+          <p>{item.metadataName}</p>
+          <p>
+            {getIndicatorTypeCname(data.type)}: <strong>{Number(item.compare.yoyCurrent)} </strong>{' '}
+          </p>
+          <p>
+            同比:
+            <span style={{ color: Number(item.compare.qoqPercentage) > 0 ? COLOR.success : COLOR.danger }}>
+              {' '}
+              {item.compare.yoyPercentage === 'NaN' ? '--' : Math.floor(Number(item.compare.yoyPercentage) * 100) + '%'}
+            </span>
+            &emsp; 环比:
+            <span style={{ color: Number(item.compare.qoqPercentage) > 0 ? COLOR.success : COLOR.danger }}>
+              {item.compare.qoqPercentage === 'NaN' ? '--' : Math.floor(Number(item.compare.qoqPercentage) * 100) + '%'}
+            </span>
+          </p>
+        </div>
+      ))}
     </div>
-  ));
+  );
 
   switch (data.type) {
     case 'TEXT':
-      return <div className={style.compare}>{compare}</div>;
+      return <div>{compare}</div>;
     case 'TABLE': {
       const tableData = getColumns(data);
       const tableScroll = tableData.length > 5 ? { x: tableData.length * 200 } : {};
       return (
         <div className={style.content}>
-          <div className={style.compare}>{compare}</div>
+          {compare}
           <div className={style.main}>
             <Table columns={tableData} dataSource={getTableData(data)} scroll={tableScroll} />
           </div>
@@ -455,7 +460,7 @@ const AnalyseEventChart = ({ data }: Props) => {
     default:
       return (
         <div className={style.content}>
-          <div className={style.compare}>{compare}</div>
+          {compare}
           <div className={style.main}>
             <ReactEcharts
               style={{ height: '100%' }}

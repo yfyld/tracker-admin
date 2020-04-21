@@ -62,7 +62,7 @@ const AnalyseFunnel = ({
           <span className={style.ruleTitle}>纬度:</span>
           <Dimension
             dimension={funnelAnalyseParam.dimension}
-            onChange={dimension => handleChange({ ...funnelAnalyseParam, dimension })}
+            onChange={(dimension) => handleChange({ ...funnelAnalyseParam, dimension })}
           />
         </div>
 
@@ -70,7 +70,7 @@ const AnalyseFunnel = ({
           <span className={style.ruleTitle}>筛选:</span>
           <Filter
             filterInfo={funnelAnalyseParam.filter}
-            onChange={filter => handleChange({ ...funnelAnalyseParam, filter })}
+            onChange={(filter) => handleChange({ ...funnelAnalyseParam, filter })}
           />
         </div>
 
@@ -80,7 +80,7 @@ const AnalyseFunnel = ({
             addText='+添加步骤'
             hasCustomName
             indicators={funnelAnalyseParam.indicators}
-            onChange={indicators => handleChange({ ...funnelAnalyseParam, indicators })}
+            onChange={(indicators) => handleChange({ ...funnelAnalyseParam, indicators })}
           />
         </div>
       </div>
@@ -89,7 +89,7 @@ const AnalyseFunnel = ({
         <Row>
           <Col span={14}>
             <AnalyseRangePicker
-              onChange={time => handleChange({ ...funnelAnalyseParam, ...time })}
+              onChange={(time) => handleChange({ ...funnelAnalyseParam, ...time })}
               value={{
                 dateType: funnelAnalyseParam.dateType,
                 dateEnd: funnelAnalyseParam.dateEnd,
@@ -114,7 +114,9 @@ const AnalyseFunnel = ({
           </Col>
         </Row>
         <Spin spinning={analyseLoading}>
-          <AnalyseFunnelChart data={funnelAnalyseData}></AnalyseFunnelChart>
+          <div style={{ height: 600 }}>
+            <AnalyseFunnelChart data={funnelAnalyseData}></AnalyseFunnelChart>
+          </div>
         </Spin>
       </div>
     </div>

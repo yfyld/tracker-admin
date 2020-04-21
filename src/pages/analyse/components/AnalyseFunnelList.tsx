@@ -7,6 +7,7 @@ import moment from 'moment';
 import { getFormatByTimeUnit, getIndicatorTypeCname } from '@/utils';
 import style from './AnalyseFunnelList.module.less';
 import { COLOR } from '@/constants';
+import NoData from '@/components/NoData';
 
 interface Props {
   data: IFunnelAnalyseData;
@@ -151,7 +152,7 @@ const AnalyseFunnelList = ({ data }: Props) => {
   const hasData = !!data.list.find((item) => item.data.length > 0);
 
   if (!hasData) {
-    return <div>暂无数据</div>;
+    return <NoData></NoData>;
   }
 
   return (

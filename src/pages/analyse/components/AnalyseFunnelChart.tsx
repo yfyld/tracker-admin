@@ -6,6 +6,7 @@ import { IEventAnalyseParam, IFunnelAnalyseData } from '@/api';
 import moment from 'moment';
 import { getFormatByTimeUnit } from '@/utils';
 import AnalyseFunnelList from './AnalyseFunnelList';
+import NoData from '@/components/NoData';
 
 interface Props {
   data: IFunnelAnalyseData;
@@ -135,39 +136,29 @@ const AnalyseFunnelChart = ({ data }: Props) => {
   const hasData = !!data.list.find((item) => item.allData.length > 0);
 
   if (!hasData) {
-    return <div>暂无数据</div>;
+    return <NoData></NoData>;
   }
 
   switch (data.type) {
     case 'TABLE': {
       const tableData = getColumns(data);
       const tableScroll = tableData.length > 5 ? { x: tableData.length * 200 } : {};
-      return (
-        <div>
-          <Table columns={tableData} dataSource={getTableData(data)} scroll={tableScroll} />
-        </div>
-      );
+      return <Table columns={tableData} dataSource={getTableData(data)} scroll={tableScroll} />;
     }
 
     case 'LIST': {
-      return (
-        <div>
-          <AnalyseFunnelList data={data}></AnalyseFunnelList>
-        </div>
-      );
+      return <AnalyseFunnelList data={data}></AnalyseFunnelList>;
     }
 
     default:
       return (
-        <div>
-          <ReactEcharts
-            style={{ height: '100%' }}
-            option={getOptions(data)}
-            theme='ts'
-            notMerge={true}
-            lazyUpdate={true}
-          />
-        </div>
+        <ReactEcharts
+          style={{ height: '100%' }}
+          option={getOptions(data)}
+          theme='ts'
+          notMerge={true}
+          lazyUpdate={true}
+        />
       );
   }
 };

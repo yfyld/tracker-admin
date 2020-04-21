@@ -106,7 +106,10 @@ const Indicator = ({
   }
 
   function handleSearch(param: IMetadataListParam) {
-    onGetActiveMetadataList(param);
+    setmetadataparam(param);
+    setTimeout(() => {
+      onGetActiveMetadataList(param);
+    }, 300);
   }
 
   const allMetadata = {
@@ -127,14 +130,15 @@ const Indicator = ({
               </Col>
               <Col span={3}>
                 <Dropdown
+                  trigger={['click']}
                   overlay={
                     <div className={style.content}>
-                      <div onClick={e => e.stopPropagation()}>
+                      <div onClick={(e) => e.stopPropagation()}>
                         <Search
                           placeholder='搜索事件'
                           value={metadataparam.name}
-                          onChange={e => setmetadataparam({ ...metadataparam, name: e.target.value })}
-                          onSearch={name => handleSearch({ ...metadataparam, name })}
+                          onChange={(e) => setmetadataparam({ ...metadataparam, name: e.target.value })}
+                          onSearch={(name) => handleSearch({ ...metadataparam, name })}
                           style={{ width: 200 }}
                         />
                         &nbsp;
@@ -142,10 +146,10 @@ const Indicator = ({
                           placeholder='根据标签筛选'
                           style={{ width: 200 }}
                           mode='multiple'
-                          value={metadataparam.tags ? metadataparam.tags.split(',').map(item => Number(item)) : []}
+                          value={metadataparam.tags ? metadataparam.tags.split(',').map((item) => Number(item)) : []}
                           onChange={(tags: number[]) => handleSearch({ ...metadataparam, tags: tags.join(',') })}
                         >
-                          {tagList.list.map(item => (
+                          {tagList.list.map((item) => (
                             <Option key={item.id} value={item.id}>
                               {item.name}
                             </Option>
@@ -163,13 +167,13 @@ const Indicator = ({
                         </span>
 
                         {activeMetadataList.list
-                          .filter(item => {
+                          .filter((item) => {
                             if (!type) {
                               return true;
                             }
                             return item.type === type;
                           })
-                          .map(item => (
+                          .map((item) => (
                             <span
                               onClick={() => handleSelectMetadata(item, index)}
                               className={item.code === indicatorInfo.metadataCode ? style.active : ''}
@@ -190,7 +194,7 @@ const Indicator = ({
                   <Input
                     defaultValue={indicatorInfo.customName}
                     placeholder='自定义名称'
-                    onBlur={event => handleNameChange(event.target.value, index)}
+                    onBlur={(event) => handleNameChange(event.target.value, index)}
                   />
                 </Col>
               )}
@@ -223,7 +227,7 @@ const Indicator = ({
               <Filter
                 fieldList={fieldListMap[indicatorInfo.metadataCode] || { list: EVENT_ATTRS }}
                 filterInfo={indicatorInfo.filter}
-                onChange={filter => handleFilterChange(filter, index)}
+                onChange={(filter) => handleFilterChange(filter, index)}
               ></Filter>
             </div>
           </div>
@@ -247,8 +251,8 @@ const mapStateToProps = (state: IStoreState) => {
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
-      onGetActiveMetadataList: param => doGetActiveMetadataList.request(param),
-      onGetFieldList: param => doGetFieldList.request(param)
+      onGetActiveMetadataList: (param) => doGetActiveMetadataList.request(param),
+      onGetFieldList: (param) => doGetFieldList.request(param)
     },
 
     dispatch
