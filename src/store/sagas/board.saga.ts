@@ -24,6 +24,7 @@ import {
   fetchMyBoardList
 } from '@/api';
 import { select, call } from '@/utils';
+import { message } from 'antd';
 
 function* getBoardList(action: ReturnType<typeof doGetBoardList.request>): Generator {
   try {
@@ -45,7 +46,7 @@ function* getBoardInfo(action: ReturnType<typeof doGetBoardInfo.request>): Gener
 
 function* addBoard(action: ReturnType<typeof doAddBoard.request>): Generator {
   try {
-    const projectId = yield* select(state => state.project.projectInfo.id);
+    const projectId = yield* select((state) => state.project.projectInfo.id);
     const response = yield* call(fetchBoardAdd, { ...action.payload, projectId });
     yield put(doAddBoard.success());
     yield put(push(`${ROUTE_PATH.board}?projectId=${projectId}&boardId=${response.data.id}`));
@@ -59,11 +60,12 @@ function* updateBoard(action: ReturnType<typeof doUpdateBoard.request>): Generat
   try {
     yield call(fetchBoardUpdate, action.payload);
     yield put(doUpdateBoard.success());
-    const projectId = yield* select(state => state.project.projectInfo.id);
+    const projectId = yield* select((state) => state.project.projectInfo.id);
     yield [
       put(doGetBoardInfo.request({ id: action.payload.id, projectId })),
       put(doGetBoardList.request({ projectId, page: 1, pageSize: 1000 }))
     ];
+    message.success('保存成功');
   } catch (error) {
     yield put(doUpdateBoard.failure(error));
   }
@@ -74,13 +76,13 @@ function* deleteBoard(action: ReturnType<typeof doDeleteBoard.request>): Generat
     yield call(fetchBoardDel, action.payload);
     yield put(doDeleteBoard.success());
 
-    const pathname = yield* select(state => state.router.location.pathname);
+    const pathname = yield* select((state) => state.router.location.pathname);
     if (pathname === ROUTE_PATH.myBoard) {
       alert('获取新list');
     } else {
-      const projectId = yield* select(state => state.project.projectInfo.id);
+      const projectId = yield* select((state) => state.project.projectInfo.id);
       yield put(doGetBoardList.request({ projectId, page: 1, pageSize: 1000 }));
-      const boardList = yield* select(state => state.board.boardList);
+      const boardList = yield* select((state) => state.board.boardList);
       const path = boardList.list[0]
         ? `${ROUTE_PATH.board}?projectId=${projectId}&boardId=${boardList.list[0].id}`
         : `${ROUTE_PATH.analyseEvent}?projectId=${projectId}`;
@@ -95,12 +97,12 @@ function* appendReportToBoard(action: ReturnType<typeof doAppendReportToBoard.re
   try {
     yield call(fetchReportAppendToBoard, action.payload);
     yield put(doAppendReportToBoard.success());
-    const location = yield* select(state => state.router.location);
-    const projectId = yield* select(state => state.project.projectInfo.id);
+    const location = yield* select((state) => state.router.location);
+    const projectId = yield* select((state) => state.project.projectInfo.id);
     if (location.pathname === ROUTE_PATH.board) {
       yield put(doGetBoardInfo.request({ projectId, id: action.payload.boardIds[0] }));
     } else if (location.pathname === ROUTE_PATH.reportList) {
-      const param = yield* select(state => state.report.reportListParams);
+      const param = yield* select((state) => state.report.reportListParams);
       yield put(doGetReportList.request(param));
     } else {
       yield put(doGetReportInfo.request({ projectId, id: action.payload.reportId }));

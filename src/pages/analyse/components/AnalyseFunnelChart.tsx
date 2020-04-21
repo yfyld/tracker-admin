@@ -32,7 +32,7 @@ const getOptions = (data: IFunnelAnalyseData): ObjectMap => {
         label: {
           show: true,
           position: 'inside',
-          formatter: function(param: any) {
+          formatter: function (param: any) {
             return `${param.name}(${param.value})`;
           }
         },
@@ -41,7 +41,7 @@ const getOptions = (data: IFunnelAnalyseData): ObjectMap => {
             fontSize: 20
           }
         },
-        data: data.list[0].allData.map(item => ({
+        data: data.list[0].allData.map((item) => ({
           name: item.customName || item.metadataName,
           value: item.count
         }))
@@ -107,7 +107,7 @@ const getColumns = (data: IFunnelAnalyseData) => {
 };
 
 const getTableData = (data: IFunnelAnalyseData): TableColumnProps[] => {
-  const tableData = data.list.map(item => {
+  const tableData = data.list.map((item) => {
     return {
       key: item.dimension,
       time: item.dimension,
@@ -116,7 +116,7 @@ const getTableData = (data: IFunnelAnalyseData): TableColumnProps[] => {
         total[step.key + '_rate'] = step.conversionRate;
         return total;
       }, {}),
-      children: item.data.map(member => ({
+      children: item.data.map((member) => ({
         key: member.time,
         time: member.time,
         ...member.steps.reduce((total: { [props: string]: any }, step) => {
@@ -132,7 +132,7 @@ const getTableData = (data: IFunnelAnalyseData): TableColumnProps[] => {
 };
 
 const AnalyseFunnelChart = ({ data }: Props) => {
-  const hasData = !!data.list.find(item => item.allData.length > 0);
+  const hasData = !!data.list.find((item) => item.allData.length > 0);
 
   if (!hasData) {
     return <div>暂无数据</div>;
@@ -160,7 +160,13 @@ const AnalyseFunnelChart = ({ data }: Props) => {
     default:
       return (
         <div>
-          <ReactEcharts option={getOptions(data)} theme='ts' notMerge={true} lazyUpdate={true} />
+          <ReactEcharts
+            style={{ height: '100%' }}
+            option={getOptions(data)}
+            theme='ts'
+            notMerge={true}
+            lazyUpdate={true}
+          />
         </div>
       );
   }

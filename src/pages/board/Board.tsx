@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import style from './Board.module.less';
 import { IStoreState, IAction, IPageData, IDate, IDeleteParam } from '@/types';
 import { bindActionCreators, Dispatch } from 'redux';
-import { Icon, Button, Popover, Drawer, Modal } from 'antd';
+import { Icon, Button, Popover, Drawer, Modal, message } from 'antd';
 import {
   IReportInfo,
   IBoardInfo,
@@ -64,8 +64,14 @@ const BasicLayout = ({
   const [updateReportModelVisible, setupdateReportModelVisible] = React.useState(false);
   const [curReportInfo, setcurReportInfo] = React.useState<IReportInfo>(null);
 
+  const [layout, setlayout] = React.useState(boardInfo.layout);
+
+  React.useEffect(() => {
+    setlayout(boardInfo.layout);
+  }, [boardInfo]);
+
   function generateDOM(reportList: IReportInfo[]) {
-    return reportList.map(item => (
+    return reportList.map((item) => (
       <div key={item.id}>
         <BoardGridPane
           onSetPane={handlePaneUpdate}
@@ -81,7 +87,7 @@ const BasicLayout = ({
   const handleDeletePane = (id: number) => {
     const newBoardInfo: IBoardInfo = JSON.parse(JSON.stringify(boardInfo));
 
-    const index = newBoardInfo.reports.findIndex(item => item.id === id);
+    const index = newBoardInfo.reports.findIndex((item) => item.id === id);
     if (index >= 0) {
       newBoardInfo.reports.splice(index, 1);
       onSave(newBoardInfo);
@@ -89,8 +95,14 @@ const BasicLayout = ({
   };
 
   function handleLayoutChange(layout: RGL.Layout[]) {
+    setlayout(layout);
+    //onSave({ id, projectId, layout });
+  }
+
+  function handleSave() {
     const { id, projectId } = boardInfo;
     if (JSON.stringify(layout) === JSON.stringify(boardInfo.layout)) {
+      message.info('当前布局未修改');
       return;
     }
     onSave({ id, projectId, layout });
@@ -158,7 +170,7 @@ const BasicLayout = ({
         visible={addReportDrawerVisible}
       >
         <ReportDrawerContent
-          onSearch={name => onGetReportList({ page: 1, pageSize: 100, projectId: boardInfo.projectId, name })}
+          onSearch={(name) => onGetReportList({ page: 1, pageSize: 100, projectId: boardInfo.projectId, name })}
           reportList={reportList}
           name={reportListParams.name}
           boardId={boardInfo.id}
@@ -175,9 +187,9 @@ const BasicLayout = ({
             value={globalDate}
             onChange={onChangeBoardGlobalDate}
           ></AnalyseRangePicker>
-
+          &nbsp;
           <ButtonGroup>
-            {/* <Button icon='save'></Button> */}
+            <Button icon='save' onClick={handleSave}></Button>
             <Button icon='delete' onClick={handleDelete}></Button>
             <Button icon='reload' onClick={() => setrefresh(refresh + 1)}></Button>
             <Popover placement='bottom' content={content} title='添加报表'>
@@ -190,7 +202,7 @@ const BasicLayout = ({
         <ReactGridLayout
           key={boardInfo.id}
           className='layout'
-          layout={boardInfo.layout}
+          layout={layout}
           onLayoutChange={handleLayoutChange}
           cols={24}
           rowHeight={30}
@@ -205,14 +217,14 @@ const BasicLayout = ({
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
-      onSave: params => doUpdateBoard.request(params),
-      onChangeBoardGlobalDate: params => doChangeBoardGlobalDate(params),
+      onSave: (params) => doUpdateBoard.request(params),
+      onChangeBoardGlobalDate: (params) => doChangeBoardGlobalDate(params),
       onAppendReportToBoard: (params: IReportAppendToBoard) => {
         return doAppendReportToBoard.request(params);
       },
       onUpdateReport: (params: IReportUpdateParam) => doUpdateReport.request(params),
       onGetReportList: (params: IReportListParam) => doGetReportList.request(params),
-      onDeleteBoard: params => doDeleteBoard.request(params)
+      onDeleteBoard: (params) => doDeleteBoard.request(params)
     },
     dispatch
   );

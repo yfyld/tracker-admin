@@ -49,7 +49,7 @@ const BoardGridPane = ({ reportInfo, onDeletePane, globalDate, onSetPane, editab
             <DateParse
               dateStart={dateStart || reportInfo.dateStart}
               dateEnd={dateEnd || reportInfo.dateEnd}
-              dateType={reportInfo.dateType}
+              dateType={dateStart ? 'STATIC' : reportInfo.dateType}
             ></DateParse>
           </div>
         </h3>

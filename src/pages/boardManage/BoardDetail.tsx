@@ -28,7 +28,7 @@ interface Props {
 const BasicLayout = ({ boardInfo, globalDate, onChangeBoardGlobalDate }: Props) => {
   const [refresh, setrefresh] = React.useState(1);
   function generateDOM(reportList: IReportInfo[]) {
-    return reportList.map(item => (
+    return reportList.map((item) => (
       <div key={item.id}>
         <BoardGridPane globalDate={globalDate} refresh={refresh} reportInfo={item} editable={false} />
       </div>
@@ -40,13 +40,15 @@ const BasicLayout = ({ boardInfo, globalDate, onChangeBoardGlobalDate }: Props) 
       <div className={style.header}>
         <h2 className={style.title}>{boardInfo.name}</h2>
         <div className={style.btnBox}>
-          {globalDate.dateStart ? (
-            <AnalyseRangePicker value={globalDate} onChange={onChangeBoardGlobalDate}></AnalyseRangePicker>
-          ) : (
-            <ButtonGroup>
-              <Button icon='reload' onClick={() => setrefresh(refresh + 1)}></Button>
-            </ButtonGroup>
-          )}
+          <AnalyseRangePicker
+            defalutShowIcon={!globalDate.dateStart}
+            value={globalDate}
+            onChange={onChangeBoardGlobalDate}
+          ></AnalyseRangePicker>
+          &nbsp;
+          <ButtonGroup>
+            <Button icon='reload' onClick={() => setrefresh(refresh + 1)}></Button>
+          </ButtonGroup>
         </div>
       </div>
       <div className={style.main}>
@@ -69,7 +71,7 @@ const BasicLayout = ({ boardInfo, globalDate, onChangeBoardGlobalDate }: Props) 
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
-      onChangeBoardGlobalDate: params => doChangeBoardGlobalDate(params),
+      onChangeBoardGlobalDate: (params) => doChangeBoardGlobalDate(params),
 
       getReportList: (params: IReportListParam) => doGetReportList.request(params)
     },
