@@ -304,7 +304,13 @@ const MetadataList = ({
         </div>
       </div>
       <div className='app-card'>
-        <Table rowKey='id' columns={columns} dataSource={metadataList.list} onChange={handleChange} />
+        <Table
+          rowKey='id'
+          columns={columns}
+          dataSource={metadataList.list}
+          onChange={handleChange}
+          pagination={{ pageSize: 20, total: metadataList.totalCount }}
+        />
       </div>
     </div>
   );

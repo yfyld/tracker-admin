@@ -13,6 +13,8 @@ export interface IBoardInfo {
   reports: IReportInfo[];
 }
 
+export type IBoardList = IPageData<IBoardInfo>;
+
 export interface IBoardListParam extends IPageQuery {
   projectId?: number;
   status?: number;

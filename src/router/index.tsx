@@ -31,8 +31,6 @@ export default class Routes extends React.Component {
             <Route path='/project' component={CoreRouter} />
             <Route path='/admin' component={AdminRouter}></Route>
             <Route path='/' component={VerticalRouter}></Route>
-
-            <Redirect from='*' to={ROUTE_PATH.home} />
           </Switch>
         </React.Suspense>
       </ConnectedRouter>

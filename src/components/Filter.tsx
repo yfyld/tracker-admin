@@ -5,15 +5,16 @@ import { IListData } from '@/types';
 import { IFieldInfo, IFilterInfo, IFilterValue } from '@/api';
 import { SelectValue } from 'antd/lib/select';
 import { v4 as uuidv4 } from 'uuid';
+import { EVENT_ATTRS } from '@/constants';
 const { Option, OptGroup } = Select;
 
 interface Props {
-  fieldList: IListData<IFieldInfo>;
+  fieldList?: IListData<IFieldInfo>;
   filterInfo: IFilterInfo;
   onChange: (filterInfo: IFilterInfo) => any;
 }
 
-const Filter = ({ fieldList, filterInfo, onChange }: Props) => {
+const Filter = ({ fieldList = { list: EVENT_ATTRS }, filterInfo, onChange }: Props) => {
   const [recommend, setrecommend] = React.useState<string[]>([]);
   const handleFieldChange = (value: string, index: number) => {
     const newFilterInfo: IFilterInfo = JSON.parse(JSON.stringify(filterInfo));

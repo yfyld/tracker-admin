@@ -145,3 +145,18 @@ export const getAnalysePath = (type: string, projectId: number, reportId: number
 };
 
 export const trimAll = (value: string): string => value.replace(/\s+/g, '');
+
+export const getIndicatorTypeCname = (type: string) => {
+  switch (type) {
+    case 'PV':
+      return '总数';
+    case 'UV':
+      return '用户数';
+    case 'APV':
+      return '人均次数';
+    case 'DPV':
+      return '日均次数';
+    default:
+      return '日均用户数';
+  }
+};

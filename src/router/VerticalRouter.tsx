@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import VerticalLayout from '@/components/VerticalLayout';
 import ProgressBar from '@/components/ProgressBar';
@@ -33,6 +33,7 @@ export default class VerticalRouter extends React.Component {
             <PrivateRoute exact path={ROUTE_PATH.teamInfo} component={TeamInfo} />
             <PrivateRoute exact path={ROUTE_PATH.myBoard} component={MyBoard} />
             <PrivateRoute exact path={ROUTE_PATH.boardDetail} component={BoardDetail} />
+            <Redirect from='*' to={ROUTE_PATH.projectList} />
           </Switch>
         </React.Suspense>
       </VerticalLayout>

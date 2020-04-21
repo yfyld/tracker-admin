@@ -16,6 +16,8 @@ export interface IReportInfo {
   dateType: string;
 }
 
+export type IReportList = IPageData<IReportInfo>;
+
 export interface IReportListParam {
   page: number;
   pageSize: number;

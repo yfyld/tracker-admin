@@ -3,15 +3,16 @@ import { Select, Row, Col, Icon } from 'antd';
 import style from './Dimension.module.less';
 import { IFieldInfo } from '@/api';
 import { IListData } from '@/types';
+import { EVENT_ATTRS } from '@/constants';
 const { Option, OptGroup } = Select;
 
 interface Props {
-  fieldList: IListData<IFieldInfo>;
+  fieldList?: IListData<IFieldInfo>;
   dimension: string;
   onChange: (param: string) => any;
 }
 
-const Dimension = ({ fieldList, dimension, onChange }: Props) => {
+const Dimension = ({ fieldList = { list: EVENT_ATTRS }, dimension, onChange }: Props) => {
   return (
     <div className={style.wrapper}>
       <Row className={style.item}>

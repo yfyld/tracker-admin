@@ -1,3 +1,4 @@
+import { IFieldListMap } from './../reducers/metadata.reducer';
 import { IDeleteParam, IListData } from './../../types/index';
 import {
   IFieldInfo,
@@ -5,7 +6,8 @@ import {
   ITagUpdateParam,
   ITagListParam,
   ITagList,
-  IMetadataAddByExcelParam
+  IMetadataAddByExcelParam,
+  IFieldListParam
 } from './../../api/metadata.api';
 import { createAsyncAction } from 'typesafe-actions';
 import { IPageData } from '@/types';
@@ -64,7 +66,7 @@ export const doGetFieldList = createAsyncAction(
   actionType.GET_FIELD_LIST_REQUEST,
   actionType.GET_FIELD_LIST_SUCCESS,
   actionType.GET_FIELD_LIST_FAILURE
-)<undefined, IListData<IFieldInfo>, Error>();
+)<IFieldListParam, IFieldListMap, Error>();
 
 export const doGetTagList = createAsyncAction(
   actionType.GET_TAG_LIST_REQUEST,

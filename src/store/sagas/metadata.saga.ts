@@ -125,8 +125,13 @@ function* disableMetadata(action: ReturnType<typeof doDisableMetadata.request>):
 
 function* getFieldList(action: ReturnType<typeof doGetFieldList.request>): Generator {
   try {
-    const response = yield* call(fetchFieldList);
-    yield put(doGetFieldList.success(response.data));
+    const fieldListMap = yield* select(state => state.metadata.fieldListMap);
+    if (fieldListMap[action.payload.metadataCode]) {
+      return;
+    }
+    const response = yield* call(fetchFieldList, action.payload);
+    fieldListMap[action.payload.metadataCode] = response.data;
+    yield put(doGetFieldList.success(fieldListMap));
   } catch (error) {
     yield put(doGetFieldList.failure(error));
   }

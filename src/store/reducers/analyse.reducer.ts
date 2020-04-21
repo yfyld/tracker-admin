@@ -57,7 +57,15 @@ const initialState = (): AnalyseState => ({
     dateEnd: DYNAMIC_TIME[1].endDate(),
     dateType: DYNAMIC_TIME[1].value
   },
-  funnelAnalyseData: { list: [], dimension: '', dimensionValues: [], timeUnit: 'DAY', type: 'LINE', conversionRate: 0 },
+  funnelAnalyseData: {
+    list: [],
+    dimension: '',
+    indicatorType: 'PV',
+    dimensionValues: [],
+    timeUnit: 'DAY',
+    type: 'LINE',
+    conversionRate: 0
+  },
   funnelAnalyseParam: {
     projectId: null,
     indicatorType: 'PV',

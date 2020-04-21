@@ -106,6 +106,7 @@ export interface IFunnelAnalyseData {
   list: IFunnelAnalyseDataItem[];
   dimension: string;
   dimensionValues: string[];
+  indicatorType: string;
   timeUnit: string;
   conversionRate: number;
   type: string;

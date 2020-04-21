@@ -87,7 +87,13 @@ export interface IFieldInfo {
   name: string;
   value: string;
   type: string;
+  eventType: number;
   recommend: string[];
+}
+
+export interface IFieldListParam {
+  metadataCode: string;
+  projectId: number;
 }
 
 export interface IMetadataAddByExcelParam {
@@ -140,6 +146,6 @@ export function fetchTagDel(projectId: number, tagId: number) {
   return fetch.delete(`/metadata/tag/${projectId}/${tagId}`);
 }
 
-export function fetchFieldList() {
-  return fetch.get<IPageData<IFieldInfo>>('/metadata/fields');
+export function fetchFieldList(param: IFieldListParam) {
+  return fetch.get<IPageData<IFieldInfo>>('/metadata/fields', param);
 }

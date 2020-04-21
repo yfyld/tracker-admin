@@ -8,16 +8,17 @@ import Indicator from '@/components/Indicator';
 import ChildPage from './ChildPage';
 import { IListData } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
+import { EVENT_ATTRS } from '@/constants';
 const { Option } = Select;
 
 interface Props {
   childPageData: IChildPageData[];
   indicators: IIndicatorInfo[];
-  fieldList: IListData<IFieldInfo>;
+  fieldList?: IListData<IFieldInfo>;
   onChange: (param: IChildPageData[]) => any;
 }
 
-const PathData = ({ childPageData, indicators, onChange, fieldList }: Props) => {
+const PathData = ({ childPageData, indicators, onChange, fieldList = { list: EVENT_ATTRS } }: Props) => {
   const [drawerVisible, setdrawerVisible] = React.useState(false);
   const [selectedPath, setselectedPath] = React.useState<number[]>([]);
   const [selectedParentPageIndex, setselectedParentPageIndex] = React.useState<number>(null);

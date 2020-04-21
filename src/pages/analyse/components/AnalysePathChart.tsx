@@ -4,7 +4,7 @@ import { Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import { IEventAnalyseParam, IPathAnalyseData } from '@/api';
 import moment from 'moment';
-import { getFormatByTimeUnit } from '@/utils';
+import { getFormatByTimeUnit, getIndicatorTypeCname } from '@/utils';
 import AnalyseFunnelList from './AnalyseFunnelList';
 
 interface Props {
@@ -18,7 +18,7 @@ const getOptions = (data: IPathAnalyseData): ObjectMap => {
 
       formatter: (params: any) => {
         if (params.dataType === 'node') {
-          return `${params.data.name} (${params.value})`;
+          return `${params.data.name} \n${getIndicatorTypeCname(data.indicatorType)}:${params.value}次`;
         } else {
           return `${params.data.sourceName} -> ${params.data.targetName}: ${params.data.value}(转化率${params.data.conversionRate}%)`;
         }
@@ -33,11 +33,13 @@ const getOptions = (data: IPathAnalyseData): ObjectMap => {
       label: {
         position: 'insideTopLeft',
         formatter: (params: any) => {
-          return `${params.data.name}(${params.data.value})`;
+          return `${params.data.name.replace(/([\u4e00-\u9fa5]{6})/, '$1\n')}\n\n${getIndicatorTypeCname(
+            data.indicatorType
+          )}:${params.data.value}次`;
         }
       },
-      links: data.links,
-      data: data.data.map(item => ({ id: item.id, name: item.name, value: item.value }))
+      links: data.links.filter((item) => item.value),
+      data: data.data.map((item) => ({ id: item.id, name: item.name, value: item.value }))
     }
   };
 
@@ -45,7 +47,9 @@ const getOptions = (data: IPathAnalyseData): ObjectMap => {
 };
 
 const AnalysePathChart = ({ data }: Props) => {
-  return <ReactEcharts option={getOptions(data)} theme='ts' notMerge={true} lazyUpdate={true} />;
+  return (
+    <ReactEcharts style={{ height: '100%' }} option={getOptions(data)} theme='ts' notMerge={true} lazyUpdate={true} />
+  );
 };
 
 export default AnalysePathChart;

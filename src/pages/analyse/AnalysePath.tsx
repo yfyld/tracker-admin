@@ -14,13 +14,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { doAddReport, doUpdateReport, doGetPathAnalyse } from '@/store/actions';
 import { IAction, IStoreState, IListData, IDate } from '@/types';
-import { DYNAMIC_TIME } from '@/constants';
+import { DYNAMIC_TIME, EVENT_ATTRS } from '@/constants';
 import AnalysePathChart from './components/AnalysePathChart';
 const { Option } = Select;
 const { Panel } = Collapse;
 const { Group } = Input;
 interface Props {
-  fieldList: IListData<IFieldInfo>;
   onGetPathAnalyseData: (param: IPathAnalyseParam) => IAction;
   projectId: number;
   pathAnalyseData: IPathAnalyseData;
@@ -30,7 +29,7 @@ interface Props {
 
 const AnalysePath = ({
   analyseLoading,
-  fieldList,
+
   onGetPathAnalyseData,
   projectId,
   pathAnalyseData,
@@ -39,9 +38,9 @@ const AnalysePath = ({
   const handleChange = (info: IPathAnalyseParam, indicator?: IIndicatorInfo) => {
     info.projectId = projectId;
     if (indicator) {
-      info.childPageData = info.childPageData.filter(item => item.parentId !== indicator.id);
+      info.childPageData = info.childPageData.filter((item) => item.parentId !== indicator.id);
       for (let i in info.childPageData) {
-        info.childPageData[i].children = info.childPageData[i].children.filter(item => item.id !== indicator.id);
+        info.childPageData[i].children = info.childPageData[i].children.filter((item) => item.id !== indicator.id);
       }
     }
     onGetPathAnalyseData(info);
@@ -69,9 +68,8 @@ const AnalysePath = ({
         <div className={style.ruleSection}>
           <span className={style.ruleTitle}>筛选:</span>
           <Filter
-            fieldList={fieldList}
             filterInfo={pathAnalyseParam.filter}
-            onChange={filter => handleChange({ ...pathAnalyseParam, filter })}
+            onChange={(filter) => handleChange({ ...pathAnalyseParam, filter })}
           />
         </div>
 
@@ -89,10 +87,9 @@ const AnalysePath = ({
         <div className={style.ruleSection}>
           <span className={style.ruleTitle}>父级页:</span>
           <PathData
-            fieldList={fieldList}
             indicators={pathAnalyseParam.indicators}
             childPageData={pathAnalyseParam.childPageData}
-            onChange={childPageData => handleChange({ ...pathAnalyseParam, childPageData: childPageData })}
+            onChange={(childPageData) => handleChange({ ...pathAnalyseParam, childPageData: childPageData })}
           ></PathData>
         </div>
       </div>
@@ -101,7 +98,7 @@ const AnalysePath = ({
         <Row>
           <Col span={14}>
             <AnalyseRangePicker
-              onChange={time => handleChange({ ...pathAnalyseParam, ...time })}
+              onChange={(time) => handleChange({ ...pathAnalyseParam, ...time })}
               value={{
                 dateType: pathAnalyseParam.dateType,
                 dateEnd: pathAnalyseParam.dateEnd,
@@ -116,7 +113,9 @@ const AnalysePath = ({
           </Col>
         </Row>
         <Spin spinning={analyseLoading}>
-          <AnalysePathChart data={pathAnalyseData}></AnalysePathChart>
+          <div style={{ height: 800 }}>
+            <AnalysePathChart data={pathAnalyseData}></AnalysePathChart>
+          </div>
         </Spin>
         <div></div>
       </div>
@@ -125,11 +124,9 @@ const AnalysePath = ({
 };
 
 const mapStateToProps = (state: IStoreState) => {
-  const { fieldList } = state.metadata;
   const projectId = state.project.projectInfo.id;
   const { pathAnalyseData, pathAnalyseParam, analyseLoading } = state.analyse;
   return {
-    fieldList,
     projectId,
     pathAnalyseData,
     pathAnalyseParam,

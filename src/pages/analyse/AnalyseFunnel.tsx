@@ -13,13 +13,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { doAddReport, doUpdateReport, doGetFunnelAnalyse } from '@/store/actions';
 import { IAction, IStoreState, IListData, IDate } from '@/types';
-import { DYNAMIC_TIME } from '@/constants';
+import { DYNAMIC_TIME, EVENT_ATTRS } from '@/constants';
 import AnalyseFunnelChart from './components/AnalyseFunnelChart';
 const { Option } = Select;
 const { Panel } = Collapse;
 const { Group } = Input;
 interface Props {
-  fieldList: IListData<IFieldInfo>;
   onGetFunnelAnalyseData: (param: IFunnelAnalyseParam) => IAction;
   projectId: number;
   funnelAnalyseData: IFunnelAnalyseData;
@@ -29,7 +28,7 @@ interface Props {
 
 const AnalyseFunnel = ({
   analyseLoading,
-  fieldList,
+
   onGetFunnelAnalyseData,
   projectId,
   funnelAnalyseData,
@@ -63,7 +62,6 @@ const AnalyseFunnel = ({
           <span className={style.ruleTitle}>纬度:</span>
           <Dimension
             dimension={funnelAnalyseParam.dimension}
-            fieldList={fieldList}
             onChange={dimension => handleChange({ ...funnelAnalyseParam, dimension })}
           />
         </div>
@@ -71,7 +69,6 @@ const AnalyseFunnel = ({
         <div className={style.ruleSection}>
           <span className={style.ruleTitle}>筛选:</span>
           <Filter
-            fieldList={fieldList}
             filterInfo={funnelAnalyseParam.filter}
             onChange={filter => handleChange({ ...funnelAnalyseParam, filter })}
           />
@@ -125,11 +122,9 @@ const AnalyseFunnel = ({
 };
 
 const mapStateToProps = (state: IStoreState) => {
-  const { fieldList } = state.metadata;
   const projectId = state.project.projectInfo.id;
   const { funnelAnalyseData, funnelAnalyseParam, analyseLoading } = state.analyse;
   return {
-    fieldList,
     projectId,
     funnelAnalyseData,
     funnelAnalyseParam,

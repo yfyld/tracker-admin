@@ -43,7 +43,7 @@ const BoardChart = ({ type, analyseParam, globalDate, refresh }: Props) => {
           if (dateEnd && dateStart) {
             newParam = { ...newParam, dateEnd, dateStart, dateType: '' };
           }
-          fetchEventAnalyseData(newParam).then(res => {
+          fetchEventAnalyseData(newParam).then((res) => {
             setdata(res.data);
             setloading(false);
           });
@@ -56,7 +56,7 @@ const BoardChart = ({ type, analyseParam, globalDate, refresh }: Props) => {
           if (dateEnd && dateStart) {
             newParam = { ...newParam, dateEnd, dateStart, dateType: '' };
           }
-          fetchFunnelAnalyseData(newParam).then(res => {
+          fetchFunnelAnalyseData(newParam).then((res) => {
             setdata(res.data);
             setloading(false);
           });
@@ -68,7 +68,7 @@ const BoardChart = ({ type, analyseParam, globalDate, refresh }: Props) => {
           if (dateEnd && dateStart) {
             newParam = { ...newParam, dateEnd, dateStart, dateType: '' };
           }
-          fetchPathAnalyseData(newParam).then(res => {
+          fetchPathAnalyseData(newParam).then((res) => {
             setdata(res.data);
             setloading(false);
           });
@@ -92,19 +92,19 @@ const BoardChart = ({ type, analyseParam, globalDate, refresh }: Props) => {
   switch (type) {
     case 'EVENT':
       return (
-        <Spin spinning={loading}>
+        <Spin spinning={loading} wrapperClassName='app-spin-fill'>
           <AnalyseEventChart data={data as IEventAnalyseData}></AnalyseEventChart>
         </Spin>
       );
     case 'FUNNEL':
       return (
-        <Spin spinning={loading}>
+        <Spin spinning={loading} wrapperClassName='app-spin-fill'>
           <AnalyseFunnelChart data={data as IFunnelAnalyseData}></AnalyseFunnelChart>
         </Spin>
       );
     case 'PATH':
       return (
-        <Spin spinning={loading}>
+        <Spin spinning={loading} wrapperClassName='app-spin-fill'>
           <AnalysePathChart data={data as IPathAnalyseData}></AnalysePathChart>
         </Spin>
       );

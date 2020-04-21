@@ -1,39 +1,36 @@
 import React from 'react';
-import { Icon, Button, Input } from 'antd';
+import { Icon, Button, Input, message, Select, Popover } from 'antd';
 import { connect } from 'react-redux';
 import { IAction, IStoreState } from '@/types';
 import { bindActionCreators, Dispatch } from 'redux';
-import { doAddReport, doUpdateReport } from '@/store/actions';
-import { IReportAddParam, IReportUpdateParam, IReportInfo } from '@/api';
+import { doAddReport, doUpdateReport, doAppendReportToBoard } from '@/store/actions';
+import { IReportAddParam, IReportUpdateParam, IReportInfo, IReportAppendToBoard } from '@/api';
 import style from './AnalyseHeader.module.less';
+import ReportAppendBoard from '@/components/ReportAppendBoard';
 interface Props {
   reportInfo: IReportInfo;
-  handleAddReport: (params: IReportAddParam) => IAction;
-  handleUpdateReport: (params: IReportUpdateParam) => IAction;
+  onAddReport: (params: IReportAddParam) => IAction;
+  onUpdateReport: (params: IReportUpdateParam) => IAction;
   data: Object;
-  //handleAppandBoard: (params: any) => IAction;
 }
-const AnalyseHeader = ({ reportInfo, handleUpdateReport, handleAddReport, data }: Props) => {
+const AnalyseHeader = ({ reportInfo, onUpdateReport, onAddReport, data }: Props) => {
   const [newReportInfo, setnewReportInfo] = React.useState(reportInfo);
+  const [appendedBoardIds, setappendedBoardIds] = React.useState([]);
   React.useEffect(() => {
     setnewReportInfo(reportInfo);
   }, [reportInfo]);
 
   const handleSave = () => {
     if (typeof reportInfo.id !== 'undefined') {
-      handleUpdateReport({ id: null, ...newReportInfo, data });
+      onUpdateReport({ id: null, ...newReportInfo, data });
     } else {
-      handleAddReport({ ...newReportInfo, data });
+      onAddReport({ ...newReportInfo, data });
     }
   };
 
   const handleSaveAs = () => {
     const { id, ...newInfo } = newReportInfo;
-    handleAddReport({ ...newInfo, data });
-  };
-
-  const handleAppand = () => {
-    //handleAppandBoard(newReportInfo);
+    onAddReport({ ...newInfo, data });
   };
 
   return (
@@ -41,7 +38,7 @@ const AnalyseHeader = ({ reportInfo, handleUpdateReport, handleAddReport, data }
       <h2 className={style.title}>
         <Input
           type='text'
-          onChange={e => setnewReportInfo({ ...newReportInfo, name: e.target.value })}
+          onChange={(e) => setnewReportInfo({ ...newReportInfo, name: e.target.value })}
           value={newReportInfo.name}
         />
       </h2>
@@ -54,13 +51,18 @@ const AnalyseHeader = ({ reportInfo, handleUpdateReport, handleAddReport, data }
             另存为
           </Button>
         )}
-        <Button type='link' icon='plus-circle' onClick={handleAppand}>
-          添加到
-        </Button>
+
+        {newReportInfo.id && (
+          <ReportAppendBoard reportInfo={newReportInfo}>
+            <Button type='link' icon='plus-circle'>
+              添加到
+            </Button>
+          </ReportAppendBoard>
+        )}
       </div>
       <div className={style.description}>
         <Input
-          onChange={e => setnewReportInfo({ ...newReportInfo, description: e.target.value })}
+          onChange={(e) => setnewReportInfo({ ...newReportInfo, description: e.target.value })}
           value={newReportInfo.description}
         ></Input>
       </div>
@@ -76,10 +78,10 @@ const mapStateToProps = (state: IStoreState) => {
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
-      handleAddReport: (params: IReportAddParam) => {
+      onAddReport: (params: IReportAddParam) => {
         return doAddReport.request(params);
       },
-      handleUpdateReport: (params: IReportUpdateParam) => {
+      onUpdateReport: (params: IReportUpdateParam) => {
         return doUpdateReport.request(params);
       }
     },

@@ -1,14 +1,24 @@
 import * as React from 'react';
 import { Tag, Select, Row, Col, Icon, Popover, Input, Dropdown, Divider } from 'antd';
 import style from './Indicator.module.less';
-import { IMetadataInfo, IMetadataListParam, IIndicatorInfo, IFieldInfo, IFilterInfo, ITagList } from '@/api';
+import {
+  IMetadataInfo,
+  IMetadataListParam,
+  IIndicatorInfo,
+  IFieldInfo,
+  IFilterInfo,
+  ITagList,
+  IFieldListParam
+} from '@/api';
 import { IPageData, IAction, IStoreState, IListData } from '@/types';
 import { connect } from 'react-redux';
 
 import { bindActionCreators, Dispatch } from 'redux';
 import Filter from './Filter';
 import { v4 as uuidv4 } from 'uuid';
-import { doGetActiveMetadataList } from '../store/actions';
+import { doGetActiveMetadataList, doGetFieldList } from '../store/actions';
+import { IFieldListMap } from '@/store/reducers/metadata.reducer';
+import { EVENT_ATTRS } from '@/constants';
 const { Option, OptGroup } = Select;
 
 const { Search } = Input;
@@ -17,7 +27,7 @@ interface Props {
   activeMetadataList: IPageData<IMetadataInfo>;
   activeMetadataListParams: IMetadataListParam;
   index?: number;
-  fieldList: IListData<IFieldInfo>;
+  fieldListMap: IFieldListMap;
   indicators: IIndicatorInfo[];
   onChange: (param: IIndicatorInfo[], changedValue?: IIndicatorInfo) => any;
   hasType?: boolean;
@@ -26,6 +36,7 @@ interface Props {
   type?: number;
   tagList: ITagList;
   onGetActiveMetadataList: (param: IMetadataListParam) => IAction;
+  onGetFieldList: (param: IFieldListParam) => IAction;
 }
 
 const Indicator = ({
@@ -33,13 +44,14 @@ const Indicator = ({
   activeMetadataList,
   activeMetadataListParams,
   onChange,
-  fieldList,
+  fieldListMap,
   hasType,
   addText = '+添加指标',
   hasCustomName = false,
   type = null,
   tagList,
-  onGetActiveMetadataList
+  onGetActiveMetadataList,
+  onGetFieldList
 }: Props) => {
   const [metadataparam, setmetadataparam] = React.useState({ ...activeMetadataListParams });
   React.useEffect(() => {
@@ -51,6 +63,7 @@ const Indicator = ({
     newIndicators[index].metadataCode = info.code;
     newIndicators[index].metadataName = info.name;
     onChange(newIndicators, indicators[index]);
+    onGetFieldList({ projectId: info.projectId, metadataCode: info.code });
   }
 
   function handleFilterChange(info: IFilterInfo, index: number) {
@@ -208,7 +221,7 @@ const Indicator = ({
             </Row>
             <div className={style.filter}>
               <Filter
-                fieldList={fieldList}
+                fieldList={fieldListMap[indicatorInfo.metadataCode] || { list: EVENT_ATTRS }}
                 filterInfo={indicatorInfo.filter}
                 onChange={filter => handleFilterChange(filter, index)}
               ></Filter>
@@ -222,20 +235,22 @@ const Indicator = ({
 };
 
 const mapStateToProps = (state: IStoreState) => {
-  const { activeMetadataList, activeMetadataListParams, tagList, fieldList } = state.metadata;
+  const { activeMetadataList, activeMetadataListParams, tagList, fieldListMap } = state.metadata;
   return {
     activeMetadataList,
     activeMetadataListParams,
     tagList,
-    fieldList
+    fieldListMap
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
-      onGetActiveMetadataList: param => doGetActiveMetadataList.request(param)
+      onGetActiveMetadataList: param => doGetActiveMetadataList.request(param),
+      onGetFieldList: param => doGetFieldList.request(param)
     },
+
     dispatch
   );
 

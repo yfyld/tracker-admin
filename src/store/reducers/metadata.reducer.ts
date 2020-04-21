@@ -7,6 +7,9 @@ import { IAction, IPageData } from '@/types';
 import { doGetMetadataList, doResetStore } from '@/store/actions';
 import { IMetadataInfo, IMetadataListParam } from '@/api';
 
+export interface IFieldListMap {
+  [prop: string]: IListData<IFieldInfo>;
+}
 export interface MetadataState {
   metadataInfo: IMetadataInfo;
   //元数据列表
@@ -16,7 +19,7 @@ export interface MetadataState {
   activeMetadataList: IPageData<IMetadataInfo>;
   activeMetadataListParams: IMetadataListParam;
   //属性列表
-  fieldList: IListData<IFieldInfo>;
+  fieldListMap: IFieldListMap;
 
   tagList: ITagList;
 }
@@ -40,7 +43,8 @@ const initialState = (): MetadataState => ({
   activeMetadataList: { totalCount: 0, list: [] },
   activeMetadataListParams: { page: 1, pageSize: 120, projectId: null, name: null, tags: null, status: 1 },
 
-  fieldList: { list: [] },
+  fieldListMap: {},
+
   tagList: { totalCount: 0, list: [] }
 });
 
@@ -64,7 +68,7 @@ export const metadataReducer = (state: MetadataState = initialState(), action: I
 
     case getType(doGetFieldList.success):
       return update(state, {
-        fieldList: { $set: action.payload }
+        fieldListMap: { $set: action.payload }
       });
 
     case getType(doGetTagList.success):

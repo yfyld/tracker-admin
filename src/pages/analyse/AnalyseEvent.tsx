@@ -13,13 +13,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { doAddReport, doUpdateReport, doGetEventAnalyse } from '@/store/actions';
 import { IAction, IStoreState, IListData, IDate } from '@/types';
-import { DYNAMIC_TIME } from '@/constants';
+import { DYNAMIC_TIME, EVENT_ATTRS } from '@/constants';
 import AnalyseEventChart from './components/AnalyseEventChart';
 const { Option } = Select;
 const { Panel } = Collapse;
 const { Group } = Input;
 interface Props {
-  fieldList: IListData<IFieldInfo>;
   onGetEventAnalyseData: (param: IEventAnalyseParam) => IAction;
   projectId: number;
   eventAnalyseData: IEventAnalyseData;
@@ -29,7 +28,7 @@ interface Props {
 
 const AnalyseEvent = ({
   analyseLoading,
-  fieldList,
+
   onGetEventAnalyseData,
   projectId,
   eventAnalyseData,
@@ -61,7 +60,6 @@ const AnalyseEvent = ({
           <span className={style.ruleTitle}>纬度:</span>
           <Dimension
             dimension={eventAnalyseParam.dimension}
-            fieldList={fieldList}
             onChange={dimension => handleChange({ ...eventAnalyseParam, dimension })}
           />
         </div>
@@ -69,7 +67,6 @@ const AnalyseEvent = ({
         <div className={style.ruleSection}>
           <span className={style.ruleTitle}>筛选:</span>
           <Filter
-            fieldList={fieldList}
             filterInfo={eventAnalyseParam.filter}
             onChange={filter => handleChange({ ...eventAnalyseParam, filter })}
           />
@@ -126,11 +123,9 @@ const AnalyseEvent = ({
 };
 
 const mapStateToProps = (state: IStoreState) => {
-  const { fieldList } = state.metadata;
   const projectId = state.project.projectInfo.id;
   const { eventAnalyseData, eventAnalyseParam, analyseLoading } = state.analyse;
   return {
-    fieldList,
     projectId,
     eventAnalyseData,
     eventAnalyseParam,

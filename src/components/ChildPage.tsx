@@ -55,7 +55,7 @@ const ChildPage = ({ indicators, onChange, fieldList, addText = '+添加子页�
           parentInfo.metadataCode !== '_ALL_METADATA'
             ? [
                 {
-                  key: 'refererCode',
+                  key: 'referrerId',
                   type: 'equal',
                   value: [parentInfo.metadataCode],
                   id: uuidv4()
@@ -76,7 +76,7 @@ const ChildPage = ({ indicators, onChange, fieldList, addText = '+添加子页�
   function handleAddReferer(index: number) {
     const newPageData: IChildPageData = JSON.parse(JSON.stringify(pageData));
     newPageData.children[index].filter.filterValues.push({
-      key: 'refererCode',
+      key: 'referrerId',
       type: 'equal',
       value: [parentInfo.metadataCode],
       id: uuidv4()
@@ -103,12 +103,12 @@ const ChildPage = ({ indicators, onChange, fieldList, addText = '+添加子页�
                   onChange={(pageId: string) => handleSelectPage(pageId, index)}
                 >
                   {indicators
-                    .filter(item => item.id !== parentInfo.id)
-                    .map(item => (
+                    .filter((item) => item.id !== parentInfo.id)
+                    .map((item) => (
                       <Option
                         key={item.id}
                         value={item.id}
-                        disabled={!!pageData.children.find(val => val.id === item.id)}
+                        disabled={!!pageData.children.find((val) => val.id === item.id)}
                       >
                         {item.customName || item.metadataName}
                       </Option>
@@ -116,8 +116,8 @@ const ChildPage = ({ indicators, onChange, fieldList, addText = '+添加子页�
                 </Select>
               </Col>
               <Col span={8}>
-                {!pageInfo.filter.filterValues.find(item => item.key === 'refererCode') && (
-                  <Button onClick={() => handleAddReferer(index)}>关联referer</Button>
+                {!pageInfo.filter.filterValues.find((item) => item.key === 'referrerId') && (
+                  <Button onClick={() => handleAddReferer(index)}>关联referrer</Button>
                 )}
                 &nbsp;
                 {pageData.children.length > 1 && <Button onClick={() => handleRemove(index)}>删除</Button>}
@@ -127,7 +127,7 @@ const ChildPage = ({ indicators, onChange, fieldList, addText = '+添加子页�
               <Filter
                 fieldList={fieldList}
                 filterInfo={pageInfo.filter}
-                onChange={filter => handleFilterChange(filter, index)}
+                onChange={(filter) => handleFilterChange(filter, index)}
               ></Filter>
             </div>
           </div>
