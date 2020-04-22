@@ -6,7 +6,7 @@ import { IStoreState, IPageData } from '@/types';
 import { Button, Pagination, Table, Modal, Input, message } from 'antd';
 import AppHeader from '@/components/AppHeader';
 import ProjectPane from './components/ProjectPane';
-import { IProjectListItem, IProjectListParam, IProjectInfo, IProjectUpdateParam } from '@/api';
+import { IProjectListItem, IProjectListParam, IProjectInfo, IProjectUpdateParam, ITeamInfo } from '@/api';
 import ProjectAddModel from './components/ProjectAddModel';
 
 import { IAction } from '@/types';
@@ -26,9 +26,17 @@ interface Props {
   onGetProjectList: (param: IProjectListParam) => IAction;
   onDeleteProject: (id: number) => IAction;
   onUpdateProject: (param: IProjectUpdateParam) => IAction;
+  team?: ITeamInfo;
 }
 
-const ProjectList = ({ projectList, onGetProjectList, projectListParams, onDeleteProject, onUpdateProject }: Props) => {
+const ProjectList = ({
+  projectList,
+  onGetProjectList,
+  projectListParams,
+  onDeleteProject,
+  onUpdateProject,
+  team
+}: Props) => {
   const [addProjectVisible, setAddProjectVisible] = React.useState(false);
   const [updateProjectVisible, setUpdateProjectVisible] = React.useState(false);
   const [shouldUpdateProject, setshouldUpdateProject] = React.useState<IProjectListItem>(null);
@@ -84,6 +92,13 @@ const ProjectList = ({ projectList, onGetProjectList, projectListParams, onDelet
     setUpdateProjectVisible(true);
   };
 
+  const handleSearch = (param: IProjectListParam) => {
+    if (team) {
+      param.teamId = team.id;
+    }
+    onGetProjectList(param);
+  };
+
   const handleDelete = (info: IProjectListItem) => {
     let name = '';
     confirm({
@@ -92,7 +107,7 @@ const ProjectList = ({ projectList, onGetProjectList, projectListParams, onDelet
         <div>
           <p>您确定要删除该项目吗?</p>
           <p>
-            请输入项目名称<Input defaultValue={name} onChange={e => (name = e.target.value)}></Input>
+            请输入项目名称<Input defaultValue={name} onChange={(e) => (name = e.target.value)}></Input>
           </p>
         </div>
       ),
@@ -128,7 +143,7 @@ const ProjectList = ({ projectList, onGetProjectList, projectListParams, onDelet
       <ProjectAddModel visible={addProjectVisible} onClose={setAddProjectVisible}></ProjectAddModel>
 
       <div className={style.header}>
-        <ProjectListForm defaultValue={projectListParams} onSubmit={onGetProjectList}></ProjectListForm>
+        <ProjectListForm defaultValue={projectListParams} onSubmit={handleSearch}></ProjectListForm>
         <Button type='primary' onClick={() => setAddProjectVisible(true)}>
           新建项目
         </Button>

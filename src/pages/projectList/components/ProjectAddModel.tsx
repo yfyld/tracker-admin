@@ -38,7 +38,6 @@ const ProjectAddModel = (props: Props) => {
             rules: [{ required: true, message: '请输入项目名称' }]
           })(<Input placeholder='请输入项目名称' />)}
         </Form.Item>
-        <Form.Item label='项目封面'>{getFieldDecorator('image', {})(<Input placeholder='请输入封面链接' />)}</Form.Item>
         <Form.Item label='项目描述'>
           {getFieldDecorator('description', {})(<Input placeholder='请输入项目描述' />)}
         </Form.Item>
@@ -50,7 +49,7 @@ const ProjectAddModel = (props: Props) => {
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
-      handleAddProject: params => {
+      handleAddProject: (params) => {
         return doAddProject.request(params);
       }
     },

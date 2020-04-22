@@ -1,3 +1,4 @@
+import { ROUTE_PATH } from '@/constants';
 import { put, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
 import { doGetProjectList, doAddProject, doDeleteProject, doGetProjectInfo, doUpdateProject } from '@/store/actions';
@@ -7,7 +8,11 @@ import { message } from 'antd';
 
 function* getProjectList(action: ReturnType<typeof doGetProjectList.request>): Generator {
   try {
-    const response = yield* call(fetchProjectList, action.payload);
+    const pathname = yield* select((state) => state.router.location.pathname);
+    if (pathname === ROUTE_PATH.teamInfo) {
+      var teamId = yield* select((state) => state.team.teamInfo.id);
+    }
+    const response = yield* call(fetchProjectList, { teamId, ...action.payload });
     yield put(doGetProjectList.success(response.data));
   } catch (error) {
     yield put(doGetProjectList.failure(error));
@@ -16,7 +21,11 @@ function* getProjectList(action: ReturnType<typeof doGetProjectList.request>): G
 
 function* addProject(action: ReturnType<typeof doAddProject.request>): Generator {
   try {
-    const response = yield* call(fetchProjectAdd, action.payload);
+    const pathname = yield* select((state) => state.router.location.pathname);
+    if (pathname === ROUTE_PATH.teamInfo) {
+      var teamId = yield* select((state) => state.team.teamInfo.id);
+    }
+    const response = yield* call(fetchProjectAdd, { ...action.payload, teamId });
     yield put(doAddProject.success(response.data));
     yield put(doGetProjectList.request({ page: 1, pageSize: 20 }));
   } catch (error) {
@@ -47,9 +56,10 @@ function* updateProject(action: ReturnType<typeof doUpdateProject.request>): Gen
   try {
     yield* call(fetchProjectUpdate, action.payload);
     yield put(doUpdateProject.success());
-    const projectListParams = yield* select(state => state.project.projectListParams);
+    const projectListParams = yield* select((state) => state.project.projectListParams);
     yield put(doGetProjectList.request(projectListParams));
-    // yield put(doGetProjectInfo.request(action.payload.id));
+    yield put(doGetProjectInfo.request(action.payload.id));
+    message.success('修改成功');
   } catch (error) {
     yield put(doUpdateProject.failure(error));
   }

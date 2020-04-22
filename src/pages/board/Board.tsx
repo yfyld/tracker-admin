@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import style from './Board.module.less';
 import { IStoreState, IAction, IPageData, IDate, IDeleteParam } from '@/types';
 import { bindActionCreators, Dispatch } from 'redux';
-import { Icon, Button, Popover, Drawer, Modal, message } from 'antd';
+import { Icon, Button, Popover, Drawer, Modal, message, Input } from 'antd';
 import {
   IReportInfo,
   IBoardInfo,
@@ -28,6 +28,9 @@ import {
 import ReportDrawerContent from './components/ReportDrawerContent';
 import AnalyseRangePicker from '@/components/AnalyseRangePicker';
 import ReportUpdateModel from './components/ReportUpdateModel';
+import ReportAddModal from '../report/components/ReportAddModal';
+import TitleEditAble from '@/components/TitleEditAble';
+
 const { confirm } = Modal;
 const ButtonGroup = Button.Group;
 
@@ -63,6 +66,8 @@ const BasicLayout = ({
   const [refresh, setrefresh] = React.useState(1);
   const [updateReportModelVisible, setupdateReportModelVisible] = React.useState(false);
   const [curReportInfo, setcurReportInfo] = React.useState<IReportInfo>(null);
+
+  const [addReportVisible, setaddReportVisible] = React.useState(false);
 
   const [layout, setlayout] = React.useState(boardInfo.layout);
 
@@ -133,14 +138,15 @@ const BasicLayout = ({
     });
   }
 
+  function handleAddReport() {
+    setaddReportVisible(true);
+  }
+
   const content = (
-    <div>
+    <div className={style.addRportMenu}>
       <div onClick={handleOpenReportDrawer}>添加已有报表</div>
-      <hr />
-      <div>
-        <Icon type='plus-circle' />
-        新增报表
-      </div>
+
+      <div onClick={handleAddReport}>新增报表</div>
     </div>
   );
 
@@ -153,6 +159,12 @@ const BasicLayout = ({
   }
   return (
     <div className={style.wrapper}>
+      <ReportAddModal
+        projectId={boardInfo.projectId}
+        visible={addReportVisible}
+        onClose={setaddReportVisible}
+      ></ReportAddModal>
+
       {curReportInfo && (
         <ReportUpdateModel
           orginInfo={curReportInfo}
@@ -178,9 +190,7 @@ const BasicLayout = ({
         ></ReportDrawerContent>
       </Drawer>
       <div className={style.header}>
-        <h2 className={style.title}>
-          {boardInfo.name} <Icon type='edit' />
-        </h2>
+        <TitleEditAble value={boardInfo.name} onChange={(name) => onSave({ ...boardInfo, name })}></TitleEditAble>
         <div className={style.btnBox}>
           <AnalyseRangePicker
             defalutShowIcon

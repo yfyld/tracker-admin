@@ -9,8 +9,8 @@ if (!config.baseURL) {
   config.baseURL = getBaseURL();
 }
 
-if (config.singelLoginURL === 'auto') {
-  config.singelLoginURL = `http://employee.qa.91jkys.com/sso/login?redirect=${config.baseURL}/user/single-signon`;
+if (config.singelLoginURL === '') {
+  config.singelLoginURL = `${window.location.protocol}//employee.qa.91jkys.com/sso/login?redirect=${config.baseURL}/auth/single-signon`;
 }
 
 export default config;

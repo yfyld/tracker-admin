@@ -42,13 +42,18 @@ const handlers = {
         action: doGetTeamInfo.request({ id: teamId }),
         ttl: CACHE_TIME,
         disable: false
+      },
+      {
+        action: doGetProjectList.request({ page: 1, pageSize: 20, teamId }),
+        ttl: CACHE_TIME,
+        disable: false
       }
     ];
   },
   '/project-list': ({}: any, state: IStoreState): IHandler[] => {
     return [
       {
-        action: doGetProjectList.request(state.project.projectListParams),
+        action: doGetProjectList.request({ ...state.project.projectListParams, teamId: null }),
         ttl: CACHE_TIME,
         disable: false
       }

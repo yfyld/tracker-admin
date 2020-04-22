@@ -123,16 +123,6 @@ const getBarOptions = (data: IEventAnalyseData): ObjectMap => {
 
 const getLineOptions = (data: IEventAnalyseData): ObjectMap => {
   const options: ObjectMap = {
-    // dataZoom: [
-    //   {
-    //     show: true,
-    //     realtime: true,
-    //     start: 0,
-    //     end: 100
-    //   }
-    // ],
-    /*     minInterval: 28 * 86400000,
-    maxInterval: 31 * 86400000, */
     grid: {
       bottom: 60,
       top: 20
@@ -145,7 +135,10 @@ const getLineOptions = (data: IEventAnalyseData): ObjectMap => {
       bottom: 0
     },
     xAxis: {
-      type: 'time',
+      type:
+        data.list[0] && (data.list[0].indicatorType === 'DPV' || data.list[0].indicatorType === 'DUV')
+          ? 'category'
+          : 'time',
       axisLine: {
         lineStyle: {
           color: '#999'
@@ -423,7 +416,7 @@ const AnalyseEventChart = ({ data }: Props) => {
         <div key={item.key} className={style.compareItem}>
           <p>{item.metadataName}</p>
           <p>
-            {getIndicatorTypeCname(data.type)}: <strong>{Number(item.compare.yoyCurrent)} </strong>{' '}
+            {getIndicatorTypeCname(item.indicatorType)}: <strong>{Number(item.compare.yoyCurrent)} </strong>{' '}
           </p>
           <p>
             同比:

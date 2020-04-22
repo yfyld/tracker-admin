@@ -54,15 +54,15 @@ const MetadataAddModel = (props: Props) => {
   return (
     <Modal onOk={handleSubmit} title='新增元数据' visible={props.visible} onCancel={() => props.onClose(false)}>
       <Form layout='horizontal' {...formItemLayout}>
-        <Form.Item label='事件code'>
-          {getFieldDecorator('code', {
-            rules: [{ required: true, message: '请输入事件code' }]
-          })(<Input placeholder='请输入事件code' />)}
-        </Form.Item>
         <Form.Item label='事件名称'>
           {getFieldDecorator('name', { rules: [{ required: true, message: '请输入事件名称' }] })(
             <Input placeholder='请输入事件名称' />
           )}
+        </Form.Item>
+        <Form.Item label='事件code'>
+          {getFieldDecorator('code', {
+            rules: [{ required: true, message: '请输入事件code' }]
+          })(<Input placeholder='请输入事件code' />)}
         </Form.Item>
         <Form.Item label='事件类型'>
           {getFieldDecorator('type', { rules: [{ required: true, message: '请选择事件类型' }] })(
@@ -78,7 +78,7 @@ const MetadataAddModel = (props: Props) => {
             {}
           )(
             <Select mode='tags' placeholder='选择或添加事件标签'>
-              {props.tagList.list.map(item => (
+              {props.tagList.list.map((item) => (
                 <Option key={item.id} value={'' + item.id}>
                   {item.name}
                 </Option>

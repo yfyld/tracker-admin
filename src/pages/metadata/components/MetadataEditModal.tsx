@@ -54,17 +54,17 @@ const MetadataEditModel = (props: Props) => {
   return (
     <Modal onOk={handleSubmit} title='新增元数据' visible={props.visible} onCancel={() => props.onClose(false)}>
       <Form layout='horizontal' {...formItemLayout}>
-        <Form.Item label='事件code'>
-          {getFieldDecorator('code', {
-            initialValue: props.defaultValue.code,
-            rules: [{ required: true, message: '请输入事件code' }]
-          })(<Input placeholder='请输入事件code' />)}
-        </Form.Item>
         <Form.Item label='事件名称'>
           {getFieldDecorator('name', {
             initialValue: props.defaultValue.name,
             rules: [{ required: true, message: '请输入事件名称' }]
           })(<Input placeholder='请输入事件名称' />)}
+        </Form.Item>
+        <Form.Item label='事件code'>
+          {getFieldDecorator('code', {
+            initialValue: props.defaultValue.code,
+            rules: [{ required: true, message: '请输入事件code' }]
+          })(<Input placeholder='请输入事件code' />)}
         </Form.Item>
         <Form.Item label='事件类型'>
           {getFieldDecorator('type', {
@@ -79,10 +79,10 @@ const MetadataEditModel = (props: Props) => {
         </Form.Item>
         <Form.Item label='标签'>
           {getFieldDecorator('newTags', {
-            initialValue: props.defaultValue.tags.map(item => '' + item.id)
+            initialValue: props.defaultValue.tags.map((item) => '' + item.id)
           })(
             <Select mode='tags' placeholder='选择事件标签'>
-              {props.tagList.list.map(item => (
+              {props.tagList.list.map((item) => (
                 <Option key={item.id} value={'' + item.id}>
                   {item.name}
                 </Option>

@@ -28,6 +28,7 @@ import { tagListFiltersSelector } from '@/store/selectors';
 import { UploadChangeParam } from 'antd/lib/upload';
 import { UploadFile } from 'antd/lib/upload/interface';
 import config from '@/config';
+import dayjs from 'dayjs';
 const { confirm } = Modal;
 
 interface Props {
@@ -70,6 +71,15 @@ const MetadataList = ({
   const [tagDrawerVisible, setTagDrawerVisible] = React.useState(false);
 
   const columns: ColumnProps<IMetadataInfo>[] = [
+    {
+      key: 'createdAt',
+      title: '创建时间',
+      dataIndex: 'createdAt',
+      sorter: true,
+      width: 120,
+      sortDirections: ['descend', 'ascend'],
+      render: (text: string) => dayjs(text).format('YYYY-MM-DD')
+    },
     {
       key: 'name',
       title: '名称',
@@ -149,7 +159,7 @@ const MetadataList = ({
       render: (tags: ITagInfo[], record: any) => {
         return (
           <div>
-            {tags.map(item => (
+            {tags.map((item) => (
               <Tag color='#1890ff' key={item.id}>
                 {item.name}
               </Tag>
@@ -298,6 +308,10 @@ const MetadataList = ({
             </Button>
           </Upload>
           &nbsp;
+          <a href='' download='导入模板'>
+            <Button>导入模板下载</Button>
+          </a>
+          &nbsp;
           <Button onClick={() => setAddMetadataVisible(true)}>新增元数据</Button>
           &nbsp;
           <Button onClick={() => setTagDrawerVisible(true)}>标签管理</Button>
@@ -319,19 +333,19 @@ const MetadataList = ({
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
-      onGetMetadataList: params => {
+      onGetMetadataList: (params) => {
         return doGetMetadataList.request(params);
       },
-      onDeleteMetadata: params => {
+      onDeleteMetadata: (params) => {
         return doDeleteMetadata.request(params);
       },
-      onEnableMetadata: params => {
+      onEnableMetadata: (params) => {
         return doEnableMetadata.request(params);
       },
-      onDisableMetadata: params => {
+      onDisableMetadata: (params) => {
         return doDisableMetadata.request(params);
       },
-      onAddMetadataByExcel: params => {
+      onAddMetadataByExcel: (params) => {
         return doAddMetadataByExcel.request(params);
       }
     },

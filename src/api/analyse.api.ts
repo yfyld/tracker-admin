@@ -56,6 +56,7 @@ interface IEventAnalyseDataItem {
   metadataCode: string;
   metadataName: string;
   customName?: string;
+  indicatorType: string;
   data: IEventAnalyseDataItemDataItem[];
   compare: ICompareInfo;
 }

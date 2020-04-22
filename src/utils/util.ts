@@ -127,7 +127,7 @@ export const toastformError = (err: any) => {
   }
 };
 
-export const getAnalysePath = (type: string, projectId: number, reportId: number) => {
+export const getAnalysePath = (type: string, projectId: number, reportId?: number) => {
   let search = `?projectId=${projectId}`;
   if (reportId) {
     search += `&reportId=${reportId}`;
@@ -149,7 +149,7 @@ export const trimAll = (value: string): string => value.replace(/\s+/g, '');
 export const getIndicatorTypeCname = (type: string) => {
   switch (type) {
     case 'PV':
-      return '总数';
+      return '总次数';
     case 'UV':
       return '用户数';
     case 'APV':

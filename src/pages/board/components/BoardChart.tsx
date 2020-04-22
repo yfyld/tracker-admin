@@ -34,8 +34,14 @@ const BoardChart = ({ type, analyseParam, globalDate, refresh }: Props) => {
   const [data, setdata] = React.useState<IEventAnalyseData | IFunnelAnalyseData | IPathAnalyseData>(null);
   const [loading, setloading] = React.useState(false);
   const { dateEnd, dateStart } = globalDate;
+  const [cache, setcache] = React.useState(null);
   React.useEffect(() => {
+    const paramStr = JSON.stringify([analyseParam, globalDate, refresh]);
+    if (cache === paramStr) {
+      return;
+    }
     setloading(true);
+    setcache(paramStr);
     switch (type) {
       case 'EVENT':
         {

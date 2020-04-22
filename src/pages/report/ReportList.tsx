@@ -106,7 +106,7 @@ const ReportList = ({
         if (!record.boards) {
           return '';
         }
-        return record.boards.map(item => item.name).join(',');
+        return record.boards.map((item) => item.name).join(',');
       }
     },
 
@@ -128,7 +128,7 @@ const ReportList = ({
           <Tooltip title='添加到看板'>
             <Popover
               placement='bottom'
-              onVisibleChange={value => value && setappendedBoardIds([])}
+              onVisibleChange={(value) => value && setappendedBoardIds([])}
               content={
                 <div>
                   <Select
@@ -138,8 +138,8 @@ const ReportList = ({
                     style={{ width: 240 }}
                     mode='multiple'
                   >
-                    {boardList.list.map(item => {
-                      const isExist = !!record.boards.find(val => val.id === item.id);
+                    {boardList.list.map((item) => {
+                      const isExist = !!record.boards.find((val) => val.id === item.id);
                       return (
                         <Select.Option key={item.id} value={item.id} disabled={isExist}>
                           {item.name}
@@ -250,6 +250,7 @@ const ReportList = ({
         <div className='app-fl'>
           <ReportListForm onSubmit={onGetReportList} defaultValue={reportListParams}></ReportListForm>
         </div>
+
         <div className='app-fr'>
           <Button onClick={() => setAddReportVisible(true)}>新增报表</Button>
         </div>
@@ -270,7 +271,7 @@ const ReportList = ({
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
-      onGetReportList: params => {
+      onGetReportList: (params) => {
         return doGetReportList.request(params);
       },
       onAddReport: (params: IReportAddParam) => {

@@ -7,6 +7,7 @@ export interface IProjectListParam {
   projectName?: string;
   page: number;
   pageSize: number;
+  teamId?: number;
 }
 
 export interface IProjectInfo {
@@ -22,7 +23,7 @@ export interface IProjectInfo {
 
 export interface IAddProject {
   name: string;
-  image: string;
+  teamId?: number;
   description: string;
 }
 

@@ -40,9 +40,6 @@ const ProjectUpdateModel = (props: Props) => {
             rules: [{ required: true, message: '请输入项目名称' }]
           })(<Input placeholder='请输入项目名称' />)}
         </Form.Item>
-        <Form.Item label='项目封面'>
-          {getFieldDecorator('image', { initialValue: props.orginInfo.image })(<Input placeholder='请输入封面链接' />)}
-        </Form.Item>
         <Form.Item label='项目描述'>
           {getFieldDecorator('description', { initialValue: props.orginInfo.description })(
             <Input placeholder='请输入项目描述' />

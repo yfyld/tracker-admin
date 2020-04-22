@@ -116,7 +116,7 @@ const AnalyseEvent = ({
         <br />
         <br />
         <Spin spinning={analyseLoading}>
-          <div style={{ height: 600 }}>
+          <div style={{ height: eventAnalyseParam.type === 'TABLE' ? 800 : 400 }}>
             <AnalyseEventChart data={eventAnalyseData}></AnalyseEventChart>
           </div>
         </Spin>

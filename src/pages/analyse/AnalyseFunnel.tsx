@@ -114,7 +114,7 @@ const AnalyseFunnel = ({
           </Col>
         </Row>
         <Spin spinning={analyseLoading}>
-          <div style={{ height: 600 }}>
+          <div style={{ height: funnelAnalyseParam.type === 'FUNNEL' ? 600 : 1000 }}>
             <AnalyseFunnelChart data={funnelAnalyseData}></AnalyseFunnelChart>
           </div>
         </Spin>

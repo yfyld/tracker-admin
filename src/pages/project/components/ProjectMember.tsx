@@ -31,9 +31,9 @@ const columns = [
     render: (text: any, record: any) => {
       return (
         <span>
-          text
-          <button>编辑</button>
-          <button>移除</button>
+          <Button size='small'>编辑</Button>
+          &nbsp;
+          <Button size='small'>移除</Button>
         </span>
       );
     }
@@ -44,7 +44,7 @@ const ProjectMember = ({ projectInfo }: Props) => {
   return (
     <div>
       <Button>添加成员</Button>
-      <Table columns={columns} dataSource={projectInfo.members} />
+      <Table columns={columns} dataSource={projectInfo.members.map((item) => ({ key: item.id, ...item }))} />
     </div>
   );
 };

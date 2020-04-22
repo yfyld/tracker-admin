@@ -2,7 +2,8 @@ import { Modal, Form, Card } from 'antd';
 import * as React from 'react';
 import { FormComponentProps } from 'antd/lib/form';
 import { IReportAddParam } from '@/api';
-import { toastformError } from '@/utils';
+import { toastformError, getAnalysePath } from '@/utils';
+import { Link } from 'react-router-dom';
 
 interface Props extends FormComponentProps {
   visible: boolean;
@@ -27,15 +28,38 @@ const ReportAddModel = (props: Props) => {
   };
   const gridStyle = {
     width: '25%',
-    'text-align': 'center'
+    'text-align': 'center',
+    padding: 0
+  };
+
+  const linkStyle = {
+    display: 'block',
+    height: '100%',
+    padding: 24
   };
   return (
     <Modal onOk={handleSubmit} title='新增报表' visible={props.visible} onCancel={() => props.onClose(false)}>
       <Card>
-        <Card.Grid style={gridStyle}>事件分析</Card.Grid>
-        <Card.Grid style={gridStyle}>漏斗分析</Card.Grid>
-        <Card.Grid style={gridStyle}>路径分析</Card.Grid>
-        <Card.Grid style={gridStyle}>用户分析</Card.Grid>
+        <Card.Grid style={gridStyle}>
+          <Link style={linkStyle} to={getAnalysePath('EVENT', props.projectId)}>
+            事件分析
+          </Link>
+        </Card.Grid>
+        <Card.Grid style={gridStyle}>
+          <Link style={linkStyle} to={getAnalysePath('FUNNEL', props.projectId)}>
+            漏斗分析
+          </Link>
+        </Card.Grid>
+        <Card.Grid style={gridStyle}>
+          <Link style={linkStyle} to={getAnalysePath('PATH', props.projectId)}>
+            路径分析
+          </Link>
+        </Card.Grid>
+        <Card.Grid style={gridStyle}>
+          <Link style={linkStyle} to={getAnalysePath('EVENT', props.projectId)}>
+            用户分析
+          </Link>
+        </Card.Grid>
       </Card>
     </Modal>
   );

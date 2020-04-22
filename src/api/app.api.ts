@@ -80,7 +80,7 @@ export function fetchSignIn(params: ILoginParam) {
 
 // 注册
 export function fetchSignUp(params: ISignupParam) {
-  return fetch.post<ILoginRes>('/user/signUp', params);
+  return fetch.post<ILoginRes>('/auth/signUp', params);
 }
 
 // 删除用户
