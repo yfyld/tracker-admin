@@ -29,6 +29,8 @@ export interface IMetadataListParam extends IPageQuery {
   type?: string;
   log?: number;
   projectId: number;
+  projectIds?: string;
+  isAssociation?: boolean;
 }
 
 export interface IMetadataAddParam {

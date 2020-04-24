@@ -10,7 +10,7 @@ import {
   doAddMetadataByExcel
 } from '@/store/actions';
 import { bindActionCreators, Dispatch } from 'redux';
-import { Table, Button, Modal, Drawer, Tag, Upload, Icon, Avatar } from 'antd';
+import { Table, Button, Modal, Drawer, Tag, Upload, Icon, Avatar, Alert } from 'antd';
 import { PaginationConfig, SorterResult, ColumnProps, ColumnFilterItem } from 'antd/lib/table';
 import {
   IMetadataListParam,
@@ -318,6 +318,12 @@ const MetadataList = ({
         </div>
       </div>
       <div className='app-card'>
+        <Alert
+          message='请使用命名空间+语义化的方式命名code 如: h5-page-member-detail(h5会员详情页)  zyjk-click-member-pay(智云健康会员支付点击事件)'
+          type='warning'
+          closable
+        />
+        <br />
         <Table
           rowKey='id'
           columns={columns}

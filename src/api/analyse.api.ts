@@ -18,6 +18,7 @@ export interface IIndicatorInfo {
   metadataCode: string;
   metadataName: string;
   customName?: string;
+  projectId: number;
   type: string;
   filter: IFilterInfo;
   id: string;

@@ -41,7 +41,15 @@ const initialState = (): MetadataState => ({
   metadataListParams: { page: 1, pageSize: 20, projectId: null },
 
   activeMetadataList: { totalCount: 0, list: [] },
-  activeMetadataListParams: { page: 1, pageSize: 120, projectId: null, name: null, tags: null, status: 1 },
+  activeMetadataListParams: {
+    page: 1,
+    pageSize: 120,
+    projectId: null,
+    name: null,
+    tags: null,
+    status: 1,
+    isAssociation: true
+  },
 
   fieldListMap: {},
 

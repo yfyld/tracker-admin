@@ -21,6 +21,7 @@ const initialState = (): ProjectState => ({
     creator: {
       nickname: ''
     },
+    associationProjects: [],
     members: [],
     description: ''
   },

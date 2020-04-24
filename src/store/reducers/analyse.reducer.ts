@@ -38,6 +38,7 @@ const initialState = (): AnalyseState => ({
         metadataCode: '_ALL_METADATA',
         metadataName: '所有事件',
         type: 'PV',
+        projectId: null,
         id: '1',
         filter: {
           filterType: 'OR',
@@ -73,6 +74,7 @@ const initialState = (): AnalyseState => ({
       {
         metadataCode: '_ALL_METADATA',
         metadataName: '所有事件',
+        projectId: null,
         type: 'PV',
         id: '1',
         filter: {
@@ -102,6 +104,7 @@ const initialState = (): AnalyseState => ({
         metadataCode: '_ALL_METADATA',
         metadataName: '所有事件',
         type: 'PV',
+        projectId: null,
         id: '1',
         filter: {
           filterType: 'OR',

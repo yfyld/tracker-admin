@@ -82,6 +82,15 @@ const handlers = {
       }
     ];
   },
+  '/project/info': ({ search: { projectId } }: any, state: IStoreState): IHandler[] => {
+    return [
+      {
+        action: doGetProjectList.request({ ...state.project.projectListParams, teamId: null }),
+        ttl: CACHE_TIME,
+        disable: false
+      }
+    ];
+  },
   '/project/metadata-list': ({ search: { projectId } }: any, state: IStoreState): IHandler[] => {
     return [
       {

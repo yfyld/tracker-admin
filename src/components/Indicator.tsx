@@ -8,7 +8,8 @@ import {
   IFieldInfo,
   IFilterInfo,
   ITagList,
-  IFieldListParam
+  IFieldListParam,
+  IProjectInfo
 } from '@/api';
 import { IPageData, IAction, IStoreState, IListData } from '@/types';
 import { connect } from 'react-redux';
@@ -37,6 +38,7 @@ interface Props {
   tagList: ITagList;
   onGetActiveMetadataList: (param: IMetadataListParam) => IAction;
   onGetFieldList: (param: IFieldListParam) => IAction;
+  projectInfo: IProjectInfo;
 }
 
 const Indicator = ({
@@ -51,7 +53,8 @@ const Indicator = ({
   type = null,
   tagList,
   onGetActiveMetadataList,
-  onGetFieldList
+  onGetFieldList,
+  projectInfo
 }: Props) => {
   const [metadataparam, setmetadataparam] = React.useState({ ...activeMetadataListParams });
   React.useEffect(() => {
@@ -62,6 +65,7 @@ const Indicator = ({
     const newIndicators: IIndicatorInfo[] = JSON.parse(JSON.stringify(indicators));
     newIndicators[index].metadataCode = info.code;
     newIndicators[index].metadataName = info.name;
+    newIndicators[index].projectId = info.projectId;
     onChange(newIndicators, indicators[index]);
     onGetFieldList({ projectId: info.projectId, metadataCode: info.code });
   }
@@ -89,6 +93,7 @@ const Indicator = ({
     newIndicators.push({
       metadataCode: '_ALL_METADATA',
       metadataName: '所有事件',
+      projectId: null,
       type: 'PV',
       id: uuidv4(),
       filter: {
@@ -139,12 +144,12 @@ const Indicator = ({
                           value={metadataparam.name}
                           onChange={(e) => setmetadataparam({ ...metadataparam, name: e.target.value })}
                           onSearch={(name) => handleSearch({ ...metadataparam, name })}
-                          style={{ width: 200 }}
+                          style={{ width: 120 }}
                         />
                         &nbsp;
                         <Select
                           placeholder='根据标签筛选'
-                          style={{ width: 200 }}
+                          style={{ width: 120 }}
                           mode='multiple'
                           value={metadataparam.tags ? metadataparam.tags.split(',').map((item) => Number(item)) : []}
                           onChange={(tags: number[]) => handleSearch({ ...metadataparam, tags: tags.join(',') })}
@@ -155,16 +160,87 @@ const Indicator = ({
                             </Option>
                           ))}
                         </Select>
+                        &nbsp;
+                        <Select
+                          placeholder='关联项目'
+                          style={{ width: 160 }}
+                          mode='multiple'
+                          value={
+                            metadataparam.projectIds
+                              ? metadataparam.projectIds.split(',').map((item) => Number(item))
+                              : []
+                          }
+                          onChange={(projectIds: number[]) =>
+                            handleSearch({ ...metadataparam, projectIds: projectIds.join(',') })
+                          }
+                        >
+                          {projectInfo.associationProjects.map((item) => (
+                            <Option key={item.id} value={item.id}>
+                              {item.name}
+                            </Option>
+                          ))}
+                        </Select>
                       </div>
 
                       <div className={style.metadataBox}>
-                        <span
-                          onClick={() => handleSelectMetadata(allMetadata, index)}
-                          className={allMetadata.code === indicatorInfo.metadataCode ? style.active : ''}
-                          key={allMetadata.code}
-                        >
-                          所有事件
-                        </span>
+                        {projectInfo.associationProjects ? (
+                          <>
+                            <span
+                              onClick={() => handleSelectMetadata({ ...allMetadata }, index)}
+                              className={
+                                allMetadata.code === indicatorInfo.metadataCode && !indicatorInfo.projectId
+                                  ? style.active
+                                  : ''
+                              }
+                              key={allMetadata.code}
+                            >
+                              所有事件
+                            </span>
+                            <span
+                              onClick={() =>
+                                handleSelectMetadata(
+                                  { ...allMetadata, name: projectInfo.name + '所有事件', projectId: projectInfo.id },
+                                  index
+                                )
+                              }
+                              className={
+                                allMetadata.code === indicatorInfo.metadataCode &&
+                                indicatorInfo.projectId === projectInfo.id
+                                  ? style.active
+                                  : ''
+                              }
+                              key={allMetadata.code + projectInfo.id}
+                            >
+                              {projectInfo.name}所有事件
+                            </span>
+                            {projectInfo.associationProjects.map((item) => (
+                              <span
+                                onClick={() =>
+                                  handleSelectMetadata(
+                                    { ...allMetadata, name: item.name + '所有事件', projectId: item.id },
+                                    index
+                                  )
+                                }
+                                className={
+                                  allMetadata.code === indicatorInfo.metadataCode && indicatorInfo.projectId === item.id
+                                    ? style.active
+                                    : ''
+                                }
+                                key={allMetadata.code + item.id}
+                              >
+                                {item.name}所有事件
+                              </span>
+                            ))}
+                          </>
+                        ) : (
+                          <span
+                            onClick={() => handleSelectMetadata({ ...allMetadata, projectId: projectInfo.id }, index)}
+                            className={allMetadata.code === indicatorInfo.metadataCode ? style.active : ''}
+                            key={allMetadata.code + projectInfo.id}
+                          >
+                            所有事件
+                          </span>
+                        )}
 
                         {activeMetadataList.list
                           .filter((item) => {
@@ -240,11 +316,13 @@ const Indicator = ({
 
 const mapStateToProps = (state: IStoreState) => {
   const { activeMetadataList, activeMetadataListParams, tagList, fieldListMap } = state.metadata;
+  const { projectInfo } = state.project;
   return {
     activeMetadataList,
     activeMetadataListParams,
     tagList,
-    fieldListMap
+    fieldListMap,
+    projectInfo
   };
 };
 

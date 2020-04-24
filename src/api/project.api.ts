@@ -14,6 +14,7 @@ export interface IProjectInfo {
   id: number;
   name: string;
   image: string;
+  associationProjects: IProjectInfo[];
   creator: {
     nickname: string;
   };
