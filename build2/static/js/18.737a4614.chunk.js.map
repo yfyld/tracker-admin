@@ -1,1 +1,0 @@
-{"version":3,"sources":["pages/admin/PermissionMange.tsx"],"names":["PermissionManage"],"mappings":"wHAAA,2BAMeA,UAJU,WACvB,OAAO","file":"static/js/18.737a4614.chunk.js","sourcesContent":["import React from 'react';\n\nconst PermissionManage = () => {\n  return <div>33333</div>;\n};\n\nexport default PermissionManage;\n"],"sourceRoot":""}

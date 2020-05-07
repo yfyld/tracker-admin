@@ -1,1 +1,0 @@
-{"version":3,"sources":["pages/admin/UserManage.tsx"],"names":["UserManage"],"mappings":"wHAAA,2BAMeA,UAJI,WACjB,OAAO","file":"static/js/20.d1ec40fb.chunk.js","sourcesContent":["import React from 'react';\n\nconst UserManage = () => {\n  return <div>11111111111111</div>;\n};\n\nexport default UserManage;\n"],"sourceRoot":""}
