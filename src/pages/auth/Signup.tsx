@@ -31,9 +31,9 @@ const Signup = ({ form, doSignupRequest }: Props) => {
   return (
     <AccountLayout>
       <h2 className={style.title}>注册</h2>
-      <Form onSubmit={e => onSubmit(e, form, doSignupRequest)} className='login-form'>
+      <Form onSubmit={(e) => onSubmit(e, form, doSignupRequest)} className='login-form'>
         <Form.Item>
-          {getFieldDecorator('name', {
+          {getFieldDecorator('nickname', {
             rules: [{ required: true, message: '请输入姓名' }]
           })(<Input prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder='请输入姓名' />)}
         </Form.Item>
@@ -76,7 +76,4 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
     dispatch
   );
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(Form.create()(Signup));
+export default connect(null, mapDispatchToProps)(Form.create()(Signup));

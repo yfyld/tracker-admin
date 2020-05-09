@@ -11,7 +11,13 @@ import {
   doAddProject,
   doGetProjectList,
   doPutRole,
-  doGetRole, doGetRolePermissions, doUpdateRolePermissions, doPutUser, doDeletePermission, doGetPermission, doDeleteUser
+  doGetRole,
+  doGetRolePermissions,
+  doUpdateRolePermissions,
+  doPutUser,
+  doDeletePermission,
+  doGetPermission,
+  doDeleteUser
 } from '@/store/actions';
 import {
   fetchSignIn,
@@ -25,19 +31,21 @@ import {
   fetchPutUser,
   fetchGetUserRoles,
   fetchPutUserRoles,
-  fetchDeletePermission, fetchDeleteUser
+  fetchDeletePermission,
+  fetchDeleteUser
 } from '@/api';
 
 import { message } from 'antd';
 import { push } from 'connected-react-router';
 import http, { updateToken } from '@/api/http';
 import handlers from '@/router/handler';
+import { ROUTE_PATH } from '@/constants';
 
 function* triggerFetchOnLocation(): Generator {
   if (!http.defaults.headers['Authorization']) {
     yield call(updateToken);
   }
-  const state = yield* select(state => state);
+  const state = yield* select((state) => state);
 
   const actions = mapLocationIntoActions(state.router.location, handlers, state)
     .filter(({ disable }) => {
@@ -88,7 +96,9 @@ function* addUser(action: ReturnType<typeof doSignup.request>): Generator {
   try {
     const response = yield* call(fetchSignUp, action.payload);
     yield put(doSignup.success(response.data));
-    yield put(doGetUserList.request({ page: 1, pageSize: 20 }));
+    // yield put(doGetUserList.request({ page: 1, pageSize: 20 }));
+    message.success('注册成功');
+    yield put(push(ROUTE_PATH.login));
   } catch (error) {
     yield put(doGetUserList.failure(error));
   }

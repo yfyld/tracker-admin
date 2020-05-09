@@ -1,3 +1,4 @@
+import { ROUTE_PATH } from './../constants/constant';
 import { doInitAnalyse } from './../store/actions/analyse.action';
 import { doGetTeamList, doGetTeamInfo } from './../store/actions/team.action';
 import { doGetTagList, doGetFieldList } from './../store/actions/metadata.action';
@@ -19,11 +20,12 @@ import {
 
 const handlers = {
   '/*': ({ pathname }: any, state: IStoreState): IHandler[] => {
+    console.log(999, pathname);
     return [
       {
         action: doGetUserInfo.request(),
         ttl: CACHE_TIME,
-        disable: pathname === '/signup' || pathname === '/login' || !!state.app.userInfo.id
+        disable: pathname === ROUTE_PATH.login || pathname === ROUTE_PATH.signup || !!state.app.userInfo.id
       }
     ];
   },
