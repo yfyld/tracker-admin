@@ -31,7 +31,7 @@ export interface IUpdatePermission extends IBasePermission {
   id: number;
 }
 
-export type IPermissionItemList = IPageData<IPermissionListItem>;
+export type IPermissionList = IPageData<IPermissionListItem>;
 
 // 新建权限
 export function fetchPostPermission(params: IBasePermission) {
@@ -40,7 +40,7 @@ export function fetchPostPermission(params: IBasePermission) {
 
 // 获取权限列表
 export function fetchGetPermission(params: IQueryPermission) {
-  return fetch.get<IPermissionItemList>('/permission', params);
+  return fetch.get<IPermissionList>('/permission', params);
 }
 
 // 更新权限

@@ -11,7 +11,9 @@ import {
   doResetStore,
   doGetUserInfo,
   doChangeCollapsed,
-  doGetRolePermissions, doEditRole, doPutUser, doEditPermission
+  doEditRole,
+  doPutUser,
+  doEditPermission
 } from '@/store/actions';
 import { ADD_BROAD } from '@/constants';
 import { IUserInfo } from '@/api';
@@ -26,7 +28,6 @@ export interface AppState {
   collapsed: boolean;
   userListParams: IUserListParam;
   userRoles: IUserRole[];
-  updateUserItem: IBaseUser,
 }
 
 const initialState = (): AppState => ({
@@ -44,14 +45,7 @@ const initialState = (): AppState => ({
   loadingText: '加载中',
   collapsed: false,
   userListParams: { page: 1, pageSize: 20, nickname: '', username: '' },
-  userRoles: [],
-  updateUserItem: {
-    id: null,
-    username: '',
-    nickname: '',
-    email: '',
-    mobile: null
-  }
+  userRoles: []
 });
 
 export const appReducer = (state: AppState = initialState(), action: IAction): AppState => {
@@ -87,14 +81,7 @@ export const appReducer = (state: AppState = initialState(), action: IAction): A
       return update(state, {
         userRoles: { $set: action.payload }
       });
-    case getType(doPutUser.request):
-      return update(state, {
-        updateUserItem: { $set: action.payload }
-      });
-    case getType(doEditUser):
-      return update(state, {
-        updateUserItem: { $set: action.payload }
-      });
+
     case getType(doChangeLoadingStatus):
       return update(state, {
         loading: { $set: action.payload.status },

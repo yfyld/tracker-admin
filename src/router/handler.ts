@@ -1,3 +1,4 @@
+import { doGetAllRole } from './../store/actions/role.action';
 import { ROUTE_PATH } from './../constants/constant';
 import { doInitAnalyse } from './../store/actions/analyse.action';
 import { doGetTeamList, doGetTeamInfo } from './../store/actions/team.action';
@@ -15,7 +16,8 @@ import {
   doGetReportList,
   doGetUserList,
   doGetPermission,
-  doGetRole
+  doGetRole,
+  doGetAllPermission
 } from '@/store/actions';
 
 const handlers = {
@@ -199,13 +201,18 @@ const handlers = {
         action: doGetUserList.request(state.app.userListParams),
         ttl: CACHE_TIME,
         disable: false
+      },
+      {
+        action: doGetAllRole.request(),
+        ttl: CACHE_TIME,
+        disable: false
       }
     ];
   },
   '/admin/permission-manage': ({ search: {} }: any, state: IStoreState): IHandler[] => {
     return [
       {
-        action: doGetPermission.request(state.permission.permissionListParams),
+        action: doGetPermission.request(state.role.roleListParams),
         ttl: CACHE_TIME,
         disable: false
       }
@@ -215,6 +222,11 @@ const handlers = {
     return [
       {
         action: doGetRole.request(state.role.roleListParams),
+        ttl: CACHE_TIME,
+        disable: false
+      },
+      {
+        action: doGetAllPermission.request(),
         ttl: CACHE_TIME,
         disable: false
       }

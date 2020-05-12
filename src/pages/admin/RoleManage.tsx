@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { IAction, IPageData, IStoreState } from '@/types';
 import { bindActionCreators, Dispatch } from 'redux';
 import { IBaseRole, IRoleListItem, IQueryRole, IUpdateRole } from '@/api';
-import { doDeleteRole, doEditRole, doGetRole, doGetRolePermissions } from '@/store/actions';
+import { doDeleteRole, doEditRole, doGetRole, doGetRoleInfo } from '@/store/actions';
 import { ColumnProps } from 'antd/lib/table';
 import { Link } from 'react-router-dom';
 import { ROUTE_PATH, roleTypeDescription, formItemLayout } from '@/constants';
@@ -47,9 +47,12 @@ const RoleManage = (props: Props) => {
     {
       key: 'type',
       title: '角色类型',
-      render: (text, record) => (
-        <span>{roleTypeDescription[record.type]}</span>
-      )
+      render: (text, record) => <span>{roleTypeDescription.find((item) => item.id === record.type).name}</span>
+    },
+    {
+      key: 'description',
+      title: '描述',
+      dataIndex: 'description'
     },
     {
       key: 'updaterNickname',
@@ -62,23 +65,28 @@ const RoleManage = (props: Props) => {
       width: 280,
       render: (text, record) => (
         <span>
-          <Button type='link' size='small' onClick={() => { notification.info({ message: `${record.name} 描述`, description: record.description || '无' }) }}>
-            查看描述
-          </Button>
-          <Button type='link' size='small' onClick={async () => {
-            await props.onGetRolePermissions(record.id);
-            setChoosePermissionsRoleId(record.id);
-            setChoosePermissionsVisible(true);
-          }}>
+          <Button
+            type='link'
+            size='small'
+            onClick={async () => {
+              await props.onGetRolePermissions(record.id);
+              setChoosePermissionsRoleId(record.id);
+              setChoosePermissionsVisible(true);
+            }}
+          >
             关联权限
           </Button>
-          <Button type='link' size='small' onClick={() => {
-            props.onEditRole(record);
-            setEditRoleVisible(true);
-          }}>
+          <Button
+            type='link'
+            size='small'
+            onClick={() => {
+              props.onEditRole(record);
+              setEditRoleVisible(true);
+            }}
+          >
             编辑
           </Button>
-          <Popconfirm title="是否要删除此行？" onConfirm={() => props.onDeleteRole(record.id)}>
+          <Popconfirm title='是否要删除此行？' onConfirm={() => props.onDeleteRole(record.id)}>
             <Button type='link' size='small'>
               删除
             </Button>
@@ -110,13 +118,13 @@ const RoleManage = (props: Props) => {
                 <Form.Item label='角色名/码'>
                   {getFieldDecorator('name', {
                     initialValue: props.roleListParams.name
-                  })(<Input placeholder="请输入角色名/角色码"/>)}
+                  })(<Input placeholder='请输入角色名/角色码' />)}
                 </Form.Item>
               </Col>
             </Form>
             <Col span={4}>
               <span className={style.submitButtons}>
-                <Button type="primary" onClick={handleFilter}>
+                <Button type='primary' onClick={handleFilter}>
                   查询
                 </Button>
               </span>
@@ -124,7 +132,11 @@ const RoleManage = (props: Props) => {
             <Col span={14}>
               <RoleAddModal visible={addRoleVisible} onClose={setAddRoleVisible}></RoleAddModal>
               <RoleEditModal visible={editRoleVisible} onClose={setEditRoleVisible}></RoleEditModal>
-              <RoleLinkPermissionsModal roleId={choosePermissionsRoleId} visible={choosePermissionsVisible} onClose={setChoosePermissionsVisible}></RoleLinkPermissionsModal>
+              <RoleLinkPermissionsModal
+                roleId={choosePermissionsRoleId}
+                visible={choosePermissionsVisible}
+                onClose={setChoosePermissionsVisible}
+              ></RoleLinkPermissionsModal>
               <div className={style.rightBtn}>
                 <Button type='primary' onClick={() => setAddRoleVisible(true)}>
                   新建角色
@@ -164,8 +176,8 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
         return doEditRole(params);
       },
       onGetRolePermissions: (roleId: number) => {
-        return doGetRolePermissions.request(roleId);
-      },
+        return doGetRoleInfo.request(roleId);
+      }
     },
     dispatch
   );

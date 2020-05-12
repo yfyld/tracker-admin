@@ -196,23 +196,25 @@ const Indicator = ({
                             >
                               所有事件
                             </span>
-                            <span
-                              onClick={() =>
-                                handleSelectMetadata(
-                                  { ...allMetadata, name: projectInfo.name + '所有事件', projectId: projectInfo.id },
-                                  index
-                                )
-                              }
-                              className={
-                                allMetadata.code === indicatorInfo.metadataCode &&
-                                indicatorInfo.projectId === projectInfo.id
-                                  ? style.active
-                                  : ''
-                              }
-                              key={allMetadata.code + projectInfo.id}
-                            >
-                              {projectInfo.name}所有事件
-                            </span>
+                            {!!projectInfo.associationProjects.length && (
+                              <span
+                                onClick={() =>
+                                  handleSelectMetadata(
+                                    { ...allMetadata, name: projectInfo.name + '所有事件', projectId: projectInfo.id },
+                                    index
+                                  )
+                                }
+                                className={
+                                  allMetadata.code === indicatorInfo.metadataCode &&
+                                  indicatorInfo.projectId === projectInfo.id
+                                    ? style.active
+                                    : ''
+                                }
+                                key={allMetadata.code + projectInfo.id}
+                              >
+                                {projectInfo.name}所有事件
+                              </span>
+                            )}
                             {projectInfo.associationProjects.map((item) => (
                               <span
                                 onClick={() =>

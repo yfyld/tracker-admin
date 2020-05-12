@@ -51,17 +51,7 @@ const RoleAddModal = (props: Props) => {
             initialValue: props.addRoleItem.name
           })(<Input placeholder='请输入角色名' />)}
         </Form.Item>
-        <Form.Item {...formItemLayout} label="角色描述">
-          {getFieldDecorator('description', {
-            initialValue: props.addRoleItem.description
-          })(
-            <TextArea
-              style={{ minHeight: 32 }}
-              placeholder="请输入角色描述"
-              rows={4}
-            />
-          )}
-        </Form.Item>
+
         <Form.Item label='角色码'>
           {getFieldDecorator('code', {
             rules: [{ required: true, message: '请输入角色码' }],
@@ -73,15 +63,21 @@ const RoleAddModal = (props: Props) => {
             rules: [{ required: true, message: '角色类型' }],
             initialValue: props.addRoleItem.type
           })(
-            <Select placeholder="请选择">
-              {
-                roleTypeDescription.map((des, index) => {
-                  if (index === 0) return null;
-                  return (<Option key={des} value={index}>{des}</Option>)
-                })
-              }
+            <Select placeholder='请选择'>
+              {roleTypeDescription.map((type) => {
+                return (
+                  <Option key={type.id} value={type.id}>
+                    {type.name}
+                  </Option>
+                );
+              })}
             </Select>
           )}
+        </Form.Item>
+        <Form.Item {...formItemLayout} label='角色描述'>
+          {getFieldDecorator('description', {
+            initialValue: props.addRoleItem.description
+          })(<TextArea style={{ minHeight: 32 }} placeholder='请输入角色描述' rows={4} />)}
         </Form.Item>
       </Form>
     </Modal>

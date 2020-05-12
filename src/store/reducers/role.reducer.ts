@@ -1,16 +1,18 @@
-import { IBaseRole, IRoleListItem, IQueryRole, IUpdateRole, IRolePermission } from '@/api';
+import { doGetAllRole } from './../actions/role.action';
+import { IBaseRole, IRoleList, IQueryRole, IUpdateRole, IRoleInfo } from '@/api';
 import update from 'immutability-helper';
 import { IAction, IPageData } from '@/types';
 import { getType } from 'typesafe-actions';
-import { doEditRole, doGetRole, doGetRolePermissions, doPostRole, } from '@/store/actions/role.action';
+import { doEditRole, doGetRole, doPostRole, doGetRoleInfo } from '@/store/actions/role.action';
 import { doResetStore } from '@/store/actions';
 
 export interface RoleState {
-  addRoleItem: IBaseRole,
-  updateRoleItem: IUpdateRole,
-  roleList: IPageData<IRoleListItem>,
-  roleListParams: IQueryRole,
-  rolePermissions :IRolePermission[]
+  addRoleItem: IBaseRole;
+  updateRoleItem: IUpdateRole;
+  roleList: IRoleList;
+  allRoleList: IRoleList;
+  roleListParams: IQueryRole;
+  roleInfo: IRoleInfo;
 }
 
 const initialState = (): RoleState => ({
@@ -29,6 +31,10 @@ const initialState = (): RoleState => ({
     status: null,
     type: null
   },
+  allRoleList: {
+    totalCount: 0,
+    list: []
+  },
   roleList: {
     totalCount: 0,
     list: []
@@ -38,7 +44,15 @@ const initialState = (): RoleState => ({
     pageSize: 20,
     name: ''
   },
-  rolePermissions: []
+  roleInfo: {
+    id: null,
+    name: '',
+    description: '',
+    code: '',
+    status: null,
+    type: null,
+    permissions: []
+  }
 });
 
 export const roleReducer = (state: RoleState = initialState(), action: IAction): RoleState => {
@@ -57,6 +71,12 @@ export const roleReducer = (state: RoleState = initialState(), action: IAction):
       return update(state, {
         roleListParams: { $set: action.payload }
       });
+
+    case getType(doGetAllRole.success):
+      return update(state, {
+        allRoleList: { $set: action.payload }
+      });
+
     case getType(doGetRole.success):
       return update(state, {
         roleList: { $set: action.payload }
@@ -65,9 +85,9 @@ export const roleReducer = (state: RoleState = initialState(), action: IAction):
       return update(state, {
         updateRoleItem: { $set: action.payload }
       });
-    case getType(doGetRolePermissions.success):
+    case getType(doGetRoleInfo.success):
       return update(state, {
-        rolePermissions: { $set: action.payload }
+        roleInfo: { $set: action.payload }
       });
     default:
       return state;

@@ -35,7 +35,7 @@ const RoleEditModal = (props: Props) => {
       }
       props.onPutRole({
         ...props.updateRoleItem,
-        ...values,
+        ...values
       });
       props.onClose(false);
     });
@@ -50,17 +50,7 @@ const RoleEditModal = (props: Props) => {
             initialValue: props.updateRoleItem.name
           })(<Input placeholder='请输入角色名' disabled={true} />)}
         </Form.Item>
-        <Form.Item {...formItemLayout} label="角色描述">
-          {getFieldDecorator('description', {
-            initialValue: props.updateRoleItem.description
-          })(
-            <TextArea
-              style={{ minHeight: 32 }}
-              placeholder="请输入角色描述"
-              rows={4}
-            />
-          )}
-        </Form.Item>
+
         <Form.Item label='角色码'>
           {getFieldDecorator('code', {
             rules: [{ required: true, message: '请输入角色码' }],
@@ -72,15 +62,21 @@ const RoleEditModal = (props: Props) => {
             rules: [{ required: true, message: '角色类型' }],
             initialValue: props.updateRoleItem.type
           })(
-            <Select placeholder="请选择" disabled={true}>
-              {
-                roleTypeDescription.map((des, index) => {
-                  if (index === 0) return null;
-                  return (<Option key={des} value={index}>{des}</Option>)
-                })
-              }
+            <Select placeholder='请选择' disabled={true}>
+              {roleTypeDescription.map((type) => {
+                return (
+                  <Option key={type.id} value={type.id}>
+                    {type.name}
+                  </Option>
+                );
+              })}
             </Select>
           )}
+        </Form.Item>
+        <Form.Item {...formItemLayout} label='角色描述'>
+          {getFieldDecorator('description', {
+            initialValue: props.updateRoleItem.description
+          })(<TextArea style={{ minHeight: 32 }} placeholder='请输入角色描述' rows={4} />)}
         </Form.Item>
       </Form>
     </Modal>

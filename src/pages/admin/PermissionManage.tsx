@@ -43,14 +43,12 @@ const PermissionManage = (props: Props) => {
     {
       key: 'type',
       title: '权限类型',
-      render: (text, record) => (
-        <span>{permissionTypeDescription[record.type]}</span>
-      )
+      render: (text, record) => <span>{permissionTypeDescription[record.type]}</span>
     },
     {
-      key: 'updaterNickname',
-      title: '最后更新人',
-      dataIndex: 'updaterNickname'
+      key: 'description',
+      title: '描述',
+      dataIndex: 'description'
     },
     {
       key: 'action',
@@ -58,16 +56,17 @@ const PermissionManage = (props: Props) => {
       width: 280,
       render: (text, record) => (
         <span>
-          <Button type='link' size='small' onClick={() => { notification.info({ message: `${record.name} 描述`, description: record.description || '无' }) }}>
-            查看描述
-          </Button>
-          <Button type='link' size='small' onClick={() => {
-            props.onEditPermission(record);
-            setEditPermissionVisible(true);
-          }}>
+          <Button
+            type='link'
+            size='small'
+            onClick={() => {
+              props.onEditPermission(record);
+              setEditPermissionVisible(true);
+            }}
+          >
             编辑
           </Button>
-          <Popconfirm title="是否要删除此行？" onConfirm={() => props.onDeletePermission(record.id)}>
+          <Popconfirm title='是否要删除此行？' onConfirm={() => props.onDeletePermission(record.id)}>
             <Button type='link' size='small'>
               删除
             </Button>
@@ -99,20 +98,23 @@ const PermissionManage = (props: Props) => {
                 <Form.Item label='权限名/码'>
                   {getFieldDecorator('name', {
                     initialValue: props.permissionListParams.name
-                  })(<Input placeholder="请输入权限名/权限码"/>)}
+                  })(<Input placeholder='请输入权限名/权限码' />)}
                 </Form.Item>
               </Col>
             </Form>
             <Col span={4}>
               <span className={style.submitButtons}>
-                <Button type="primary" onClick={handleFilter}>
+                <Button type='primary' onClick={handleFilter}>
                   查询
                 </Button>
               </span>
             </Col>
             <Col span={14}>
               <PermissionAddModal visible={addPermissionVisible} onClose={setAddPermissionVisible}></PermissionAddModal>
-              <PermissionEditModal visible={editPermissionVisible} onClose={setEditPermissionVisible}></PermissionEditModal>
+              <PermissionEditModal
+                visible={editPermissionVisible}
+                onClose={setEditPermissionVisible}
+              ></PermissionEditModal>
               <div className={style.rightBtn}>
                 <Button type='primary' onClick={() => setAddPermissionVisible(true)}>
                   新建权限

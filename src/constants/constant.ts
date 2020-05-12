@@ -336,7 +336,16 @@ export const EVENT_ATTRS: IFieldInfo[] = [
 
 export const permissionTypeDescription = ['', '接口', '路由', '功能'];
 
-export const roleTypeDescription = ['', '超管', '项目管理员', '平台用户'];
+export const roleTypeDescription = [
+  {
+    id: 1,
+    name: '项目角色'
+  },
+  {
+    id: 2,
+    name: '平台角色'
+  }
+];
 
 export const COLOR = {
   primary: '#1890ff',

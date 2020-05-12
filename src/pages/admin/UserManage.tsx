@@ -22,8 +22,8 @@ const { confirm } = Modal;
 
 interface Props extends FormComponentProps {
   userList: IPageData<IBaseUser>;
-  userListParams: IUserListParam,
-  userInfo: IUserInfo,
+  userListParams: IUserListParam;
+  userInfo: IUserInfo;
   onGetUserList: (param: IUserListParam) => IAction;
   onEditUser: (params: IBaseUser) => IAction;
   onGetUserRoles: (userId: number) => IAction;
@@ -35,7 +35,7 @@ const UserManage = (props: Props) => {
 
   const [addUserModalVisible, setAddProjectVisible] = React.useState(false);
   const [chooseRolesVisible, setChooseRolesVisible] = React.useState(false);
-  const [chooseUserId, setChooseUserId] = React.useState(null);
+  const [chooseUpdateUser, setchooseUpdateUser] = React.useState<IBaseUser>(null);
   const [editUserVisible, setEditUserVisible] = React.useState(false);
 
   const handleFilter = (e: React.MouseEvent) => {
@@ -72,25 +72,28 @@ const UserManage = (props: Props) => {
       dataIndex: 'mobile'
     },
     {
+      key: 'role',
+      title: '角色',
+      dataIndex: 'roles',
+      render: (text, record) => <div>{record.roles.map((item) => item.name).join(',')}</div>
+    },
+    {
       title: '操作',
       key: 'action',
       width: 200,
       render: (text, record) => (
         <span>
-          <Button type='link' size='small' onClick={async () => {
-            await props.onGetUserRoles(record.id);
-            setChooseUserId(record.id);
-            setChooseRolesVisible(true);
-          }}>
-            关联角色
-          </Button>
-          <Button type='link' size='small' onClick={() => {
-            props.onEditUser(record);
-            setEditUserVisible(true);
-          }}>
+          <Button
+            type='link'
+            size='small'
+            onClick={() => {
+              setchooseUpdateUser(record);
+              setEditUserVisible(true);
+            }}
+          >
             编辑
           </Button>
-          <Popconfirm title="是否要删除此行？" onConfirm={() => props.onDeleteUser(record.id)}>
+          <Popconfirm title='是否要删除此行？' onConfirm={() => props.onDeleteUser(record.id)}>
             <Button type='link' size='small'>
               删除
             </Button>
@@ -110,21 +113,27 @@ const UserManage = (props: Props) => {
                 <Form.Item label='用户名'>
                   {getFieldDecorator('username', {
                     initialValue: props.userInfo.username
-                  })(<Input placeholder="请输入角色名/角色码"/>)}
+                  })(<Input placeholder='请输入角色名/角色码' />)}
                 </Form.Item>
               </Col>
             </Form>
             <Col span={4}>
               <span className={style.submitButtons}>
-                <Button type="primary" onClick={handleFilter}>
+                <Button type='primary' onClick={handleFilter}>
                   查询
                 </Button>
               </span>
             </Col>
             <Col span={14}>
               <UserAddModal visible={addUserModalVisible} onClose={setAddProjectVisible}></UserAddModal>
-              <UserLinkRolesModal userId={chooseUserId} visible={chooseRolesVisible} onClose={setChooseRolesVisible}></UserLinkRolesModal>
-              <UserEditModal visible={editUserVisible} onClose={setEditUserVisible}></UserEditModal>
+
+              {chooseUpdateUser && (
+                <UserEditModal
+                  visible={editUserVisible}
+                  userInfo={chooseUpdateUser}
+                  onClose={setEditUserVisible}
+                ></UserEditModal>
+              )}
               <div className={style.rightBtn}>
                 <Button type='primary' onClick={() => setAddProjectVisible(true)}>
                   新建用户
@@ -138,7 +147,7 @@ const UserManage = (props: Props) => {
         <Table rowKey='id' columns={columns} dataSource={props.userList.list} />
       </div>
     </div>
-  )
+  );
 };
 
 const mapStateToProps = (state: IStoreState) => {
@@ -150,22 +159,22 @@ const mapStateToProps = (state: IStoreState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
-    bindActionCreators(
-        {
-          onGetUserList: (params: IUserListParam) => {
-            return doGetUserList.request(params);
-          },
-          onEditUser: (params: IBaseUser) => {
-            return doEditUser(params);
-          },
-          onGetUserRoles: (userId: number) => {
-            return doGetUserRoles.request(userId);
-          },
-          onDeleteUser: (userId: number) => {
-            return doDeleteUser.request(userId);
-          }
-        },
-        dispatch
-    );
+  bindActionCreators(
+    {
+      onGetUserList: (params: IUserListParam) => {
+        return doGetUserList.request(params);
+      },
+      onEditUser: (params: IBaseUser) => {
+        return doEditUser(params);
+      },
+      onGetUserRoles: (userId: number) => {
+        return doGetUserRoles.request(userId);
+      },
+      onDeleteUser: (userId: number) => {
+        return doDeleteUser.request(userId);
+      }
+    },
+    dispatch
+  );
 
 export default connect(mapStateToProps, mapDispatchToProps)(Form.create<Props>()(UserManage));

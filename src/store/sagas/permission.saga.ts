@@ -1,3 +1,4 @@
+import { doGetAllPermission } from './../actions/permission.action';
 import {
   doDeletePermission,
   doGetPermission,
@@ -15,6 +16,15 @@ function* getPermissionList(action: ReturnType<typeof doGetPermission.request>):
     yield put(doGetPermission.success(response.data));
   } catch (error) {
     yield put(doGetPermission.failure(error));
+  }
+}
+
+function* getAllPermissionList(action: ReturnType<typeof doGetAllPermission.request>): Generator {
+  try {
+    const response = yield* call(fetchGetPermission, { page: 1, pageSize: 10000 });
+    yield put(doGetAllPermission.success(response.data));
+  } catch (error) {
+    yield put(doGetAllPermission.failure(error));
   }
 }
 
@@ -50,6 +60,7 @@ function* updatePermission(action: ReturnType<typeof doPutPermission.request>): 
 
 export default function* watchPermission() {
   yield takeEvery(getType(doGetPermission.request), getPermissionList);
+  yield takeEvery(getType(doGetAllPermission.request), getAllPermissionList);
   yield takeEvery(getType(doPostPermission.request), addPermission);
   yield takeEvery(getType(doDeletePermission.request), deletePermission);
   yield takeEvery(getType(doPutPermission.request), updatePermission);

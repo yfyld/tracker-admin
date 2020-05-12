@@ -1,3 +1,4 @@
+import { IPermissionListItem } from './permission.api';
 import { IPageQuery } from './../types/index';
 import { IPageData } from '@/types';
 import fetch from './http';
@@ -25,7 +26,7 @@ export interface IUpdateRole extends IBaseRole {
   id: number;
 }
 
-export interface IRolePermission {
+export interface IRolePermissionListItem {
   id: string;
   name: string;
   description?: string;
@@ -36,21 +37,28 @@ export interface IRolePermission {
   disabled: boolean; // 不可点击，超管等角色不能修改其权限
 }
 
-export interface IUpdateRolePermissions {
-  roleId: number,
-  permissionIds: number[]
+export type IRolePermissionList = IRolePermissionListItem[];
+
+export interface IRoleInfo extends IBaseRole {
+  id: number;
+  permissions: IPermissionListItem[];
 }
 
-export type IRoleItemList = IPageData<IRoleListItem>;
+export interface IUpdateRolePermissions {
+  roleId: number;
+  permissionIds: number[];
+}
+
+export type IRoleList = IPageData<IRoleListItem>;
 
 // 新建角色
 export function fetchPostRole(params: IBaseRole) {
   return fetch.post<IRoleListItem>('/role', params);
 }
 
-// 获取角色列表
+// 获取角色详情
 export function fetchGetRole(params: IQueryRole) {
-  return fetch.get<IRoleItemList>('/role', params);
+  return fetch.get<IRoleList>('/role', params);
 }
 
 // 更新角色
@@ -64,8 +72,8 @@ export function fetchDeleteRole(roleId: number) {
 }
 
 // 获取角色对应权限列表
-export function fetchGetRolePermissions(roleId: number) {
-  return fetch.get<IRolePermission[]>(`/role/rolePermissions/${roleId}`);
+export function fetchGetRoleInfo(roleId: number) {
+  return fetch.get<IRoleInfo>(`/role/${roleId}`);
 }
 
 // 更新角色下所有权限

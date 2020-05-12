@@ -51,17 +51,7 @@ const PermissionAddModal = (props: Props) => {
             initialValue: props.addPermissionItem.name
           })(<Input placeholder='请输入权限名' />)}
         </Form.Item>
-        <Form.Item {...formItemLayout} label="权限描述">
-          {getFieldDecorator('description', {
-            initialValue: props.addPermissionItem.description
-          })(
-            <TextArea
-              style={{ minHeight: 32 }}
-              placeholder="请输入权限描述"
-              rows={4}
-            />
-          )}
-        </Form.Item>
+
         <Form.Item label='权限码'>
           {getFieldDecorator('code', {
             rules: [{ required: true, message: '请输入权限码' }],
@@ -73,15 +63,22 @@ const PermissionAddModal = (props: Props) => {
             rules: [{ required: true, message: '权限类型' }],
             initialValue: props.addPermissionItem.type
           })(
-            <Select placeholder="请选择">
-              {
-                permissionTypeDescription.map((des, index) => {
-                  if (index === 0) return null;
-                  return (<Option key={des} value={index}>{des}</Option>)
-                })
-              }
+            <Select placeholder='请选择'>
+              {permissionTypeDescription.map((des, index) => {
+                if (index === 0) return null;
+                return (
+                  <Option key={des} value={index}>
+                    {des}
+                  </Option>
+                );
+              })}
             </Select>
           )}
+        </Form.Item>
+        <Form.Item {...formItemLayout} label='权限描述'>
+          {getFieldDecorator('description', {
+            initialValue: props.addPermissionItem.description
+          })(<TextArea style={{ minHeight: 32 }} placeholder='请输入权限描述' rows={4} />)}
         </Form.Item>
       </Form>
     </Modal>

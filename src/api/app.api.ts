@@ -1,3 +1,6 @@
+import { IRoleInfo } from './role.api';
+import { IBaseRole } from '@/api';
+import { IRole } from './project.api';
 import { IPageQuery } from './../types/index';
 import { IPageData } from '@/types';
 import fetch from './http';
@@ -36,6 +39,7 @@ export interface IBaseUser {
   nickname: string;
   email: string;
   mobile: string;
+  roles: IRoleInfo[];
 }
 
 export interface IUserListItem extends IBaseUser {
@@ -96,6 +100,11 @@ export function fetchUserList(param: IUserListParam) {
 // 更新用户信息
 export function fetchPutUser(params: IBaseUser) {
   return fetch.put('/user', params);
+}
+
+// 管理员更新用户信息
+export function fetchPutUserByAdmin(params: IBaseUser) {
+  return fetch.put('/user/admin-update', params);
 }
 
 // 获取用户对应角色列表

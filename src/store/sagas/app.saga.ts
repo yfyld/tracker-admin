@@ -1,4 +1,4 @@
-import { doGetUserList, doGetUserRoles, doPutUserRoles, doSignup } from './../actions/app.action';
+import { doGetUserList, doGetUserRoles, doPutUserRoles, doSignup, doPutUserByAdmin } from './../actions/app.action';
 import { put, takeEvery, delay } from 'redux-saga/effects';
 
 import { getType } from 'typesafe-actions';
@@ -12,7 +12,6 @@ import {
   doGetProjectList,
   doPutRole,
   doGetRole,
-  doGetRolePermissions,
   doUpdateRolePermissions,
   doPutUser,
   doDeletePermission,
@@ -26,13 +25,14 @@ import {
   fetchUserInfo,
   fetchUserList,
   fetchPutRole,
-  fetchGetRolePermissions,
+  fetchGetRoleInfo,
   fetchPutRolePermissions,
   fetchPutUser,
   fetchGetUserRoles,
   fetchPutUserRoles,
   fetchDeletePermission,
-  fetchDeleteUser
+  fetchDeleteUser,
+  fetchPutUserByAdmin
 } from '@/api';
 
 import { message } from 'antd';
@@ -113,9 +113,18 @@ function* updateUser(action: ReturnType<typeof doPutUser.request>): Generator {
   try {
     yield* call(fetchPutUser, action.payload);
     yield put(doPutUser.success());
-    yield put(doGetUserList.request({ page: 1, pageSize: 20 }));
   } catch (error) {
     yield put(doPutUser.failure(error));
+  }
+}
+
+function* updateUserByAdmin(action: ReturnType<typeof doPutUserByAdmin.request>): Generator {
+  try {
+    yield* call(fetchPutUserByAdmin, action.payload);
+    yield put(doPutUserByAdmin.success());
+    yield put(doGetUserList.request({ page: 1, pageSize: 20 }));
+  } catch (error) {
+    yield put(doPutUserByAdmin.failure(error));
   }
 }
 
@@ -153,6 +162,8 @@ export default function* watchApp() {
   yield takeEvery(getType(doGetUserInfo.request), getUserInfo);
   yield takeEvery(getType(doGetUserList.request), getUserList);
   yield takeEvery(getType(doPutUser.request), updateUser);
+  yield takeEvery(getType(doPutUserByAdmin.request), updateUserByAdmin);
+
   yield takeEvery(getType(doGetUserRoles.request), getUserRoles);
   yield takeEvery(getType(doPutUserRoles.request), updateUserRole);
   yield takeEvery(getType(doDeleteUser.request), deleteUser);

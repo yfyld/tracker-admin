@@ -1,13 +1,16 @@
+import { doGetAllRole } from './../actions/role.action';
 import {
   doDeleteRole,
-  doGetRole, doGetRolePermissions,
+  doGetRole,
+  doGetRoleInfo,
   doPostRole,
-  doPutRole, doUpdateRolePermissions
+  doPutRole,
+  doUpdateRolePermissions
 } from '@/store/actions/role.action';
 import {
   fetchDeleteRole,
   fetchGetRole,
-  fetchGetRolePermissions,
+  fetchGetRoleInfo,
   fetchPostRole,
   fetchPutRole,
   fetchPutRolePermissions
@@ -22,6 +25,15 @@ function* getRoleList(action: ReturnType<typeof doGetRole.request>): Generator {
     yield put(doGetRole.success(response.data));
   } catch (error) {
     yield put(doGetRole.failure(error));
+  }
+}
+
+function* getAllRoleList(action: ReturnType<typeof doGetAllRole.request>): Generator {
+  try {
+    const response = yield* call(fetchGetRole, { page: 1, pageSize: 10000 });
+    yield put(doGetAllRole.success(response.data));
+  } catch (error) {
+    yield put(doGetAllRole.failure(error));
   }
 }
 
@@ -55,12 +67,12 @@ function* updateRole(action: ReturnType<typeof doPutRole.request>): Generator {
   }
 }
 
-function* getRolePermissions(action: ReturnType<typeof doGetRolePermissions.request>): Generator {
+function* getRoleInfo(action: ReturnType<typeof doGetRoleInfo.request>): Generator {
   try {
-    const response = yield* call(fetchGetRolePermissions, action.payload);
-    yield put(doGetRolePermissions.success(response.data));
+    const response = yield* call(fetchGetRoleInfo, action.payload);
+    yield put(doGetRoleInfo.success(response.data));
   } catch (error) {
-    yield put(doGetRolePermissions.failure(error));
+    yield put(doGetRoleInfo.failure(error));
   }
 }
 
@@ -75,9 +87,10 @@ function* updateRolePermission(action: ReturnType<typeof doUpdateRolePermissions
 
 export default function* watchRole() {
   yield takeEvery(getType(doGetRole.request), getRoleList);
+  yield takeEvery(getType(doGetAllRole.request), getAllRoleList);
   yield takeEvery(getType(doPostRole.request), addRole);
   yield takeEvery(getType(doDeleteRole.request), deleteRole);
   yield takeEvery(getType(doPutRole.request), updateRole);
-  yield takeEvery(getType(doGetRolePermissions.request), getRolePermissions);
+  yield takeEvery(getType(doGetRoleInfo.request), getRoleInfo);
   yield takeEvery(getType(doUpdateRolePermissions.request), updateRolePermission);
 }

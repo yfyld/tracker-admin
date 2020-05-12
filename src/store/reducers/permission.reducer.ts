@@ -1,15 +1,18 @@
+import { doGetAllPermission } from './../actions/permission.action';
+import { IPermissionList } from './../../api/permission.api';
 import { IBasePermission, IPermissionListItem, IQueryPermission, IUpdatePermission } from '@/api';
 import update from 'immutability-helper';
 import { IAction, IPageData } from '@/types';
 import { getType } from 'typesafe-actions';
-import { doEditPermission, doGetPermission, doPostPermission, } from '@/store/actions/permission.action';
+import { doEditPermission, doGetPermission, doPostPermission } from '@/store/actions/permission.action';
 import { doResetStore } from '@/store/actions';
 
 export interface PermissionState {
-  addPermissionItem: IBasePermission,
-  updatePermissionItem: IUpdatePermission,
-  permissionList: IPageData<IPermissionListItem>,
-  permissionListParams: IQueryPermission
+  addPermissionItem: IBasePermission;
+  updatePermissionItem: IUpdatePermission;
+  permissionList: IPermissionList;
+  permissionListParams: IQueryPermission;
+  allPermissionList: IPermissionList;
 }
 
 const initialState = (): PermissionState => ({
@@ -27,6 +30,10 @@ const initialState = (): PermissionState => ({
     code: '',
     status: null,
     type: null
+  },
+  allPermissionList: {
+    totalCount: 0,
+    list: []
   },
   permissionList: {
     totalCount: 0,
@@ -58,6 +65,10 @@ export const permissionReducer = (state: PermissionState = initialState(), actio
     case getType(doGetPermission.success):
       return update(state, {
         permissionList: { $set: action.payload }
+      });
+    case getType(doGetAllPermission.success):
+      return update(state, {
+        allPermissionList: { $set: action.payload }
       });
     case getType(doEditPermission):
       return update(state, {

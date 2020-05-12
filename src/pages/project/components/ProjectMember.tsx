@@ -22,8 +22,8 @@ const columns = [
   },
   {
     title: '角色',
-    dataIndex: 'roleCode',
-    key: 'roleCode'
+    dataIndex: 'roleName',
+    key: 'roleName'
   },
   {
     title: '操作',

@@ -35,7 +35,7 @@ const PermissionEditModal = (props: Props) => {
       }
       props.onPutPermission({
         ...props.updatePermissionItem,
-        ...values,
+        ...values
       });
       props.onClose(false);
     });
@@ -48,19 +48,9 @@ const PermissionEditModal = (props: Props) => {
           {getFieldDecorator('name', {
             rules: [{ required: true, message: '请输入权限名' }],
             initialValue: props.updatePermissionItem.name
-          })(<Input placeholder='请输入权限名' disabled={true} />)}
+          })(<Input placeholder='请输入权限名' />)}
         </Form.Item>
-        <Form.Item {...formItemLayout} label="权限描述">
-          {getFieldDecorator('description', {
-            initialValue: props.updatePermissionItem.description
-          })(
-            <TextArea
-              style={{ minHeight: 32 }}
-              placeholder="请输入权限描述"
-              rows={4}
-            />
-          )}
-        </Form.Item>
+
         <Form.Item label='权限码'>
           {getFieldDecorator('code', {
             rules: [{ required: true, message: '请输入权限码' }],
@@ -72,15 +62,22 @@ const PermissionEditModal = (props: Props) => {
             rules: [{ required: true, message: '权限类型' }],
             initialValue: props.updatePermissionItem.type
           })(
-            <Select placeholder="请选择" disabled={true}>
-              {
-                permissionTypeDescription.map((des, index) => {
-                  if (index === 0) return null;
-                  return (<Option key={des} value={index}>{des}</Option>)
-                })
-              }
+            <Select placeholder='请选择' disabled={true}>
+              {permissionTypeDescription.map((des, index) => {
+                if (index === 0) return null;
+                return (
+                  <Option key={des} value={index}>
+                    {des}
+                  </Option>
+                );
+              })}
             </Select>
           )}
+        </Form.Item>
+        <Form.Item {...formItemLayout} label='权限描述'>
+          {getFieldDecorator('description', {
+            initialValue: props.updatePermissionItem.description
+          })(<TextArea style={{ minHeight: 32 }} placeholder='请输入权限描述' rows={4} />)}
         </Form.Item>
       </Form>
     </Modal>
