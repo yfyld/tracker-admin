@@ -1,8 +1,25 @@
+import { doUpdateProjectMember, doDeleteProjectMember } from './../actions/project.action';
 import { ROUTE_PATH } from '@/constants';
 import { put, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
-import { doGetProjectList, doAddProject, doDeleteProject, doGetProjectInfo, doUpdateProject } from '@/store/actions';
-import { fetchProjectList, fetchProjectAdd, fetchProjectDel, fetchProjectInfo, fetchProjectUpdate } from '@/api';
+import {
+  doGetProjectList,
+  doAddProject,
+  doDeleteProject,
+  doGetProjectInfo,
+  doUpdateProject,
+  doAddProjectMember
+} from '@/store/actions';
+import {
+  fetchProjectList,
+  fetchProjectAdd,
+  fetchProjectDel,
+  fetchProjectInfo,
+  fetchProjectUpdate,
+  fetchPrjectMemberAdd,
+  fetchPrjectMemberUpdate,
+  fetchPrjectMemberDel
+} from '@/api';
 import { call, select } from '@/utils';
 import { message } from 'antd';
 
@@ -65,10 +82,44 @@ function* updateProject(action: ReturnType<typeof doUpdateProject.request>): Gen
   }
 }
 
+function* addProjectMember(action: ReturnType<typeof doAddProjectMember.request>): Generator {
+  try {
+    const response = yield* call(fetchPrjectMemberAdd, action.payload);
+    yield put(doAddProjectMember.success());
+    yield put(doGetProjectInfo.request(action.payload.projectId));
+  } catch (error) {
+    yield put(doAddProjectMember.failure(error));
+  }
+}
+
+function* updateProjectMember(action: ReturnType<typeof doUpdateProjectMember.request>): Generator {
+  try {
+    const response = yield* call(fetchPrjectMemberUpdate, action.payload);
+    yield put(doUpdateProjectMember.success());
+    yield put(doGetProjectInfo.request(action.payload.projectId));
+  } catch (error) {
+    yield put(doUpdateProjectMember.failure(error));
+  }
+}
+
+function* delProjectMember(action: ReturnType<typeof doDeleteProjectMember.request>): Generator {
+  try {
+    const response = yield* call(fetchPrjectMemberDel, action.payload);
+    yield put(doDeleteProjectMember.success());
+    yield put(doGetProjectInfo.request(action.payload.projectId));
+  } catch (error) {
+    yield put(doDeleteProjectMember.failure(error));
+  }
+}
+
 export default function* watchProject() {
   yield takeEvery(getType(doGetProjectList.request), getProjectList);
   yield takeEvery(getType(doAddProject.request), addProject);
   yield takeEvery(getType(doDeleteProject.request), deleteProject);
   yield takeEvery(getType(doGetProjectInfo.request), getProjectInfo);
   yield takeEvery(getType(doUpdateProject.request), updateProject);
+
+  yield takeEvery(getType(doUpdateProjectMember.request), updateProjectMember);
+  yield takeEvery(getType(doAddProjectMember.request), addProjectMember);
+  yield takeEvery(getType(doDeleteProjectMember.request), delProjectMember);
 }

@@ -10,7 +10,6 @@ export interface ProjectState {
   projectInfo: IProjectInfo;
   projectList: IPageData<IProjectListItem>;
   projectListParams: IProjectListParam;
-  aaaaa: string;
 }
 
 const initialState = (): ProjectState => ({
@@ -25,7 +24,7 @@ const initialState = (): ProjectState => ({
     members: [],
     description: ''
   },
-  aaaaa: '',
+
   projectList: { totalCount: 0, list: [] },
   projectListParams: { page: 1, pageSize: 20, projectName: '' }
 });

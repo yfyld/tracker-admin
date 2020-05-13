@@ -54,6 +54,23 @@ export enum IRole {
   member = ''
 }
 
+export interface IProjectMemberAddParam {
+  userIds: number[];
+  projectId: number;
+  roleCode: string;
+}
+
+export interface IProjectMemberUpdateParam {
+  userIds: number[];
+  projectId: number;
+  roleCode: string;
+}
+
+export interface IProjectMemberDelParam {
+  userIds: number[];
+  projectId: number;
+}
+
 export function fetchProjectList(params: IProjectListParam) {
   return fetch.get<IPageData<IProjectListItem>>('/project/', params);
 }
@@ -70,6 +87,18 @@ export function fetchProjectDel(projectId: number) {
   return fetch.delete(`/project/${projectId}`);
 }
 
-export function fetchProjectUpdate(parmas: IProjectUpdateParam) {
-  return fetch.put(`/project`, parmas);
+export function fetchProjectUpdate(params: IProjectUpdateParam) {
+  return fetch.put(`/project`, params);
+}
+
+export function fetchPrjectMemberAdd(params: IProjectMemberAddParam) {
+  return fetch.post('project/add-members', params);
+}
+
+export function fetchPrjectMemberUpdate(params: IProjectMemberUpdateParam) {
+  return fetch.post('project/update-members', params);
+}
+
+export function fetchPrjectMemberDel(params: IProjectMemberDelParam) {
+  return fetch.post('project/delete-members', params);
 }

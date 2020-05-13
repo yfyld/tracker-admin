@@ -92,6 +92,11 @@ const handlers = {
         action: doGetProjectList.request({ ...state.project.projectListParams, teamId: null }),
         ttl: CACHE_TIME,
         disable: false
+      },
+      {
+        action: doGetAllRole.request(),
+        ttl: CACHE_TIME,
+        disable: state.role.allRoleList.totalCount > 0
       }
     ];
   },

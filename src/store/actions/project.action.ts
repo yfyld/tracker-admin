@@ -1,8 +1,15 @@
-import { IProjectListItem } from './../../api/project.api';
+import { IProjectListItem, IProjectMemberDelParam, IProjectMemberUpdateParam } from './../../api/project.api';
 import * as actionType from '@/constants/actionType';
 import { createAsyncAction } from 'typesafe-actions';
 import { IPageData } from '@/types';
-import { IProjectListParam, IAddProject, IProjectAddRes, IProjectInfo, IProjectUpdateParam } from '@/api';
+import {
+  IProjectListParam,
+  IAddProject,
+  IProjectAddRes,
+  IProjectInfo,
+  IProjectUpdateParam,
+  IProjectMemberAddParam
+} from '@/api';
 
 export const doGetProjectList = createAsyncAction(
   actionType.GET_PROJECT_LIST_REQUEST,
@@ -33,3 +40,21 @@ export const doUpdateProject = createAsyncAction(
   actionType.UPDATE_PROJECT_SUCCESS,
   actionType.UPDATE_PROJECT_FAILURE
 )<IProjectUpdateParam, undefined, Error>();
+
+export const doAddProjectMember = createAsyncAction(
+  actionType.ADD_PROJECT_MEMBER_REQUEST,
+  actionType.ADD_PROJECT_MEMBER_SUCCESS,
+  actionType.ADD_PROJECT_MEMBER_FAILURE
+)<IProjectMemberAddParam, undefined, Error>();
+
+export const doDeleteProjectMember = createAsyncAction(
+  actionType.DELETE_PROJECT_MEMBER_REQUEST,
+  actionType.DELETE_PROJECT_MEMBER_SUCCESS,
+  actionType.DELETE_PROJECT_MEMBER_FAILURE
+)<IProjectMemberDelParam, undefined, Error>();
+
+export const doUpdateProjectMember = createAsyncAction(
+  actionType.UPDATE_PROJECT_MEMBER_REQUEST,
+  actionType.UPDATE_PROJECT_MEMBER_SUCCESS,
+  actionType.UPDATE_PROJECT_MEMBER_FAILURE
+)<IProjectMemberUpdateParam, undefined, Error>();
