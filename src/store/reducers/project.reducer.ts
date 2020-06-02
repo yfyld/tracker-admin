@@ -22,7 +22,8 @@ const initialState = (): ProjectState => ({
     },
     associationProjects: [],
     members: [],
-    description: ''
+    description: '',
+    trackKey: ''
   },
 
   projectList: { totalCount: 0, list: [] },

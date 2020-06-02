@@ -20,6 +20,7 @@ export interface IProjectInfo {
   };
   members: IMemberInfo[];
   description: string;
+  trackKey: string;
 }
 
 export interface IAddProject {

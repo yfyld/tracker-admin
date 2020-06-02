@@ -59,7 +59,8 @@ export const ROUTE_PATH = {
   home: '/home',
   userManage: '/admin/user-manage',
   roleManage: '/admin/role-manage',
-  permissionManage: '/admin/permission-manage'
+  permissionManage: '/admin/permission-manage',
+  custom: '/project/query'
 };
 
 export interface IDynamicTime {
@@ -150,48 +151,6 @@ export const DYNAMIC_TIME: IDynamicTime[] = [
 ];
 
 export const EVENT_ATTRS: IFieldInfo[] = [
-  {
-    name: 'IP',
-    value: 'ip',
-    type: 'string',
-    eventType: 0,
-    recommend: []
-  },
-  {
-    name: '国家',
-    value: 'country',
-    type: 'string',
-    eventType: 0,
-    recommend: []
-  },
-  {
-    name: '省份',
-    value: 'province',
-    type: 'string',
-    eventType: 0,
-    recommend: []
-  },
-  {
-    name: '城市',
-    value: 'city',
-    type: 'string',
-    eventType: 0,
-    recommend: []
-  },
-  {
-    name: '屏幕高',
-    value: 'clientHeight',
-    type: 'number',
-    eventType: 0,
-    recommend: []
-  },
-  {
-    name: '屏幕宽',
-    value: 'clientWidth',
-    type: 'number',
-    eventType: 0,
-    recommend: []
-  },
   {
     name: '页面标题',
     value: 'title',
@@ -329,6 +288,111 @@ export const EVENT_ATTRS: IFieldInfo[] = [
     name: '是否登录',
     value: 'title',
     type: 'string',
+    eventType: 0,
+    recommend: []
+  },
+  {
+    name: '国家',
+    value: 'country',
+    type: 'string',
+    eventType: 0,
+    recommend: []
+  },
+  {
+    name: '省份',
+    value: 'province',
+    type: 'string',
+    eventType: 0,
+    recommend: []
+  },
+  {
+    name: '城市',
+    value: 'city',
+    type: 'string',
+    eventType: 0,
+    recommend: []
+  },
+  {
+    name: 'IP',
+    value: 'ip',
+    type: 'string',
+    eventType: 0,
+    recommend: []
+  },
+  {
+    name: '版本',
+    value: 'version',
+    type: 'string',
+    eventType: 0,
+    recommend: []
+  },
+  {
+    name: '屏幕高',
+    value: 'clientHeight',
+    type: 'number',
+    eventType: 0,
+    recommend: []
+  },
+  {
+    name: '屏幕宽',
+    value: 'clientWidth',
+    type: 'number',
+    eventType: 0,
+    recommend: []
+  },
+  {
+    name: '像素比',
+    value: 'radio',
+    type: 'number',
+    eventType: 0,
+    recommend: []
+  },
+  {
+    name: 'SDK版本',
+    value: 'libVersion',
+    type: 'string',
+    eventType: 0,
+    recommend: []
+  },
+  {
+    name: 'SDK类型',
+    value: 'libType',
+    type: 'string',
+    eventType: 0,
+    recommend: []
+  },
+  {
+    name: 'SDK版本',
+    value: 'libVersion',
+    type: 'string',
+    eventType: 0,
+    recommend: []
+  },
+  {
+    name: '渠道',
+    value: 'channel',
+    type: 'string',
+    eventType: 0,
+    recommend: []
+  },
+  {
+    name: 'AppId',
+    value: 'appId',
+    type: 'string',
+    eventType: 0,
+    recommend: []
+  },
+  {
+    name: '自定义参数',
+    value: 'custom',
+    type: 'string',
+    eventType: 0,
+    recommend: []
+  },
+  {
+    name: '自定义数值',
+    value: 'score',
+    type: 'number',
     eventType: 0,
     recommend: []
   }

@@ -18,7 +18,7 @@ export const menuDataSelector = createSelector(projectIdSelector, boardListSelec
       name: '数据看板',
       icon: 'setting',
       action: ADD_BROAD,
-      children: boardList.map(item => ({
+      children: boardList.map((item) => ({
         key: `/project/board?projectId=${id}&boardId=${item.id}`,
         icon: 'setting',
         name: item.name
@@ -57,6 +57,12 @@ export const menuDataSelector = createSelector(projectIdSelector, boardListSelec
     {
       key: `/project/metadata-list?projectId=${id}`,
       name: '元数据',
+      icon: 'setting',
+      auth: ['dev', 'admin']
+    },
+    {
+      key: `/project/query?projectId=${id}`,
+      name: '自定义查询',
       icon: 'setting',
       auth: ['dev', 'admin']
     }

@@ -319,7 +319,7 @@ const MetadataList = ({
       </div>
       <div className='app-card'>
         <Alert
-          message='请使用命名空间+语义化的方式命名code 如: h5-page-member-detail(h5会员详情页)  zyjk-click-member-pay(智云健康会员支付点击事件)'
+          message='请使用命名空间+语义化的方式命名code 如:  业务-端-类型-详情  zyjk-h5-click-member-pay(智云健康会员支付点击事件)  '
           type='warning'
           closable
         />

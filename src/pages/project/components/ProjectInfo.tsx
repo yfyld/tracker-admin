@@ -42,7 +42,7 @@ const ProjectInfo = ({ form, projectInfo, handleUpdateProject, projectList }: Pr
           ]
         })(<Input />)}
       </Form.Item>
-      <Form.Item label='trackKey'>{btoa(`{"projectId":${projectInfo.id}}`)}</Form.Item>
+      <Form.Item label='trackKey'>{projectInfo.trackKey}</Form.Item>
 
       <Form.Item label='关联项目'>
         {getFieldDecorator('associationProjectIds', {

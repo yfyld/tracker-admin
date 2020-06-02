@@ -159,6 +159,14 @@ export interface IPathAnalyseDataLinksItem {
   targetName: string;
 }
 
+export interface ICustomAnalyseParam {
+  projectId: number;
+  dateType: string;
+  dateStart: number;
+  dateEnd: number;
+  query: string;
+}
+
 export function fetchEventAnalyseData(param: IEventAnalyseParam) {
   return fetch.post<IEventAnalyseData>('/analyse/event', { ...param, SHOW_LOADING: false });
 }
@@ -169,4 +177,8 @@ export function fetchFunnelAnalyseData(param: IFunnelAnalyseParam) {
 
 export function fetchPathAnalyseData(param: IPathAnalyseParam) {
   return fetch.post<IPathAnalyseData>('/analyse/path', { ...param, SHOW_LOADING: false });
+}
+
+export function fetchCustomAnalyseData(param: ICustomAnalyseParam) {
+  return fetch.post<any>('/analyse/custom', { ...param, SHOW_LOADING: false });
 }
