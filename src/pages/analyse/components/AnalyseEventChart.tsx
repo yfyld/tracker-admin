@@ -1,6 +1,6 @@
 import * as React from 'react';
 import ReactEcharts, { ObjectMap } from 'echarts-for-react';
-import { Table } from 'antd';
+import { Table, Icon } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import { IEventAnalyseParam, IEventAnalyseData } from '@/api';
 
@@ -420,13 +420,18 @@ const AnalyseEventChart = ({ data }: Props) => {
           </p>
           <p>
             同比:
-            <span style={{ color: Number(item.compare.qoqPercentage) > 0 ? COLOR.success : COLOR.danger }}>
-              {' '}
-              {item.compare.yoyPercentage === 'NaN' ? '--' : Math.floor(Number(item.compare.yoyPercentage) * 100) + '%'}
+            <span style={{ color: Number(item.compare.yoyPercentage) > 1 ? COLOR.success : COLOR.danger }}>
+              <Icon type={Number(item.compare.yoyPercentage) > 1 ? 'caret-up' : 'caret-down'} />
+              {item.compare.yoyPercentage === null
+                ? '--'
+                : Math.abs(Math.floor(Number(item.compare.yoyPercentage) * 100 - 100)) + '%'}
             </span>
             &emsp; 环比:
-            <span style={{ color: Number(item.compare.qoqPercentage) > 0 ? COLOR.success : COLOR.danger }}>
-              {item.compare.qoqPercentage === 'NaN' ? '--' : Math.floor(Number(item.compare.qoqPercentage) * 100) + '%'}
+            <span style={{ color: Number(item.compare.qoqPercentage) > 1 ? COLOR.success : COLOR.danger }}>
+              <Icon type={Number(item.compare.qoqPercentage) > 1 ? 'caret-up' : 'caret-down'} />
+              {item.compare.qoqPercentage === null
+                ? '--'
+                : Math.abs(Math.floor(Number(item.compare.qoqPercentage) * 100 - 100)) + '%'}
             </span>
           </p>
         </div>
