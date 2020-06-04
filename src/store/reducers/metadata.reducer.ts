@@ -1,6 +1,11 @@
 import { IListData } from './../../types/index';
 import { IFieldInfo, ITagList } from './../../api/metadata.api';
-import { doGetActiveMetadataList, doGetFieldList, doGetTagList } from './../actions/metadata.action';
+import {
+  doGetActiveMetadataList,
+  doGetFieldList,
+  doGetTagList,
+  doAddMetadataByExcel
+} from './../actions/metadata.action';
 import update from 'immutability-helper';
 import { getType } from 'typesafe-actions';
 import { IAction, IPageData } from '@/types';
@@ -22,6 +27,8 @@ export interface MetadataState {
   fieldListMap: IFieldListMap;
 
   tagList: ITagList;
+
+  uploading: boolean;
 }
 
 const initialState = (): MetadataState => ({
@@ -35,6 +42,7 @@ const initialState = (): MetadataState => ({
     projectId: null,
     tags: [],
     log: null,
+    operatorType: 0,
     recentLog: null
   },
   metadataList: { totalCount: 0, list: [] },
@@ -53,7 +61,8 @@ const initialState = (): MetadataState => ({
 
   fieldListMap: {},
 
-  tagList: { totalCount: 0, list: [] }
+  tagList: { totalCount: 0, list: [] },
+  uploading: false
 });
 
 export const metadataReducer = (state: MetadataState = initialState(), action: IAction): MetadataState => {
@@ -82,6 +91,13 @@ export const metadataReducer = (state: MetadataState = initialState(), action: I
     case getType(doGetTagList.success):
       return update(state, {
         tagList: { $set: action.payload }
+      });
+
+    case getType(doAddMetadataByExcel.request):
+      return update(state, { uploading: { $set: true } });
+    case getType(doAddMetadataByExcel.success):
+      return update(state, {
+        uploading: { $set: false }
       });
     default:
       return state;

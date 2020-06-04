@@ -2,7 +2,7 @@ import { Modal, Form, Input, Select } from 'antd';
 import * as React from 'react';
 import { formItemLayout } from '@/constants';
 import { FormComponentProps } from 'antd/lib/form';
-import { IMetadataUpdateParam, ITagList, IMetadataInfo, EMetadataType } from '@/api';
+import { IMetadataUpdateParam, ITagList, IMetadataInfo, EMetadataType, EOperatorType } from '@/api';
 import { toastformError } from '@/utils';
 import { connect } from 'react-redux';
 import { IAction, IStoreState } from '@/types';
@@ -66,6 +66,7 @@ const MetadataEditModel = (props: Props) => {
             rules: [{ required: true, message: '请输入事件code' }]
           })(<Input placeholder='请输入事件code' />)}
         </Form.Item>
+
         <Form.Item label='事件类型'>
           {getFieldDecorator('type', {
             initialValue: props.defaultValue.type,
@@ -74,6 +75,18 @@ const MetadataEditModel = (props: Props) => {
             <Select placeholder='请选择事件类型'>
               <Option value={EMetadataType.page}>页面</Option>
               <Option value={EMetadataType.event}>事件</Option>
+            </Select>
+          )}
+        </Form.Item>
+        <Form.Item label='执行者'>
+          {getFieldDecorator('operatorType', {
+            initialValue: props.defaultValue.operatorType
+          })(
+            <Select placeholder='请选择执行者类型'>
+              <Option value={EOperatorType.h5}>h5</Option>
+              <Option value={EOperatorType.native}>native</Option>
+              <Option value={EOperatorType.all}>all</Option>
+              <Option value={EOperatorType['待定']}>待定</Option>
             </Select>
           )}
         </Form.Item>

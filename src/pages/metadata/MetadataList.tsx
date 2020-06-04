@@ -18,7 +18,8 @@ import {
   ITagInfo,
   EMetadataType,
   fetchMetadataAddByExcel,
-  IMetadataAddByExcelParam
+  IMetadataAddByExcelParam,
+  EOperatorType
 } from '@/api';
 import MetadataAddModal from './components/MetadataAddModal';
 import MetadataEditModal from './components/MetadataEditModal';
@@ -41,6 +42,7 @@ interface Props {
   metadataListParams: IMetadataListParam;
   tagListFilters: ColumnFilterItem[];
   projectId: number;
+  uploading: boolean;
 }
 
 const MetadataList = ({
@@ -52,7 +54,8 @@ const MetadataList = ({
   metadataListParams,
   tagListFilters,
   onAddMetadataByExcel,
-  projectId
+  projectId,
+  uploading
 }: Props) => {
   const [addMetadataVisible, setAddMetadataVisible] = React.useState(false);
   const [editMetadataVisible, setEditMetadataVisible] = React.useState(false);
@@ -66,6 +69,7 @@ const MetadataList = ({
     status: null,
     tags: [],
     log: 0,
+    operatorType: 0,
     recentLog: 0
   });
   const [tagDrawerVisible, setTagDrawerVisible] = React.useState(false);
@@ -108,6 +112,31 @@ const MetadataList = ({
       ],
       filterMultiple: false,
       render: (text: number) => <span>{filterMetadataType(text)}</span>
+    },
+    {
+      key: 'operatorType',
+      title: '执行者',
+      dataIndex: 'operatorType',
+      filters: [
+        {
+          text: 'native',
+          value: '' + EOperatorType.native
+        },
+        {
+          text: 'h5',
+          value: '' + EOperatorType.h5
+        },
+        {
+          text: 'all',
+          value: '' + EOperatorType.all
+        },
+        {
+          text: '待定',
+          value: '' + EOperatorType['待定']
+        }
+      ],
+      filterMultiple: false,
+      render: (text: number) => <span>{EOperatorType[text]}</span>
     },
     {
       key: 'status',
@@ -243,6 +272,9 @@ const MetadataList = ({
     if (filters.type) {
       params.type = filters.type[0];
     }
+    if (filters.operatorType) {
+      params.operatorType = filters.operatorType[0];
+    }
     if (filters.log) {
       params.log = filters.log[0];
     }
@@ -303,7 +335,7 @@ const MetadataList = ({
             action={config.baseURL + '/common/upload'}
             onChange={handleImportChange}
           >
-            <Button>
+            <Button loading={uploading}>
               <Icon type='upload' /> 导入元数据
             </Button>
           </Upload>
@@ -319,7 +351,7 @@ const MetadataList = ({
       </div>
       <div className='app-card'>
         <Alert
-          message='请使用命名空间+语义化的方式命名code 如:  业务-端-类型-详情  zyjk-h5-click-member-pay(智云健康会员支付点击事件)  '
+          message='请使用命名空间+语义化的方式命名code 如:  业务-类型-详情  zyjk-click-member-pay(智云健康会员支付点击事件)  '
           type='warning'
           closable
         />
@@ -359,7 +391,7 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   );
 
 const mapStateToProps = (state: IStoreState) => {
-  const { metadataList, metadataListParams, tagList } = state.metadata;
+  const { metadataList, metadataListParams, tagList, uploading } = state.metadata;
   const projectId = state.project.projectInfo.id;
   const tagListFilters = tagListFiltersSelector(state);
   return {
@@ -367,7 +399,8 @@ const mapStateToProps = (state: IStoreState) => {
     metadataListParams,
     tagList,
     tagListFilters,
-    projectId
+    projectId,
+    uploading
   };
 };
 

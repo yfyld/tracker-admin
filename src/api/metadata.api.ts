@@ -7,6 +7,13 @@ export enum EMetadataType {
   event = 2 // 事件
 }
 
+export enum EOperatorType {
+  'h5' = 1,
+  'native' = 2,
+  'all' = 3,
+  '待定' = 0
+}
+
 export interface IMetadataInfo {
   id: number;
   name: string;
@@ -18,6 +25,7 @@ export interface IMetadataInfo {
   projectId: number;
   log: number;
   recentLog: number;
+  operatorType: number;
   url?: string;
 }
 
