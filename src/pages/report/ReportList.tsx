@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { IStoreState, IAction, IPageData } from '@/types';
 import { doGetReportList, doAddReport, doDeleteReport, doAppendReportToBoard } from '@/store/actions';
 import { bindActionCreators, Dispatch } from 'redux';
-import { Table, Button, Icon, Tooltip, Modal, Popover, Select, message } from 'antd';
+import { Table, Button, Icon, Tooltip, Modal, Popover, Select, message, Dropdown, Menu } from 'antd';
 import { PaginationConfig, SorterResult, ColumnProps, ColumnFilterItem } from 'antd/lib/table';
 import { IReportListParam, IReportInfo, IReportAddParam, IBoardInfo, IReportAppendToBoard } from '@/api';
 import ReportAddModal from './components/ReportAddModal';
@@ -14,6 +14,7 @@ import { boardListFiltersSelector, boardListMapSelector } from '@/store/selector
 import { Link } from 'react-router-dom';
 import { ROUTE_PATH } from '@/constants';
 import { getAnalysePath } from '@/utils';
+import { ClickParam } from 'antd/lib/menu';
 const { confirm } = Modal;
 interface Props {
   onGetReportList: (params: IReportListParam) => IAction;
@@ -40,7 +41,7 @@ const ReportList = ({
   projectId
 }: Props) => {
   const [addReportVisible, setAddReportVisible] = React.useState(false);
-  const [appendedBoardIds, setappendedBoardIds] = React.useState<number[]>([]);
+
   const [appendBoardVisible, setappendBoardVisible] = React.useState(false);
   const [curReportInfo, setcurReportInfo] = React.useState<IReportInfo>({
     id: null,
@@ -53,6 +54,32 @@ const ReportList = ({
     dateEnd: null,
     dateType: null
   });
+
+  const handleMenuClick = (key: string, record: IReportInfo) => {
+    switch (key) {
+      case 'COPY':
+        handleReportCopy(record);
+        break;
+
+      case 'APPEND':
+        handleReportAppendBoard(record);
+        break;
+      case 'DEL':
+        handleReportDelete(record);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const menu = (record: IReportInfo) => (
+    <Menu onClick={({ key }) => handleMenuClick(key, record)}>
+      <Menu.Item key='COPY'>拷贝</Menu.Item>
+      <Menu.Item key='APPEND'>添加到看板</Menu.Item>
+      <Menu.Item key='DEL'>删除</Menu.Item>
+    </Menu>
+  );
 
   const columns: ColumnProps<IReportInfo>[] = [
     {
@@ -115,54 +142,16 @@ const ReportList = ({
       key: 'action',
       render: (text: string, record) => (
         <span>
-          <Tooltip title='编辑'>
-            <Link to={getAnalysePath(record.type, record.projectId, record.id)}>
-              <Icon type='edit' />
-            </Link>
-          </Tooltip>
+          <Link to={getAnalysePath(record.type, record.projectId, record.id)}>
+            <Button type='link'>编辑</Button>
+          </Link>
           &nbsp;
-          <Tooltip title='拷贝'>
-            <Icon onClick={() => handleReportCopy(record)} type='copy' />
-          </Tooltip>
-          &nbsp;
-          <Tooltip title='添加到看板'>
-            <Popover
-              placement='bottom'
-              onVisibleChange={(value) => value && setappendedBoardIds([])}
-              content={
-                <div>
-                  <Select
-                    size='small'
-                    onChange={(e: number[]) => setappendedBoardIds(e)}
-                    value={appendedBoardIds}
-                    style={{ width: 240 }}
-                    mode='multiple'
-                  >
-                    {boardList.list.map((item) => {
-                      const isExist = !!record.boards.find((val) => val.id === item.id);
-                      return (
-                        <Select.Option key={item.id} value={item.id} disabled={isExist}>
-                          {item.name}
-                        </Select.Option>
-                      );
-                    })}
-                  </Select>
-                  &nbsp;
-                  <Button size='small' onClick={() => handleReportAppendBoard(record)}>
-                    确定
-                  </Button>
-                </div>
-              }
-              title='选择看板'
-              trigger='click'
-            >
-              <Icon type='plus-square' />
-            </Popover>
-          </Tooltip>
-          &nbsp;
-          <Tooltip title='删除'>
-            <Icon onClick={() => handleReportDelete(record)} type='delete' />
-          </Tooltip>
+          <Dropdown overlay={menu(record)}>
+            <span>
+              更多
+              <Icon type='down' />
+            </span>
+          </Dropdown>
         </span>
       )
     }
@@ -180,17 +169,36 @@ const ReportList = ({
   }
 
   function handleReportAppendBoard(record: IReportInfo) {
-    if (!appendedBoardIds.length) {
-      message.info('请选择看板');
-      return;
-    }
-    onAppendReportToBoard({ reportId: record.id, boardIds: appendedBoardIds, projectId });
-    // if (!record.boards.length) {
-    //   setcurReportInfo(record);
-    //   setappendBoardVisible(true);
-    // } else {
-    //   onAppendReportToBoard({ reportId: record.id, boardIds: appendedBoardIds,projectId });
-    // }
+    let appendedBoardIds = record.boards.map((item) => item.id);
+    Modal.info({
+      title: '添加到看板',
+      okText: '确定',
+      content: (
+        <Select
+          size='small'
+          onChange={(e: number[]) => (appendedBoardIds = e)}
+          defaultValue={appendedBoardIds}
+          style={{ width: 240 }}
+          mode='multiple'
+        >
+          {boardList.list.map((item) => {
+            const isExist = !!record.boards.find((val) => val.id === item.id);
+            return (
+              <Select.Option key={item.id} value={item.id} disabled={isExist}>
+                {item.name}
+              </Select.Option>
+            );
+          })}
+        </Select>
+      ),
+      onOk() {
+        if (!appendedBoardIds.length) {
+          message.info('请选择看板');
+          return;
+        }
+        onAppendReportToBoard({ reportId: record.id, boardIds: appendedBoardIds, projectId });
+      }
+    });
   }
 
   function handleReportDelete(record: IReportInfo) {
@@ -246,23 +254,37 @@ const ReportList = ({
         boardIds={[1]}
         onSubmit={onAppendReportToBoard}
       />
-      <div className='app-card'>
-        <div className='app-fl'>
-          <ReportListForm onSubmit={onGetReportList} defaultValue={reportListParams}></ReportListForm>
+
+      <div className='app-tablePage-wrapper'>
+        <div className='app-tablePage-title'>报表列表</div>
+        <div className='app-tablePage-form'>
+          <div>
+            <Button size='large' onClick={() => setAddReportVisible(true)}>
+              新增报表
+            </Button>
+          </div>
+          <div>
+            <ReportListForm onSubmit={onGetReportList} defaultValue={reportListParams}></ReportListForm>
+          </div>
         </div>
 
-        <div className='app-fr'>
-          <Button onClick={() => setAddReportVisible(true)}>新增报表</Button>
+        <div className='app-tablePage-table'>
+          {/* <div className='app-tablePage-tableBtnBox'>
+            <Button type='link'>添加标签</Button>
+            <Button type='link'>删除</Button>
+            <Button type='link'>启用</Button>
+            <Button type='link'>禁用</Button>
+          </div> */}
+          <Table
+            size='middle'
+            bordered
+            rowKey='id'
+            pagination={{ pageSize: 20, total: reportList.totalCount }}
+            columns={columns}
+            dataSource={reportList.list}
+            onChange={handleChange}
+          />
         </div>
-      </div>
-      <div className='app-card'>
-        <Table
-          rowKey='id'
-          pagination={{ pageSize: 20, total: reportList.totalCount }}
-          columns={columns}
-          dataSource={reportList.list}
-          onChange={handleChange}
-        />
       </div>
     </div>
   );

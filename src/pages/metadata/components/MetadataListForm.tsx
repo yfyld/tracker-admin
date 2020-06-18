@@ -1,4 +1,4 @@
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Select } from 'antd';
 import * as React from 'react';
 import { FormComponentProps } from 'antd/lib/form';
 import { IMetadataListParam } from '@/api';
@@ -18,23 +18,25 @@ const MetadataListForm = (props: Props) => {
         toastformError(err);
         return;
       }
-      props.onSubmit({ ...props.defaultValue, ...values });
+      props.onSubmit({ ...props.defaultValue, [values.type]: values.name });
     });
   };
+
+  const prefixSelector = getFieldDecorator('type', {
+    initialValue: 'name'
+  })(
+    <Select size='large'>
+      <Select.Option value='name'>名称</Select.Option>
+      <Select.Option value='code'>Code</Select.Option>
+    </Select>
+  );
+
   return (
     <Form onSubmit={handleSubmit} layout='inline'>
-      <Form.Item label=''>
+      <Form.Item>
         {getFieldDecorator('name', {
           initialValue: props.defaultValue.name
-        })(<Input placeholder='名称' />)}
-      </Form.Item>
-      <Form.Item label=''>
-        {getFieldDecorator('code', {
-          initialValue: props.defaultValue.code
-        })(<Input placeholder='Code' />)}
-      </Form.Item>
-      <Form.Item>
-        <Button htmlType='submit'>查询</Button>
+        })(<Input.Search size='large' addonBefore={prefixSelector} placeholder='搜索' />)}
       </Form.Item>
     </Form>
   );

@@ -145,7 +145,7 @@ const ProjectList = ({
       <div className={style.header}>
         <ProjectListForm defaultValue={projectListParams} onSubmit={handleSearch}></ProjectListForm>
         <Button type='primary' onClick={() => setAddProjectVisible(true)}>
-          新建项目
+          创建新项目
         </Button>
       </div>
       {/* <div className={style.listBox}>

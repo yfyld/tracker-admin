@@ -4,6 +4,8 @@ import { formItemLayout } from '@/constants';
 import { FormComponentProps } from 'antd/lib/form';
 import { IReportListParam } from '@/api';
 import { toastformError } from '@/utils';
+
+const { Search, Group } = Input;
 interface Props extends FormComponentProps {
   onSubmit: (param: IReportListParam) => any;
   defaultValue: IReportListParam;
@@ -22,12 +24,13 @@ const ReportListForm = (props: Props) => {
       props.onSubmit({ ...props.defaultValue, ...values });
     });
   };
+
   return (
     <Form onSubmit={handleSubmit} layout='inline'>
       <Form.Item>
         {getFieldDecorator('name', {
           initialValue: props.defaultValue.name
-        })(<Input placeholder='报表名称' />)}
+        })(<Search size='large' placeholder='搜索' />)}
       </Form.Item>
       {/* <Form.Item >
         {getFieldDecorator('inBoard', {
@@ -39,9 +42,6 @@ const ReportListForm = (props: Props) => {
           </Select>
         )}
       </Form.Item> */}
-      <Form.Item>
-        <Button htmlType='submit'>查询</Button>
-      </Form.Item>
     </Form>
   );
 };

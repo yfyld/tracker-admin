@@ -1,11 +1,11 @@
 .logo {
-  background-color: #000;
+  background-color: #3f4651;
   width: 100%;
   position: absolute;
   top: 0px;
   left: 0px;
   height: @header-height;
-  padding: 3px 20px;
+  padding: 15px 20px;
   > img {
     width: 190px;
   }
@@ -19,12 +19,20 @@
 .wrapper {
   height: 100%;
   padding-bottom: 50px;
-  padding-top: 50px;
-  background-color: #000;
+  padding-top: @header-height;
+  background-color: #3f4651;
   :global {
     .ant-menu {
       height: 100%;
       overflow: auto;
+    }
+    .ant-menu-dark,
+    .ant-menu-dark .ant-menu-sub {
+      background-color: #3f4651;
+    }
+    .ant-menu-dark .ant-menu-inline.ant-menu-sub {
+      background-color: #3f4651;
+      box-shadow: none;
     }
   }
 }

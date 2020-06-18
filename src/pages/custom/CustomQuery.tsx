@@ -20,15 +20,14 @@ interface Props {
 
 const CustomQuery = ({ projectId }: Props) => {
   const handleChange = (info: any) => {
-    setparam({ ...info, projectId });
+    setparam(info);
   };
 
   const [param, setparam] = React.useState({
     dateStart: DYNAMIC_TIME[1].startDate(),
     dateEnd: DYNAMIC_TIME[1].endDate(),
     dateType: DYNAMIC_TIME[1].value,
-    query: '',
-    projectId
+    query: ''
   });
 
   const [result, setResult] = React.useState([]);
@@ -36,7 +35,7 @@ const CustomQuery = ({ projectId }: Props) => {
   const [loading, setloading] = React.useState(false);
 
   const handleQuery = () => {
-    fetchCustomAnalyseData(param).then((res) => {
+    fetchCustomAnalyseData({ ...param, projectId }).then((res) => {
       setResult(res.data);
     });
   };
@@ -140,12 +139,15 @@ const CustomQuery = ({ projectId }: Props) => {
         </Row>
         <br />
         <br />
-        <Spin spinning={loading}>
-          <Table columns={getTableColumns(result)} dataSource={result} />
+        <div className='app-tablePage-table'>
+          <Spin spinning={loading}>
+            <Table columns={getTableColumns(result)} bordered dataSource={result} />
 
-          <br />
-          <br />
-        </Spin>
+            <br />
+            <br />
+          </Spin>
+        </div>
+
         <div></div>
       </div>
     </div>
