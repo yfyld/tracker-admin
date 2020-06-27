@@ -18,7 +18,7 @@ const MetadataListForm = (props: Props) => {
         toastformError(err);
         return;
       }
-      props.onSubmit({ ...props.defaultValue, [values.type]: values.name });
+      props.onSubmit({ ...props.defaultValue, code: '', name: '', [values.type]: values.name });
     });
   };
 
