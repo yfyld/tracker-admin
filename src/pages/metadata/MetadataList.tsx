@@ -1,13 +1,14 @@
 import * as React from 'react';
 import style from './MetadataList.module.less';
 import { connect } from 'react-redux';
-import { IStoreState, IAction, IPageData } from '@/types';
+import { IStoreState, IAction, IPageData, IInfoParam } from '@/types';
 import {
   doGetMetadataList,
   doDeleteMetadata,
   doEnableMetadata,
   doDisableMetadata,
-  doAddMetadataByExcel
+  doAddMetadataByExcel,
+  doUpdateMetadataLog
 } from '@/store/actions';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Table, Button, Modal, Drawer, Tag, Upload, Icon, Avatar, Alert, Dropdown, Menu } from 'antd';
@@ -39,6 +40,7 @@ interface Props {
   onEnableMetadata: (params: number) => IAction;
   onDisableMetadata: (params: number) => IAction;
   onAddMetadataByExcel: (params: IMetadataAddByExcelParam) => IAction;
+  onUpdateMetadataLog: (params: IInfoParam) => IAction;
   metadataList: IPageData<IMetadataInfo>;
   metadataListParams: IMetadataListParam;
   tagListFilters: ColumnFilterItem[];
@@ -52,6 +54,7 @@ const MetadataList = ({
   onDeleteMetadata,
   onEnableMetadata,
   onDisableMetadata,
+  onUpdateMetadataLog,
   metadataListParams,
   tagListFilters,
   onAddMetadataByExcel,
@@ -161,6 +164,10 @@ const MetadataList = ({
         handleDeleteMetadata(record.id);
         break;
 
+      case 'UPDATE_LOG':
+        onUpdateMetadataLog({ id: record.id, projectId: record.projectId });
+        break;
+
       default:
         break;
     }
@@ -169,6 +176,7 @@ const MetadataList = ({
   const menu = (record: any) => (
     <Menu onClick={({ key }) => handleMenuClick(key, record)}>
       {record.status === 0 ? <Menu.Item key='ENABLE'>启用</Menu.Item> : <Menu.Item key='DISABLE'>禁用</Menu.Item>}
+      <Menu.Item key='UPDATE_LOG'>更新日志</Menu.Item>
       <Menu.Item key='DEL'>删除</Menu.Item>
     </Menu>
   );
@@ -446,6 +454,9 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
       },
       onDisableMetadata: (params) => {
         return doDisableMetadata.request(params);
+      },
+      onUpdateMetadataLog: (params) => {
+        return doUpdateMetadataLog.request(params);
       },
       onAddMetadataByExcel: (params) => {
         return doAddMetadataByExcel.request(params);

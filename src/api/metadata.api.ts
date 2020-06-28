@@ -1,4 +1,4 @@
-import { IDeleteParam, IPageQuery, IListData } from './../types/index';
+import { IDeleteParam, IPageQuery, IListData, IInfoParam } from './../types/index';
 import fetch from './http';
 import { IPageData } from '@/types';
 
@@ -126,6 +126,10 @@ export function fetchMetadataAdd(params: IMetadataAddParam) {
 
 export function fetchMetadataUpdate(params: IMetadataUpdateParam) {
   return fetch.put('/metadata/', params);
+}
+
+export function fetchMetadataLogUpdate(params: IInfoParam) {
+  return fetch.put('/metadata/log', params);
 }
 
 export function fetchMetadataDelete(projectId: number, metadataId: number) {

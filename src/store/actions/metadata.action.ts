@@ -1,5 +1,5 @@
 import { IFieldListMap } from './../reducers/metadata.reducer';
-import { IDeleteParam, IListData } from './../../types/index';
+import { IDeleteParam, IListData, IInfoParam } from './../../types/index';
 import {
   IFieldInfo,
   ITagAddParam,
@@ -37,6 +37,12 @@ export const doUpdateMetadata = createAsyncAction(
   actionType.UPDATE_METADATA_SUCCESS,
   actionType.UPDATE_METADATA_FAILURE
 )<IMetadataUpdateParam, undefined, Error>();
+
+export const doUpdateMetadataLog = createAsyncAction(
+  actionType.UPDATE_METADATA_LOG_REQUEST,
+  actionType.UPDATE_METADATA_LOG_SUCCESS,
+  actionType.UPDATE_METADATA_LOG_FAILURE
+)<IInfoParam, undefined, Error>();
 
 export const doDeleteMetadata = createAsyncAction(
   actionType.DELETE_METADATA_REQUEST,
