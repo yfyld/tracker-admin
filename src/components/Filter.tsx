@@ -15,13 +15,13 @@ interface Props {
 }
 
 const Filter = ({ fieldList = { list: EVENT_ATTRS }, filterInfo, onChange }: Props) => {
-  const [recommend, setrecommend] = React.useState<string[]>([]);
+  const [recommend, setrecommend] = React.useState<any[]>([]);
   const handleFieldChange = (value: string, index: number) => {
     const newFilterInfo: IFilterInfo = JSON.parse(JSON.stringify(filterInfo));
     newFilterInfo.filterValues[index].key = value;
     newFilterInfo.filterValues[index].type = 'equal';
     newFilterInfo.filterValues[index].value = [];
-    const field = fieldList.list.find(field => field.value === value);
+    const field = fieldList.list.find((field) => field.value === value);
     if (field) {
       setrecommend(field.recommend);
     }
@@ -88,7 +88,7 @@ const Filter = ({ fieldList = { list: EVENT_ATTRS }, filterInfo, onChange }: Pro
               <Row gutter={16} key={filter.id}>
                 <Col span={5}>
                   <Select value={filter.key} onChange={(val: string) => handleFieldChange(val, index)}>
-                    {fieldList.list.map(field => (
+                    {fieldList.list.map((field) => (
                       <Option value={field.value} key={field.value}>
                         {field.name}
                       </Option>
@@ -129,9 +129,9 @@ const Filter = ({ fieldList = { list: EVENT_ATTRS }, filterInfo, onChange }: Pro
                           style={{ width: '100%' }}
                           tokenSeparators={[',']}
                         >
-                          {recommend.map(item => (
-                            <Option key={item} value={item}>
-                              {item}
+                          {recommend.map((item) => (
+                            <Option key={item.value} value={item.value}>
+                              {item.text}
                             </Option>
                           ))}
                         </Select>

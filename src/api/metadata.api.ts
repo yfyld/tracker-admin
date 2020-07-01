@@ -98,7 +98,7 @@ export interface IFieldInfo {
   value: string;
   type: string;
   eventType: number;
-  recommend: string[];
+  recommend: { text: string; value: string }[];
 }
 
 export interface IFieldListParam {

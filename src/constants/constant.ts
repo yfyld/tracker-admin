@@ -152,6 +152,85 @@ export const DYNAMIC_TIME: IDynamicTime[] = [
 
 export const EVENT_ATTRS: IFieldInfo[] = [
   {
+    name: '日志类型',
+    value: 'actionType',
+    type: 'string',
+    eventType: 0,
+    recommend: [
+      {
+        text: '页面访问',
+        value: 'PAGE'
+      },
+      {
+        text: '事件',
+        value: 'EVENT'
+      },
+      {
+        text: '页面停留',
+        value: 'DURATION'
+      },
+      {
+        text: '视区',
+        value: 'VIEW'
+      }
+    ]
+  },
+  {
+    name: '页面Id',
+    value: 'pageId',
+    type: 'string',
+    eventType: 1,
+    recommend: []
+  },
+  {
+    name: '事件名称',
+    value: 'eventName',
+    type: 'string',
+    eventType: 1,
+    recommend: []
+  },
+
+  {
+    name: '停留时长',
+    value: 'durationTime',
+    type: 'string',
+    eventType: 1,
+    recommend: []
+  },
+
+  {
+    name: '网络类型',
+    value: 'netType',
+    type: 'string',
+    eventType: 0,
+    recommend: []
+  },
+
+  {
+    name: '用户uid',
+    value: 'uid',
+    type: 'string',
+    eventType: 0,
+    recommend: []
+  },
+
+  {
+    name: '是否登录',
+    value: 'isLogin',
+    type: 'string',
+    eventType: 0,
+    recommend: []
+  },
+
+  {
+    name: '设备Id',
+    value: 'utoken',
+    type: 'string',
+    eventType: 0,
+    recommend: []
+  },
+
+  {
     name: '页面标题',
     value: 'title',
     type: 'string',
@@ -284,13 +363,7 @@ export const EVENT_ATTRS: IFieldInfo[] = [
     eventType: 0,
     recommend: []
   },
-  {
-    name: '是否登录',
-    value: 'title',
-    type: 'string',
-    eventType: 0,
-    recommend: []
-  },
+
   {
     name: '国家',
     value: 'country',
@@ -347,13 +420,7 @@ export const EVENT_ATTRS: IFieldInfo[] = [
     eventType: 0,
     recommend: []
   },
-  {
-    name: 'SDK版本',
-    value: 'libVersion',
-    type: 'string',
-    eventType: 0,
-    recommend: []
-  },
+
   {
     name: 'SDK类型',
     value: 'libType',
@@ -378,6 +445,41 @@ export const EVENT_ATTRS: IFieldInfo[] = [
   {
     name: 'AppId',
     value: 'appId',
+    type: 'string',
+    eventType: 0,
+    recommend: []
+  },
+  {
+    name: '手机产品',
+    value: 'product',
+    type: 'string',
+    eventType: 0,
+    recommend: []
+  },
+  {
+    name: '系统定制商',
+    value: 'deviceBrand',
+    type: 'string',
+    eventType: 0,
+    recommend: []
+  },
+  {
+    name: '支持操作系统',
+    value: 'supportedAbi',
+    type: 'string',
+    eventType: 0,
+    recommend: []
+  },
+  {
+    name: '系统版本号',
+    value: 'androidSdkInt',
+    type: 'string',
+    eventType: 0,
+    recommend: []
+  },
+  {
+    name: '是否真机',
+    value: 'isPhysicalDevice',
     type: 'string',
     eventType: 0,
     recommend: []
