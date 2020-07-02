@@ -15,6 +15,7 @@ export interface IUserInfo {
   id: number;
   username: string;
   nickname?: string;
+  mobile?: string;
   type?: number;
 }
 
