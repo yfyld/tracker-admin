@@ -24,6 +24,7 @@ export interface IMetadataInfo {
   tags: ITagInfo[];
   projectId: number;
   log: number;
+  logByApp: number;
   recentLog: number;
   operatorType: number;
   url?: string;

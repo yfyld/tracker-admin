@@ -12,7 +12,7 @@ interface Props {
   userInfo: IUserInfo;
 }
 
-function addWaterMarker(str: string, dom: HTMLElement) {
+function addWaterMarker(str: string, dom: HTMLElement, opacity: number) {
   var can = document.createElement('canvas');
   var body = document.body;
   body.appendChild(can);
@@ -22,7 +22,7 @@ function addWaterMarker(str: string, dom: HTMLElement) {
   var cans = can.getContext('2d');
   cans.rotate((-20 * Math.PI) / 180);
   cans.font = '16px Microsoft JhengHei';
-  cans.fillStyle = 'rgba(17, 17, 17, 0.05)';
+  cans.fillStyle = `rgba(17, 17, 17, ${opacity})`;
   cans.textAlign = 'center';
   cans.textBaseline = 'middle';
   cans.fillText(str, can.width / 3, can.height / 2);
@@ -32,11 +32,18 @@ function addWaterMarker(str: string, dom: HTMLElement) {
 
 const App = ({ loading, loadingText, userInfo }: Props) => {
   const materMarker = React.useRef(null);
+  const materMarker2 = React.useRef(null);
   React.useEffect(() => {
     if (userInfo.id && materMarker.current) {
       addWaterMarker(
         userInfo.nickname + '    ' + (userInfo.mobile || userInfo.username).substr(-4, 4),
-        materMarker.current
+        materMarker.current,
+        0.05
+      );
+      addWaterMarker(
+        userInfo.nickname + '    ' + (userInfo.mobile || userInfo.username).substr(-4, 4),
+        materMarker2.current,
+        0.01
       );
     }
   }, [userInfo.id]);
@@ -48,6 +55,10 @@ const App = ({ loading, loadingText, userInfo }: Props) => {
       ></div>
       <Spin spinning={loading} className={style.spin} delay={50} tip={loadingText}></Spin>
       <Routes />
+      <div
+        ref={materMarker2}
+        style={{ position: 'fixed', top: 0, left: 0, bottom: 0, right: 0, zIndex: 999, pointerEvents: 'none' }}
+      ></div>
     </>
   );
 };

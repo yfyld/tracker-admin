@@ -74,6 +74,7 @@ const MetadataList = ({
     status: null,
     tags: [],
     log: 0,
+    logByApp: 0,
     operatorType: 0,
     recentLog: 0
   });
@@ -281,9 +282,16 @@ const MetadataList = ({
       filterMultiple: false,
       render: (text: number, record) =>
         record.log ? (
-          <span>
-            {record.log}条(最新:{record.recentLog}条)
-          </span>
+          <div>
+            <span>
+              总日志:{record.log}(最新:{record.recentLog})条
+            </span>
+
+            <br />
+            <span>app日志:{record.logByApp}条</span>
+            <br />
+            <span>H5日志:{record.log - record.logByApp}条</span>
+          </div>
         ) : (
           <span>无</span>
         )

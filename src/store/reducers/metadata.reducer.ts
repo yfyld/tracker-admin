@@ -42,6 +42,7 @@ const initialState = (): MetadataState => ({
     projectId: null,
     tags: [],
     log: null,
+    logByApp: null,
     operatorType: 0,
     recentLog: null
   },
