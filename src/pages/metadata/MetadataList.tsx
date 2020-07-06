@@ -271,12 +271,28 @@ const MetadataList = ({
       dataIndex: 'log',
       filters: [
         {
-          text: '有',
-          value: '1'
+          text: '无日志',
+          value: 'NONE'
         },
         {
-          text: '无',
-          value: '0'
+          text: '无H5日志',
+          value: 'NONE_H5'
+        },
+        {
+          text: '无Native日志',
+          value: 'NONE_NATIVE'
+        },
+        {
+          text: '有H5日志',
+          value: 'H5'
+        },
+        {
+          text: '有Native日志',
+          value: 'NATIVE'
+        },
+        {
+          text: '有日志',
+          value: 'ALL'
         }
       ],
       filterMultiple: false,
