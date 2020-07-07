@@ -417,7 +417,7 @@ const MetadataList = ({
               </Button>
             </Upload>
             &nbsp;
-            <a href='/元数据模板.xlsx' download='导入模板'>
+            <a href='/static/元数据模板.xlsx' download='导入模板'>
               <Button size='large'>导入模板下载</Button>
             </a>
             &nbsp;

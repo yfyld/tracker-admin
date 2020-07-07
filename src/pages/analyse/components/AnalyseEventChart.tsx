@@ -366,11 +366,49 @@ const getTableData = (data: IEventAnalyseData): TableColumnProps[] => {
   const dataBydateMap: { [prop: string]: TableColumnProps } = {};
   if (data.dimension) {
     if (data.list.length > 1) {
-    } else {
+      const newDataMap: any = {};
+      data.list.forEach((indicator) => {
+        indicator.data.forEach((item) => {
+          if (!newDataMap[item.time]) {
+            newDataMap[item.time] = {
+              time: item.time,
+              key: item.time
+            };
+          }
+          newDataMap[item.time][item[data.dimension]] = item.count;
+        });
+      });
+      return Object.values(newDataMap);
+    } else if (data.list.length === 1) {
+      const newDataMap: any = {};
+
+      data.list[0].data.forEach((item) => {
+        if (!newDataMap[item.time]) {
+          newDataMap[item.time] = {
+            time: item.time,
+            key: item.time
+          };
+        }
+
+        newDataMap[item.time][item[data.dimension]] = item.count;
+      });
+      return Object.values(newDataMap);
     }
   } else {
     if (data.list.length > 1) {
-      data.list.forEach((indicator) => {});
+      const newDataMap: any = {};
+      data.list.forEach((indicator) => {
+        indicator.data.forEach((item) => {
+          if (!newDataMap[item.time]) {
+            newDataMap[item.time] = {
+              time: item.time,
+              key: item.time
+            };
+          }
+          newDataMap[item.time][indicator.key] = item.count;
+        });
+      });
+      return Object.values(newDataMap);
     } else if (data.list.length === 1) {
       return data.list[0].data.map((item) => ({
         time: item.time,

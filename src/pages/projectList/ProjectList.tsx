@@ -131,7 +131,7 @@ const ProjectList = ({
   console.log(projectList);
 
   return (
-    <div className={style.wrapper}>
+    <div className='app-tablePage-wrapper'>
       {shouldUpdateProject && (
         <ProjectUpdateModal
           orginInfo={shouldUpdateProject}
@@ -142,18 +142,24 @@ const ProjectList = ({
       )}
       <ProjectAddModel visible={addProjectVisible} onClose={setAddProjectVisible}></ProjectAddModel>
 
-      <div className={style.header}>
-        <ProjectListForm defaultValue={projectListParams} onSubmit={handleSearch}></ProjectListForm>
-        <Button type='primary' onClick={() => setAddProjectVisible(true)}>
-          创建新项目
-        </Button>
+      <div className='app-tablePage-title'>应用列表</div>
+      <div className='app-tablePage-form'>
+        <div>
+          <Button size='large' onClick={() => setAddProjectVisible(true)}>
+            创建新项目
+          </Button>
+        </div>
+        <div>
+          <ProjectListForm defaultValue={projectListParams} onSubmit={handleSearch}></ProjectListForm>
+        </div>
       </div>
+
       {/* <div className={style.listBox}>
         {projectList.list.map(project => (
           <ProjectPane key={project.id} shouldUpdateProject={project} />
         ))}
       </div> */}
-      <div className={style.table}>
+      <div className='app-tablePage-table'>
         <Table rowKey='id' columns={columns} dataSource={projectList.list} />
       </div>
     </div>

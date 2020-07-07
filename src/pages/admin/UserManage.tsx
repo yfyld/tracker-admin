@@ -38,8 +38,7 @@ const UserManage = (props: Props) => {
   const [chooseUpdateUser, setchooseUpdateUser] = React.useState<IBaseUser>(null);
   const [editUserVisible, setEditUserVisible] = React.useState(false);
 
-  const handleFilter = (e: React.MouseEvent) => {
-    e.preventDefault();
+  const handleFilter = () => {
     props.form.validateFields((err, values) => {
       if (err) {
         toastformError(err);
@@ -104,46 +103,39 @@ const UserManage = (props: Props) => {
   ];
 
   return (
-    <div className={style.wrapper}>
-      <Row gutter={24}>
-        <Col>
-          <Row>
-            <Form layout='horizontal' {...formItemLayout}>
-              <Col span={6}>
-                <Form.Item label='用户名'>
-                  {getFieldDecorator('username', {
-                    initialValue: props.userInfo.username
-                  })(<Input placeholder='请输入角色名/角色码' />)}
-                </Form.Item>
-              </Col>
-            </Form>
-            <Col span={4}>
-              <span className={style.submitButtons}>
-                <Button type='primary' onClick={handleFilter}>
-                  查询
-                </Button>
-              </span>
-            </Col>
-            <Col span={14}>
-              <UserAddModal visible={addUserModalVisible} onClose={setAddProjectVisible}></UserAddModal>
+    <div className='app-tablePage-wrapper'>
+      <UserAddModal visible={addUserModalVisible} onClose={setAddProjectVisible}></UserAddModal>
+      {chooseUpdateUser && (
+        <UserEditModal
+          visible={editUserVisible}
+          userInfo={chooseUpdateUser}
+          onClose={setEditUserVisible}
+        ></UserEditModal>
+      )}
+      <div className='app-tablePage-title'>用户管理</div>
+      <div className='app-tablePage-form'>
+        <div>
+          <Button size='large' onClick={() => setAddProjectVisible(true)}>
+            新建用户
+          </Button>
+        </div>
+        <div>
+          <Form
+            layout='inline'
+            onSubmit={() => {
+              handleFilter();
+            }}
+          >
+            <Form.Item label=''>
+              {getFieldDecorator('username', {
+                initialValue: props.userInfo.username
+              })(<Input.Search size='large' placeholder='请输入角色名/角色码' />)}
+            </Form.Item>
+          </Form>
+        </div>
+      </div>
 
-              {chooseUpdateUser && (
-                <UserEditModal
-                  visible={editUserVisible}
-                  userInfo={chooseUpdateUser}
-                  onClose={setEditUserVisible}
-                ></UserEditModal>
-              )}
-              <div className={style.rightBtn}>
-                <Button type='primary' onClick={() => setAddProjectVisible(true)}>
-                  新建用户
-                </Button>
-              </div>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-      <div className={style.table}>
+      <div className='app-tablePage-table'>
         <Table rowKey='id' columns={columns} dataSource={props.userList.list} />
       </div>
     </div>
