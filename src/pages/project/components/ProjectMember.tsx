@@ -99,16 +99,25 @@ const ProjectMember = ({ projectInfo, onDeleteProjectMember, onUpdateProjectMemb
   }
 
   return (
-    <div>
+    <div className='app-tablePage-wrapper'>
       <ProjectMemberAddModal visible={addMemberModalVisible} onClose={setaddMemberModalVisible}></ProjectMemberAddModal>
-      <Button onClick={() => setaddMemberModalVisible(true)}>添加成员</Button>
-      <br />
-      <br />
-      <Table
-        style={{ background: '#fff' }}
-        columns={columns}
-        dataSource={projectInfo.members.map((item) => ({ key: item.id, ...item }))}
-      />
+
+      <div className='app-tablePage-title'>成员列表</div>
+      <div className='app-tablePage-form'>
+        <div>
+          <Button size='large' onClick={() => setaddMemberModalVisible(true)}>
+            添加成员
+          </Button>
+        </div>
+      </div>
+
+      <div className='app-tablePage-table'>
+        <Table
+          style={{ background: '#fff' }}
+          columns={columns}
+          dataSource={projectInfo.members.map((item) => ({ key: item.id, ...item }))}
+        />
+      </div>
     </div>
   );
 };
