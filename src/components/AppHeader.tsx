@@ -58,9 +58,9 @@ const AppHeader = ({ collapsed, onChangeCollapsed, userInfo, alone = false, proj
                 我的看板
               </Link>,
 
-              <Link key='team' to='/team-list'>
-                团队
-              </Link>,
+              // <Link key='team' to='/team-list'>
+              //   团队
+              // </Link>,
 
               <Link key='project' to='/project-list'>
                 项目列表

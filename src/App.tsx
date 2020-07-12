@@ -38,12 +38,12 @@ const App = ({ loading, loadingText, userInfo }: Props) => {
       addWaterMarker(
         userInfo.nickname + '    ' + (userInfo.mobile || userInfo.username).substr(-4, 4),
         materMarker.current,
-        0.05
+        0.03
       );
       addWaterMarker(
         userInfo.nickname + '    ' + (userInfo.mobile || userInfo.username).substr(-4, 4),
         materMarker2.current,
-        0.01
+        0.005
       );
     }
   }, [userInfo.id]);
