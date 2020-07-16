@@ -31,11 +31,19 @@ const onSubmit = (e: React.FormEvent, form: WrappedFormUtils, doLoginRequest: (p
 
 const Login = ({ form, doLoginRequest }: Props) => {
   const { getFieldDecorator } = form;
-  return (
+
+  React.useEffect(() => {
+    if (config.singelLoginURL) {
+      window.location.replace(config.singelLoginURL);
+    }
+  }, [config.signupAble]);
+  return config.singelLoginURL ? (
+    <div>正在跳转</div>
+  ) : (
     <AccountLayout>
       <h2 className={style.title}>登录</h2>
       <Form onSubmit={(e) => onSubmit(e, form, doLoginRequest)} className='login-form'>
-        {/* <Form.Item>
+        <Form.Item>
           {getFieldDecorator('username', {
             rules: [{ required: true, message: '请输入手机号' }]
           })(<Input prefix={<Icon type='mobile' style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder='请输入手机号' />)}
@@ -50,11 +58,11 @@ const Login = ({ form, doLoginRequest }: Props) => {
               placeholder='请输入密码'
             />
           )}
-        </Form.Item> */}
+        </Form.Item>
         <Form.Item>
-          {/* <Button block type='primary' htmlType='submit' className={style.btn}>
+          <Button block type='primary' htmlType='submit' className={style.btn}>
             登&emsp;&emsp;录
-          </Button> */}
+          </Button>
 
           <a href={config.singelLoginURL}>
             <Button block type='primary' className={style.btn}>
@@ -62,11 +70,11 @@ const Login = ({ form, doLoginRequest }: Props) => {
             </Button>
           </a>
 
-          {/* {config.signupAble && (
+          {config.signupAble && (
             <div className={style.text}>
               没有账号 <Link to='/signup'>马上注册!</Link>(测试用,请直接内网登录)
             </div>
-          )} */}
+          )}
         </Form.Item>
       </Form>
     </AccountLayout>

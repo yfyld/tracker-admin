@@ -23,7 +23,7 @@ const TeamInfo = ({ teamInfo }: Props) => {
         ))}
       </div> */}
       <h2>
-        <strong>{teamInfo.name}</strong>团队项目
+        <strong>{teamInfo.name}</strong>团队应用
       </h2>
       <ProjectList team={teamInfo}></ProjectList>
     </div>

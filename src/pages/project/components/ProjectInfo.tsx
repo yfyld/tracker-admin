@@ -31,20 +31,20 @@ const ProjectInfo = ({ form, projectInfo, handleUpdateProject, projectList }: Pr
 
   return (
     <Form onSubmit={handleSubmit} style={{ maxWidth: 500 }} {...formItemLayout}>
-      <Form.Item label='项目名称'>
+      <Form.Item label='应用名称'>
         {getFieldDecorator('name', {
           initialValue: projectInfo.name,
           rules: [
             {
               required: true,
-              message: '项目名称不能为空'
+              message: '应用名称不能为空'
             }
           ]
         })(<Input />)}
       </Form.Item>
       <Form.Item label='trackKey'>{projectInfo.trackKey}</Form.Item>
 
-      <Form.Item label='关联项目'>
+      <Form.Item label='关联应用'>
         {getFieldDecorator('associationProjectIds', {
           initialValue: projectInfo.associationProjects.map((item) => item.id)
         })(

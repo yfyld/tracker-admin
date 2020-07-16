@@ -24,15 +24,15 @@ const ProjectListForm = (props: Props) => {
   };
   return (
     <Form onSubmit={handleSubmit} layout='inline'>
-      {/* <Form.Item label='项目名称'>
+      {/* <Form.Item label='应用名称'>
         {getFieldDecorator('projectName', {
           initialValue: props.defaultValue.projectName
-        })(<Input placeholder='请输入项目名称' />)}
+        })(<Input placeholder='请输入应用名称' />)}
       </Form.Item> */}
       <Form.Item>
         {getFieldDecorator('projectName', {
           initialValue: props.defaultValue.projectName
-        })(<Input.Search size='large' placeholder='项目名称' />)}
+        })(<Input.Search size='large' placeholder='应用名称' />)}
       </Form.Item>
       {/* <Form.Item>
         <Button type='primary' htmlType='submit'>

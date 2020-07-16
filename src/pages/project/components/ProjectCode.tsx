@@ -92,11 +92,11 @@ jumpToBaidu(){
         <h4>配置项</h4>
 
         <SyntaxHighlighter language='javascript'>{`{
-  trackKey: '', //项目key
+  trackKey: '', //应用key
   serverUrl: //日志收集接口,
   pageTime: true, //是否记录页面停留时间
   watchHistoryAndHash: true, //单页面应用监听url变化
-  version: null, //项目版本
+  version: null, //应用版本
   sendType: SEND_TYPE.ASYNC, //发送日志方式 (同步发,异步延迟发,关闭浏览器前发送)
   delayTime: 1000, //延迟发送的时间
   autoTrackPage: false, //自动埋点页面
@@ -137,7 +137,7 @@ Telescope.trackEvent({trackId:"zyyh-click-submit"})`}</SyntaxHighlighter>
         </div>
 
         <div>
-          <h4>VUE项目,使用指令埋点</h4>
+          <h4>VUE应用,使用指令埋点</h4>
 
           <SyntaxHighlighter language='javascript'>{`//注册指令
 Vue.directive('track-event', Telescope.vTrackEvent);

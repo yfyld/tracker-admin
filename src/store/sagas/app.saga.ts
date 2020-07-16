@@ -1,4 +1,11 @@
-import { doGetUserList, doGetUserRoles, doPutUserRoles, doSignup, doPutUserByAdmin } from './../actions/app.action';
+import {
+  doGetUserList,
+  doGetUserRoles,
+  doPutUserRoles,
+  doSignup,
+  doPutUserByAdmin,
+  doLogout
+} from './../actions/app.action';
 import { put, takeEvery, delay } from 'redux-saga/effects';
 
 import { getType } from 'typesafe-actions';
@@ -32,7 +39,8 @@ import {
   fetchPutUserRoles,
   fetchDeletePermission,
   fetchDeleteUser,
-  fetchPutUserByAdmin
+  fetchPutUserByAdmin,
+  fetchSignOut
 } from '@/api';
 
 import { message } from 'antd';
@@ -70,6 +78,22 @@ function* login(action: ReturnType<typeof doLogin.request>): Generator {
     yield put(push('/project-list'));
   } catch (error) {
     yield put(doLogin.failure(error));
+    return;
+  }
+}
+
+function* logout(action: ReturnType<typeof doLogin.request>): Generator {
+  try {
+    yield* call(fetchSignOut);
+    yield put(doLogout.success());
+    yield put(doResetStore());
+    message.success('注销成功');
+
+    yield call(updateToken, '');
+    yield delay(300);
+    yield put(push('/login'));
+  } catch (error) {
+    yield put(doLogout.failure(error));
     return;
   }
 }
@@ -158,6 +182,8 @@ function* deleteUser(action: ReturnType<typeof doDeleteUser.request>): Generator
 
 export default function* watchApp() {
   yield takeEvery(getType(doLogin.request), login);
+  yield takeEvery(getType(doLogout.request), logout);
+
   yield takeEvery(getType(doSignup.request), addUser);
   yield takeEvery(getType(doGetUserInfo.request), getUserInfo);
   yield takeEvery(getType(doGetUserList.request), getUserList);

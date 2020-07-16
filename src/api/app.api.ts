@@ -83,6 +83,11 @@ export function fetchSignIn(params: ILoginParam) {
   return fetch.post<ILoginRes>('/auth/signIn', params);
 }
 
+// 注销
+export function fetchSignOut() {
+  return fetch.get('/auth/signOut');
+}
+
 // 注册
 export function fetchSignUp(params: ISignupParam) {
   return fetch.post<ILoginRes>('/auth/signUp', params);

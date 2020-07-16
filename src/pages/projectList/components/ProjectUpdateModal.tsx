@@ -32,17 +32,17 @@ const ProjectUpdateModel = (props: Props) => {
     });
   };
   return (
-    <Modal onOk={handleSubmit} title='编辑项目' visible={props.visible} onCancel={() => props.onClose(false)}>
+    <Modal onOk={handleSubmit} title='编辑应用' visible={props.visible} onCancel={() => props.onClose(false)}>
       <Form layout='horizontal' {...formItemLayout}>
-        <Form.Item label='项目名称'>
+        <Form.Item label='应用名称'>
           {getFieldDecorator('name', {
             initialValue: props.orginInfo.name,
-            rules: [{ required: true, message: '请输入项目名称' }]
-          })(<Input placeholder='请输入项目名称' />)}
+            rules: [{ required: true, message: '请输入应用名称' }]
+          })(<Input placeholder='请输入应用名称' />)}
         </Form.Item>
-        <Form.Item label='项目描述'>
+        <Form.Item label='应用描述'>
           {getFieldDecorator('description', { initialValue: props.orginInfo.description })(
-            <Input placeholder='请输入项目描述' />
+            <Input placeholder='请输入应用描述' />
           )}
         </Form.Item>
       </Form>

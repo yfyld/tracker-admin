@@ -27,7 +27,7 @@ const MyBoardForm = (props: Props) => {
       <Form.Item label='看板名称'>
         {getFieldDecorator('name', {
           initialValue: props.defaultValue.name
-        })(<Input placeholder='请输入项目名称' />)}
+        })(<Input placeholder='请输入应用名称' />)}
       </Form.Item>
       <Form.Item>
         <Button type='primary' htmlType='submit'>

@@ -223,31 +223,31 @@ const MetadataList = ({
       filterMultiple: false,
       render: (text: number) => <span>{filterMetadataType(text)}</span>
     },
-    {
-      key: 'operatorType',
-      title: '执行者',
-      dataIndex: 'operatorType',
-      filters: [
-        {
-          text: 'native',
-          value: '' + EOperatorType.native
-        },
-        {
-          text: 'h5',
-          value: '' + EOperatorType.h5
-        },
-        {
-          text: 'all',
-          value: '' + EOperatorType.all
-        },
-        {
-          text: '待定',
-          value: '' + EOperatorType['待定']
-        }
-      ],
-      filterMultiple: false,
-      render: (text: number) => <span>{EOperatorType[text]}</span>
-    },
+    // {
+    //   key: 'operatorType',
+    //   title: '执行者',
+    //   dataIndex: 'operatorType',
+    //   filters: [
+    //     {
+    //       text: 'native',
+    //       value: '' + EOperatorType.native
+    //     },
+    //     {
+    //       text: 'h5',
+    //       value: '' + EOperatorType.h5
+    //     },
+    //     {
+    //       text: 'all',
+    //       value: '' + EOperatorType.all
+    //     },
+    //     {
+    //       text: '待定',
+    //       value: '' + EOperatorType['待定']
+    //     }
+    //   ],
+    //   filterMultiple: false,
+    //   render: (text: number) => <span>{EOperatorType[text]}</span>
+    // },
     {
       key: 'status',
       title: '启用',

@@ -13,6 +13,13 @@ export type LOGIN_REQUEST = typeof LOGIN_REQUEST;
 export type LOGIN_SUCCESS = typeof LOGIN_SUCCESS;
 export type LOGIN_FAILURE = typeof LOGIN_FAILURE;
 
+export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+export const LOGOUT_FAILURE = 'LOGOUT_FAILURE';
+export type LOGOUT_REQUEST = typeof LOGOUT_REQUEST;
+export type LOGOUT_SUCCESS = typeof LOGOUT_SUCCESS;
+export type LOGOUT_FAILURE = typeof LOGOUT_FAILURE;
+
 export const SIGNUP_REQUEST = 'SIGNUP_REQUEST';
 export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
 export const SIGNUP_FAILURE = 'SIGNUP_FAILURE';

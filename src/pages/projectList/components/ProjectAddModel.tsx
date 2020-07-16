@@ -31,15 +31,15 @@ const ProjectAddModel = (props: Props) => {
     });
   };
   return (
-    <Modal onOk={handleSubmit} title='新建项目' visible={props.visible} onCancel={() => props.onClose(false)}>
+    <Modal onOk={handleSubmit} title='新建应用' visible={props.visible} onCancel={() => props.onClose(false)}>
       <Form layout='horizontal' {...formItemLayout}>
-        <Form.Item label='项目名称'>
+        <Form.Item label='应用名称'>
           {getFieldDecorator('name', {
-            rules: [{ required: true, message: '请输入项目名称' }]
-          })(<Input placeholder='请输入项目名称' />)}
+            rules: [{ required: true, message: '请输入应用名称' }]
+          })(<Input placeholder='请输入应用名称' />)}
         </Form.Item>
-        <Form.Item label='项目描述'>
-          {getFieldDecorator('description', {})(<Input placeholder='请输入项目描述' />)}
+        <Form.Item label='应用描述'>
+          {getFieldDecorator('description', {})(<Input placeholder='请输入应用描述' />)}
         </Form.Item>
       </Form>
     </Modal>

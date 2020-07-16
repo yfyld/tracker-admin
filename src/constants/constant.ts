@@ -505,7 +505,7 @@ export const permissionTypeDescription = ['', '接口', '路由', '功能'];
 export const roleTypeDescription = [
   {
     id: 1,
-    name: '项目角色'
+    name: '应用角色'
   },
   {
     id: 2,

@@ -51,7 +51,7 @@ const ProjectList = ({
   const columns: ColumnProps<IProjectListItem>[] = [
     {
       key: 'name',
-      title: '项目名称',
+      title: '应用名称',
       dataIndex: 'name',
       render: (text, record) => <Link to={`${ROUTE_PATH.analyseEvent}?projectId=${record.id}`}>{text}</Link>
     },
@@ -105,9 +105,9 @@ const ProjectList = ({
       title: '警告',
       content: (
         <div>
-          <p>您确定要删除该项目吗?</p>
+          <p>您确定要删除该应用吗?</p>
           <p>
-            请输入项目名称<Input defaultValue={name} onChange={(e) => (name = e.target.value)}></Input>
+            请输入应用名称<Input defaultValue={name} onChange={(e) => (name = e.target.value)}></Input>
           </p>
         </div>
       ),
@@ -117,7 +117,7 @@ const ProjectList = ({
         if (name === shouldDelProject.name) {
           onDeleteProject(shouldDelProject.id);
         } else {
-          message.error('项目名称不正确,请确认');
+          message.error('应用名称不正确,请确认');
           return Promise.reject();
         }
       },
@@ -146,7 +146,7 @@ const ProjectList = ({
       <div className='app-tablePage-form'>
         <div>
           <Button size='large' onClick={() => setAddProjectVisible(true)}>
-            创建新项目
+            创建新应用
           </Button>
         </div>
         <div>

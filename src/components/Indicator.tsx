@@ -162,7 +162,7 @@ const Indicator = ({
                         </Select>
                         &nbsp;
                         <Select
-                          placeholder='关联项目'
+                          placeholder='关联应用'
                           style={{ width: 160 }}
                           mode='multiple'
                           value={

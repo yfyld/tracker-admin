@@ -3,7 +3,7 @@ import style from './AppHeader.module.less';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { IStoreState, IAction } from '@/types';
-import { doChangeCollapsed, doResetStore } from '@/store/actions';
+import { doChangeCollapsed, doResetStore, doLogout } from '@/store/actions';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Icon, Dropdown, Menu } from 'antd';
 import { IUserInfo, IProjectInfo } from '@/api';
@@ -13,17 +13,17 @@ import { ClickParam } from 'antd/lib/menu';
 
 interface Props {
   onChangeCollapsed: (collapsed: boolean) => IAction;
-  onResetStore: () => IAction;
+  onLogout: () => IAction;
   projectInfo: IProjectInfo;
   collapsed: boolean;
   userInfo: IUserInfo;
   alone?: boolean;
 }
 
-const AppHeader = ({ collapsed, onChangeCollapsed, userInfo, alone = false, projectInfo, onResetStore }: Props) => {
+const AppHeader = ({ collapsed, onChangeCollapsed, userInfo, alone = false, projectInfo, onLogout }: Props) => {
   const handleMenuClick = ({ key }: ClickParam) => {
     if (key === 'SINGOUT') {
-      onResetStore();
+      onLogout();
     }
   };
   const menu = (
@@ -31,9 +31,7 @@ const AppHeader = ({ collapsed, onChangeCollapsed, userInfo, alone = false, proj
       <Menu.Item key=''>
         <Link to='/project-list'>个人中心</Link>
       </Menu.Item>
-      <Menu.Item key='SINGOUT'>
-        <Link to='/login'>退出</Link>
-      </Menu.Item>
+      <Menu.Item key='SINGOUT'>退出</Menu.Item>
     </Menu>
   );
 
@@ -63,7 +61,7 @@ const AppHeader = ({ collapsed, onChangeCollapsed, userInfo, alone = false, proj
               // </Link>,
 
               <Link key='project' to='/project-list'>
-                项目列表
+                应用列表
               </Link>,
               <Link key='seting' to='/admin/user-manage'>
                 设置
@@ -93,8 +91,8 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
       onChangeCollapsed: (collapsed: boolean) => {
         return doChangeCollapsed(collapsed);
       },
-      onResetStore: () => {
-        return doResetStore();
+      onLogout: () => {
+        return doLogout.request();
       }
     },
     dispatch

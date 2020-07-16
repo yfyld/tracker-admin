@@ -34,7 +34,10 @@ import {
   APP_INIT_FAILURE,
   RESET_STORE,
   CHANGE_COLLAPSED,
-  EDIE_USER
+  EDIE_USER,
+  LOGOUT_SUCCESS,
+  LOGOUT_REQUEST,
+  LOGOUT_FAILURE
 } from '@/constants';
 import { createAsyncAction, createAction } from 'typesafe-actions';
 
@@ -45,6 +48,8 @@ export const doAppInit = createAsyncAction(APP_INIT_REQUEST, APP_INIT_SUCCESS, A
 >();
 
 export const doLogin = createAsyncAction(LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE)<ILoginParam, ILoginRes, Error>();
+
+export const doLogout = createAsyncAction(LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAILURE)<null, undefined, Error>();
 
 export const doGetUserInfo = createAsyncAction(GET_USER_INFO_REQUEST, GET_USER_INFO_SUCCESS, GET_USER_INFO_FAILURE)<
   undefined,

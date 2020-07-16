@@ -24,21 +24,21 @@ const UserLinkRolesModal = (props: Props) => {
   const [projectAdminCheckedPermissionIds, setProjectAdminCheckedPermissionIds] = React.useState(null);
   const [userCheckedPermissionIds, setUserCheckedPermissionIds] = React.useState(null);
 
-  const options = props.userRoles.map(item => ({
+  const options = props.userRoles.map((item) => ({
     label: item.name,
     value: parseInt(item.id),
     disabled: item.disabled,
     checked: item.checked,
     type: item.type
   }));
-  const globalAdminOptions = options.filter(option => option.type === RoleType.GLOBAL_ADMIN); // 超管类型角色
-  const projectAdminOptions = options.filter(option => option.type === RoleType.PROJECT_ADMIN); // 项目管理员类型角色
-  const userOptions = options.filter(option => option.type === RoleType.USER); // 普通用户类型角色
+  const globalAdminOptions = options.filter((option) => option.type === RoleType.GLOBAL_ADMIN); // 超管类型角色
+  const projectAdminOptions = options.filter((option) => option.type === RoleType.PROJECT_ADMIN); // 应用管理员类型角色
+  const userOptions = options.filter((option) => option.type === RoleType.USER); // 普通用户类型角色
 
   React.useEffect(() => {
-    seGlobalAdminCheckPermissionIds(globalAdminOptions.filter(i => i.checked).map(i => i.value));
-    setProjectAdminCheckedPermissionIds(projectAdminOptions.filter(i => i.checked).map(i => i.value));
-    setUserCheckedPermissionIds(userOptions.filter(i => i.checked).map(i => i.value));
+    seGlobalAdminCheckPermissionIds(globalAdminOptions.filter((i) => i.checked).map((i) => i.value));
+    setProjectAdminCheckedPermissionIds(projectAdminOptions.filter((i) => i.checked).map((i) => i.value));
+    setUserCheckedPermissionIds(userOptions.filter((i) => i.checked).map((i) => i.value));
   }, [props.visible, props.userRoles]);
 
   const handleSubmit = async () => {
@@ -51,28 +51,46 @@ const UserLinkRolesModal = (props: Props) => {
 
   const choosePermissions = (type: RoleType) => (checkedValues: any) => {
     if (type === RoleType.GLOBAL_ADMIN) {
-      seGlobalAdminCheckPermissionIds(checkedValues)
+      seGlobalAdminCheckPermissionIds(checkedValues);
     } else if (type === RoleType.PROJECT_ADMIN) {
-      setProjectAdminCheckedPermissionIds(checkedValues)
+      setProjectAdminCheckedPermissionIds(checkedValues);
     } else {
-      setUserCheckedPermissionIds(checkedValues)
+      setUserCheckedPermissionIds(checkedValues);
     }
   };
 
   return (
     <Modal onOk={handleSubmit} title='关联角色' visible={props.visible} onCancel={() => props.onClose(false)}>
-      <Card title="超管类型角色" style={{
-        marginBottom: 20,
-      }}>
-        <Checkbox.Group options={globalAdminOptions} value={globalAdminCheckPermissionIds} onChange={choosePermissions(RoleType.GLOBAL_ADMIN)} />
+      <Card
+        title='超管类型角色'
+        style={{
+          marginBottom: 20
+        }}
+      >
+        <Checkbox.Group
+          options={globalAdminOptions}
+          value={globalAdminCheckPermissionIds}
+          onChange={choosePermissions(RoleType.GLOBAL_ADMIN)}
+        />
       </Card>
-      <Card title="项目管理员类型角色" style={{
-        marginBottom: 20,
-      }}>
-        <Checkbox.Group options={projectAdminOptions} value={projectAdminCheckedPermissionIds} onChange={choosePermissions(RoleType.PROJECT_ADMIN)} />
+      <Card
+        title='应用管理员类型角色'
+        style={{
+          marginBottom: 20
+        }}
+      >
+        <Checkbox.Group
+          options={projectAdminOptions}
+          value={projectAdminCheckedPermissionIds}
+          onChange={choosePermissions(RoleType.PROJECT_ADMIN)}
+        />
       </Card>
-      <Card title="普通用户类型角色">
-        <Checkbox.Group options={userOptions} value={userCheckedPermissionIds} onChange={choosePermissions(RoleType.USER)} />
+      <Card title='普通用户类型角色'>
+        <Checkbox.Group
+          options={userOptions}
+          value={userCheckedPermissionIds}
+          onChange={choosePermissions(RoleType.USER)}
+        />
       </Card>
     </Modal>
   );

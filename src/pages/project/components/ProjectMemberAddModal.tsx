@@ -60,7 +60,7 @@ const ProjectMemberAddModel = (props: Props) => {
   };
 
   return (
-    <Modal onOk={handleSubmit} title='添加项目成员' visible={props.visible} onCancel={() => props.onClose(false)}>
+    <Modal onOk={handleSubmit} title='添加应用成员' visible={props.visible} onCancel={() => props.onClose(false)}>
       <Form layout='horizontal' {...formItemLayout}>
         <Form.Item label='添加成员'>
           {getFieldDecorator(

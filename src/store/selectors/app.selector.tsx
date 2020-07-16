@@ -9,18 +9,18 @@ export const menuDataSelector = createSelector(projectIdSelector, boardListSelec
   return [
     {
       key: `/project/info?projectId=${id}`,
-      name: '项目信息',
-      icon: 'setting',
+      name: '应用信息',
+      icon: 'appstore',
       auth: ['admin']
     },
     {
       key: 'broad',
       name: '数据看板',
-      icon: 'setting',
+      icon: 'dashboard',
       action: ADD_BROAD,
       children: boardList.map((item) => ({
         key: `/project/board?projectId=${id}&boardId=${item.id}`,
-        icon: 'setting',
+        icon: 'file',
         name: item.name
       }))
     },
@@ -28,21 +28,21 @@ export const menuDataSelector = createSelector(projectIdSelector, boardListSelec
       key: 'analyse',
       name: '行为分析',
       auth: ['dev', 'admin'],
-      icon: 'setting',
+      icon: 'gold',
       children: [
         {
           key: `/project/analyse/event?projectId=${id}`,
-          icon: 'setting',
+          icon: 'fund',
           name: '事件分析'
         },
         {
           key: `/project/analyse/funnel?projectId=${id}`,
-          icon: 'setting',
+          icon: 'filter',
           name: '漏斗分析'
         },
         {
           key: `/project/analyse/path?projectId=${id}`,
-          icon: 'setting',
+          icon: 'fork',
           name: '路径分析'
         }
       ]
@@ -51,19 +51,19 @@ export const menuDataSelector = createSelector(projectIdSelector, boardListSelec
     {
       key: `/project/report-list?projectId=${id}`,
       name: '报表',
-      icon: 'setting',
+      icon: 'line-chart',
       auth: ['dev', 'admin']
     },
     {
       key: `/project/metadata-list?projectId=${id}`,
       name: '元数据',
-      icon: 'setting',
+      icon: 'database',
       auth: ['dev', 'admin']
     },
     {
       key: `/project/query?projectId=${id}`,
       name: '自定义查询',
-      icon: 'setting',
+      icon: 'search',
       auth: ['dev', 'admin']
     }
   ];
