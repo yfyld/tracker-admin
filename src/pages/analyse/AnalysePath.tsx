@@ -62,6 +62,9 @@ const AnalysePath = ({
             <Option value='APV'>人均次数</Option>
             <Option value='DPV'>日均次数</Option>
             <Option value='DUV'>日均用户数</Option>
+            <Option value='RUV'>真实用户数</Option>
+            <Option value='RAPV'>真实人均次数</Option>
+            <Option value='DRUV'>日均真实用户数</Option>
           </Select>
         </div>
 
