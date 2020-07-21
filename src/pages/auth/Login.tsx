@@ -12,6 +12,7 @@ import style from './Account.less';
 import { doLogin } from '@/store/actions';
 import { ILoginParam } from '@/api';
 import config from '@/config';
+import { getCookie } from '@/utils';
 
 interface Props {
   form: WrappedFormUtils;
@@ -34,7 +35,7 @@ const Login = ({ form, doLoginRequest, location }: Props) => {
   const { getFieldDecorator } = form;
 
   React.useEffect(() => {
-    if (config.singelLoginURL && !/test/.test(location.search)) {
+    if (config.singelLoginURL && !getCookie('TEST')) {
       window.location.replace(config.singelLoginURL);
     }
   }, [config.signupAble]);
