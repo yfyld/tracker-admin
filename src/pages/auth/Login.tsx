@@ -39,7 +39,7 @@ const Login = ({ form, doLoginRequest, location }: Props) => {
       window.location.replace(config.singelLoginURL);
     }
   }, [config.signupAble]);
-  return config.singelLoginURL ? (
+  return config.singelLoginURL && !getCookie('TEST') ? (
     <div>正在跳转</div>
   ) : (
     <AccountLayout>
