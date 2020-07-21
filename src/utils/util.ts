@@ -156,7 +156,6 @@ export const getIndicatorTypeCname = (type: string) => {
       return '人均次数';
     case 'DPV':
       return '日均次数';
-
     case 'RAUV':
       return '真实人均次数';
     case 'RUV':

@@ -106,11 +106,20 @@ const CustomQuery = ({ projectId }: Props) => {
         if (/^__/.test(key)) {
           continue;
         }
-        columns.push({
-          title: key,
-          key: key,
-          dataIndex: key
-        });
+        if (key === 'trackTime') {
+          columns.push({
+            title: key,
+            key: key,
+            dataIndex: key,
+            render: (text: number) => dayjs(text).format('YYYY-MM-DD HH:mm')
+          });
+        } else {
+          columns.push({
+            title: key,
+            key: key,
+            dataIndex: key
+          });
+        }
       }
     }
     return columns;

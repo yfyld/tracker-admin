@@ -7,7 +7,7 @@ import { Dispatch } from 'redux';
 import AccountLayout from './components/AccountLayout';
 import { Link } from 'react-router-dom';
 
-import { IAction } from '@/types';
+import { IAction, IStoreState } from '@/types';
 import style from './Account.less';
 import { doLogin } from '@/store/actions';
 import { ILoginParam } from '@/api';
@@ -15,6 +15,7 @@ import config from '@/config';
 
 interface Props {
   form: WrappedFormUtils;
+  location: Location;
   doLoginRequest: (params: ILoginParam) => {};
 }
 
@@ -29,11 +30,11 @@ const onSubmit = (e: React.FormEvent, form: WrappedFormUtils, doLoginRequest: (p
   });
 };
 
-const Login = ({ form, doLoginRequest }: Props) => {
+const Login = ({ form, doLoginRequest, location }: Props) => {
   const { getFieldDecorator } = form;
 
   React.useEffect(() => {
-    if (config.singelLoginURL) {
+    if (config.singelLoginURL && !/test/.test(location.search)) {
       window.location.replace(config.singelLoginURL);
     }
   }, [config.signupAble]);
@@ -81,6 +82,12 @@ const Login = ({ form, doLoginRequest }: Props) => {
   );
 };
 
+const mapStateToProps = (state: IStoreState) => {
+  const { location } = state.router;
+  return {
+    location
+  };
+};
 const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
   bindActionCreators(
     {
