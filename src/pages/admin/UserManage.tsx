@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Button, Pagination, Table, Modal, Input, message, Col, Row, Form, Popconfirm } from 'antd';
-import { ColumnProps } from 'antd/lib/table';
+import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import { IUserInfo, IUserList, IUserInfoParam, IUserListParam, IBaseUser } from '@/api';
 import { IStoreState, IPageData, IAction } from '@/types';
 import { doGetUserList, doGetUserRoles, doPutUser, doDeleteUser, doEditUser } from '@/store/actions';
@@ -46,6 +46,14 @@ const UserManage = (props: Props) => {
       }
       values.username = trimAll(values.username);
       props.onGetUserList(values);
+    });
+  };
+
+  const handleTableChange = (pagination: PaginationConfig) => {
+    props.onGetUserList({
+      ...props.form.getFieldsValue(),
+      page: pagination.current,
+      pageSize: pagination.pageSize
     });
   };
 
@@ -136,7 +144,13 @@ const UserManage = (props: Props) => {
       </div>
 
       <div className='app-tablePage-table'>
-        <Table rowKey='id' columns={columns} dataSource={props.userList.list} />
+        <Table
+          rowKey='id'
+          columns={columns}
+          dataSource={props.userList.list}
+          pagination={{ pageSize: 20 }}
+          onChange={handleTableChange}
+        />
       </div>
     </div>
   );

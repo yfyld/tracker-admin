@@ -4,7 +4,7 @@ import { IAction, IPageData, IStoreState } from '@/types';
 import { bindActionCreators, Dispatch } from 'redux';
 import { IBaseRole, IRoleListItem, IQueryRole, IUpdateRole } from '@/api';
 import { doDeleteRole, doEditRole, doGetRole, doGetRoleInfo } from '@/store/actions';
-import { ColumnProps } from 'antd/lib/table';
+import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import { Link } from 'react-router-dom';
 import { ROUTE_PATH, roleTypeDescription, formItemLayout } from '@/constants';
 import { Button, Table, Popconfirm, notification, Row, Col, Input, Form, Card } from 'antd';
@@ -96,6 +96,14 @@ const RoleManage = (props: Props) => {
     }
   ];
 
+  const handleTableChange = (pagination: PaginationConfig) => {
+    props.onGetRoleList({
+      ...props.form.getFieldsValue(),
+      page: pagination.current,
+      pageSize: pagination.pageSize
+    });
+  };
+
   const handleFilter = (e: React.MouseEvent) => {
     e.preventDefault();
     props.form.validateFields((err, values) => {
@@ -147,7 +155,13 @@ const RoleManage = (props: Props) => {
         </Col>
       </Row>
       <div className={style.table}>
-        <Table rowKey='id' columns={columns} dataSource={props.roleList.list} />
+        <Table
+          rowKey='id'
+          columns={columns}
+          dataSource={props.roleList.list}
+          pagination={{ pageSize: 20 }}
+          onChange={handleTableChange}
+        />
       </div>
     </div>
   );

@@ -134,6 +134,12 @@ const handlers = {
       },
 
       {
+        action: doGetFieldList.request({ metadataCode: '_ALL_METADATA', projectId }),
+        ttl: CACHE_TIME,
+        disable: !!state.metadata.fieldListMap['_ALL_METADATA']
+      },
+
+      {
         action: doGetTagList.request({ page: 1, pageSize: 1000, projectId: projectId }),
         ttl: CACHE_TIME,
         disable: state.metadata.tagList.list.length && projectId === state.metadata.tagList.list[0].projectId

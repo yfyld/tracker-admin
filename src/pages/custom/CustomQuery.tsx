@@ -111,7 +111,7 @@ const CustomQuery = ({ projectId }: Props) => {
             title: key,
             key: key,
             dataIndex: key,
-            render: (text: number) => dayjs(text).format('YYYY-MM-DD HH:mm')
+            render: (text: number) => dayjs(Number(text)).format('YYYY-MM-DD HH:mm')
           });
         } else {
           columns.push({
