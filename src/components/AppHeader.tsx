@@ -10,6 +10,8 @@ import { IUserInfo, IProjectInfo } from '@/api';
 import logo2 from '@/assets/imgs/logo2.png';
 import ProjectInfo from '@/pages/project/components/ProjectInfo';
 import { ClickParam } from 'antd/lib/menu';
+import Permission from './Permission';
+import { PERMISSION_CODE } from '@/constants';
 
 interface Props {
   onChangeCollapsed: (collapsed: boolean) => IAction;
@@ -52,20 +54,21 @@ const AppHeader = ({ collapsed, onChangeCollapsed, userInfo, alone = false, proj
       <div className={style.navRight}>
         {userInfo.id
           ? [
-              <Link key='borad' to='/my-board'>
-                我的看板
-              </Link>,
-
+              <Permission key='borad' code={PERMISSION_CODE.ROUTE_BOARD_LIST}>
+                <Link to='/my-board'>我的看板</Link>
+              </Permission>,
               // <Link key='team' to='/team-list'>
               //   团队
               // </Link>,
 
-              <Link key='project' to='/project-list'>
-                应用列表
-              </Link>,
-              <Link key='seting' to='/admin/user-manage'>
-                设置
-              </Link>,
+              <Permission key='project' code={PERMISSION_CODE.ROUTE_PROJECT_LIST}>
+                <Link to='/project-list'>应用列表</Link>
+              </Permission>,
+
+              <Permission key='seting' code={PERMISSION_CODE.ROUTE_SETTING}>
+                <Link to='/admin/user-manage'>设置</Link>
+              </Permission>,
+
               <Dropdown key='menu' overlay={menu}>
                 <a className='ant-dropdown-link' href='#'>
                   {userInfo.nickname || userInfo.username} <Icon type='down' />

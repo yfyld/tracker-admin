@@ -1,5 +1,5 @@
-import { doGetAllPermission } from './../actions/permission.action';
-import { IPermissionList } from './../../api/permission.api';
+import { doGetAllPermission, doGetUserPermission } from './../actions/permission.action';
+import { IPermissionList, IUserPermissionCodes, IUserPermissionCodesMap } from './../../api/permission.api';
 import { IBasePermission, IPermissionListItem, IQueryPermission, IUpdatePermission } from '@/api';
 import update from 'immutability-helper';
 import { IAction, IPageData } from '@/types';
@@ -13,6 +13,7 @@ export interface PermissionState {
   permissionList: IPermissionList;
   permissionListParams: IQueryPermission;
   allPermissionList: IPermissionList;
+  userPermissionCodes: IUserPermissionCodesMap;
 }
 
 const initialState = (): PermissionState => ({
@@ -43,6 +44,10 @@ const initialState = (): PermissionState => ({
     page: 1,
     pageSize: 20,
     name: ''
+  },
+  userPermissionCodes: {
+    projectId: null,
+    permissionCodesMap: {}
   }
 });
 
@@ -73,6 +78,11 @@ export const permissionReducer = (state: PermissionState = initialState(), actio
     case getType(doEditPermission):
       return update(state, {
         updatePermissionItem: { $set: action.payload }
+      });
+
+    case getType(doGetUserPermission.success):
+      return update(state, {
+        userPermissionCodes: { $set: action.payload }
       });
     default:
       return state;

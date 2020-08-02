@@ -2,10 +2,12 @@ import * as React from 'react';
 import AppHeader from './AppHeader';
 import style from './AdminLayout.module.less';
 import { Menu } from 'antd';
-import { ROUTE_PATH } from '@/constants';
+import { ROUTE_PATH, PERMISSION_CODE } from '@/constants';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
+
+import Permission from '@/components/Permission';
 interface Props extends RouteComponentProps {
-  children: any;
+  children: React.ReactElement;
 }
 
 const AdminLayout = ({ children, history, location }: Props) => {
@@ -23,9 +25,15 @@ const AdminLayout = ({ children, history, location }: Props) => {
       </div>
       <div className={style.menu}>
         <Menu selectedKeys={[selectedKey]} onClick={({ key }) => handleMenuClick(key)}>
-          <Menu.Item key={ROUTE_PATH.userManage}>账号管理</Menu.Item>
-          <Menu.Item key={ROUTE_PATH.roleManage}>角色管理</Menu.Item>
-          <Menu.Item key={ROUTE_PATH.permissionManage}>权限管理</Menu.Item>
+          <Permission code={PERMISSION_CODE.ROUTE_USER} key={ROUTE_PATH.userManage}>
+            <Menu.Item>账号管理</Menu.Item>
+          </Permission>
+          <Permission code={PERMISSION_CODE.ROUTE_ROLE} key={ROUTE_PATH.roleManage}>
+            <Menu.Item>角色管理</Menu.Item>
+          </Permission>
+          <Permission code={PERMISSION_CODE.ROUTE_PERMISSION} key={ROUTE_PATH.permissionManage}>
+            <Menu.Item>权限管理</Menu.Item>
+          </Permission>
         </Menu>
       </div>
       <div className={style.content}>{children}</div>

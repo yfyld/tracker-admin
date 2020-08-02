@@ -14,7 +14,15 @@ import {
   PUT_PERMISSION_REQUEST,
   PUT_PERMISSION_SUCCESS
 } from '@/constants';
-import { IPermissionList, IQueryPermission, IBasePermission, IPermissionListItem, IUpdatePermission } from '@/api';
+import {
+  IPermissionList,
+  IQueryPermission,
+  IBasePermission,
+  IPermissionListItem,
+  IUpdatePermission,
+  IUserPermissionCodes,
+  IUserPermissionCodesMap
+} from '@/api';
 
 export const doGetPermission = createAsyncAction(
   GET_PERMISSION_REQUEST,
@@ -53,3 +61,13 @@ export const doGetAllPermission = createAsyncAction(
   GET_ALL_PERMISSION_SUCCESS,
   GET_ALL_PERMISSION_FAILURE
 )<undefined, IPermissionList, Error>();
+
+const GET_USER_PERMISSION_REQUEST = 'GET_USER_PERMISSION_REQUEST';
+const GET_USER_PERMISSION_SUCCESS = 'GET_USER_PERMISSION_SUCCESS';
+const GET_USER_PERMISSION_FAILURE = 'GET_USER_PERMISSION_FAILURE';
+
+export const doGetUserPermission = createAsyncAction(
+  GET_USER_PERMISSION_REQUEST,
+  GET_USER_PERMISSION_SUCCESS,
+  GET_USER_PERMISSION_FAILURE
+)<number | null, IUserPermissionCodesMap, Error>();

@@ -21,6 +21,16 @@ export interface IQueryPermission extends IPageQuery {
   name?: string;
 }
 
+export interface IUserPermissionCodes {
+  projectId?: string;
+  permissionCodes: string[];
+}
+
+export interface IUserPermissionCodesMap {
+  projectId?: string;
+  permissionCodesMap: { [prop: string]: boolean };
+}
+
 // export interface IPermissionItem extends IBasePermission {
 //   id: number;
 //   updaterId: number;
@@ -51,4 +61,9 @@ export function fetchPutPermission(params: IUpdatePermission) {
 // 删除权限
 export function fetchDeletePermission(permissionId: number) {
   return fetch.delete(`/permission/${permissionId}`);
+}
+
+// 删除权限
+export function fetchPermissionByUserOrProject(projectId?: number) {
+  return fetch.get<IUserPermissionCodes>(`/permission/all`, { projectId });
 }
