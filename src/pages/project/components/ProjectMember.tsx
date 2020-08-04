@@ -2,10 +2,12 @@ import { Table, Button, Modal, Select } from 'antd';
 import * as React from 'react';
 import { bindActionCreators, Dispatch } from 'redux';
 import { IAction, IStoreState } from '@/types';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { IProjectInfo, IProjectMemberDelParam, IProjectMemberUpdateParam, IRoleList } from '@/api';
 import ProjectMemberAddModal from './ProjectMemberAddModal';
 import { doDeleteProjectMember, doUpdateProjectMember } from '@/store/actions';
+import Permission from '@/components/Permission';
+import { PERMISSION_CODE } from '@/constants';
 const { Option } = Select;
 
 interface Props {
@@ -39,13 +41,17 @@ const ProjectMember = ({ projectInfo, onDeleteProjectMember, onUpdateProjectMemb
       render: (text: any, record: any) => {
         return (
           <span>
-            <Button size='small' onClick={() => handleUpdateMember(record.id)}>
-              编辑
-            </Button>
+            <Permission code={PERMISSION_CODE.PROJECT_MEMBER_UPDATE}>
+              <Button size='small' onClick={() => handleUpdateMember(record.id)}>
+                编辑
+              </Button>
+            </Permission>
             &nbsp;
-            <Button onClick={() => handleRemoveMember(record.id)} size='small'>
-              移除
-            </Button>
+            <Permission code={PERMISSION_CODE.PROJECT_MEMBER_DEL}>
+              <Button onClick={() => handleRemoveMember(record.id)} size='small'>
+                移除
+              </Button>
+            </Permission>
           </span>
         );
       }
@@ -105,9 +111,11 @@ const ProjectMember = ({ projectInfo, onDeleteProjectMember, onUpdateProjectMemb
       <div className='app-tablePage-title'>成员列表</div>
       <div className='app-tablePage-form'>
         <div>
-          <Button size='large' onClick={() => setaddMemberModalVisible(true)}>
-            添加成员
-          </Button>
+          <Permission code={PERMISSION_CODE.PROJECT_MEMBER_ADD}>
+            <Button size='large' onClick={() => setaddMemberModalVisible(true)}>
+              添加成员
+            </Button>
+          </Permission>
         </div>
       </div>
 

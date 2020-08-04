@@ -1,8 +1,8 @@
 import { Form, Button, Input, Select } from 'antd';
 import * as React from 'react';
 import { FormComponentProps } from 'antd/lib/form/Form';
-import { formItemLayout, tailFormItemLayout } from '@/constants';
-import { connect } from 'react-redux';
+import { formItemLayout, tailFormItemLayout, PERMISSION_CODE } from '@/constants';
+import { connect, useSelector } from 'react-redux';
 import { IAction, IStoreState, IPageData } from '@/types';
 import { bindActionCreators, Dispatch } from 'redux';
 import { doUpdateProject } from '@/store/actions';
@@ -17,6 +17,9 @@ interface Props extends FormComponentProps {
 
 const ProjectInfo = ({ form, projectInfo, handleUpdateProject, projectList }: Props) => {
   const { getFieldDecorator } = form;
+  const permissionCodesMap = useSelector<IStoreState, { [prop: string]: boolean }>(
+    (state) => state.permission.userPermissionCodes.permissionCodesMap
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,7 +43,7 @@ const ProjectInfo = ({ form, projectInfo, handleUpdateProject, projectList }: Pr
               message: '应用名称不能为空'
             }
           ]
-        })(<Input />)}
+        })(<Input disabled={permissionCodesMap[PERMISSION_CODE.PROJECT_UPDATE]} />)}
       </Form.Item>
       <Form.Item label='trackKey'>{projectInfo.trackKey}</Form.Item>
 
@@ -48,7 +51,7 @@ const ProjectInfo = ({ form, projectInfo, handleUpdateProject, projectList }: Pr
         {getFieldDecorator('associationProjectIds', {
           initialValue: projectInfo.associationProjects.map((item) => item.id)
         })(
-          <Select mode='multiple'>
+          <Select mode='multiple' disabled={permissionCodesMap[PERMISSION_CODE.PROJECT_UPDATE]}>
             {projectList.list
               .filter((item) => item.id !== projectInfo.id)
               .map((item) => (
@@ -60,7 +63,7 @@ const ProjectInfo = ({ form, projectInfo, handleUpdateProject, projectList }: Pr
         )}
       </Form.Item>
       <Form.Item {...tailFormItemLayout}>
-        <Button type='primary' htmlType='submit'>
+        <Button type='primary' htmlType='submit' disabled={permissionCodesMap[PERMISSION_CODE.PROJECT_UPDATE]}>
           保存
         </Button>
       </Form.Item>

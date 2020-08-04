@@ -373,7 +373,12 @@ const MetadataList = ({
     switch (type) {
       case 'TAG':
         break;
-
+      case 'DEL':
+        break;
+      case 'ENABLE':
+        break;
+      case 'DISABLE':
+        break;
       default:
         break;
     }

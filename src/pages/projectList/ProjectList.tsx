@@ -15,9 +15,10 @@ import { doGetProjectList, doDeleteProject, doUpdateProject } from '@/store/acti
 import ProjectListForm from './components/ProjectListForm';
 import { ColumnProps } from 'antd/lib/table';
 import ProjectUpdateModal from './components/ProjectUpdateModal';
-import { ROUTE_PATH } from '@/constants';
+import { ROUTE_PATH, PERMISSION_CODE } from '@/constants';
 import { Link } from 'react-router-dom';
 import { render } from 'react-dom';
+import Permission from '@/components/Permission';
 const { confirm } = Modal;
 
 interface Props {
@@ -55,11 +56,7 @@ const ProjectList = ({
       dataIndex: 'name',
       render: (text, record) => <Link to={`${ROUTE_PATH.analyseEvent}?projectId=${record.id}`}>{text}</Link>
     },
-    {
-      key: 'log',
-      title: '产生日志',
-      dataIndex: 'log'
-    },
+
     {
       key: 'description',
       title: '备注',
@@ -71,17 +68,23 @@ const ProjectList = ({
       width: 180,
       render: (text, record) => (
         <span>
-          <Link to={`${ROUTE_PATH.analyseEvent}?projectId=${record.id}`}>
-            <Button type='link' size='small'>
-              查看
+          <Permission code={PERMISSION_CODE.PROJECT_SEARCH}>
+            <Link to={`${ROUTE_PATH.analyseEvent}?projectId=${record.id}`}>
+              <Button type='link' size='small'>
+                查看
+              </Button>
+            </Link>
+          </Permission>
+          <Permission code={PERMISSION_CODE.PROJECT_UPDATE}>
+            <Button type='link' size='small' onClick={() => handleUpdate(record)}>
+              编辑
             </Button>
-          </Link>
-          <Button type='link' size='small' onClick={() => handleUpdate(record)}>
-            编辑
-          </Button>
-          <Button type='link' size='small' onClick={() => setshouldDelProject(record)}>
-            删除
-          </Button>
+          </Permission>
+          <Permission code={PERMISSION_CODE.PROJECT_DEL}>
+            <Button type='link' size='small' onClick={() => setshouldDelProject(record)}>
+              删除
+            </Button>
+          </Permission>
         </span>
       )
     }
@@ -145,9 +148,11 @@ const ProjectList = ({
       <div className='app-tablePage-title'>应用列表</div>
       <div className='app-tablePage-form'>
         <div>
-          <Button size='large' onClick={() => setAddProjectVisible(true)}>
-            创建新应用
-          </Button>
+          <Permission code={PERMISSION_CODE.PROJECT_ADD}>
+            <Button size='large' onClick={() => setAddProjectVisible(true)}>
+              创建新应用
+            </Button>
+          </Permission>
         </div>
         <div>
           <ProjectListForm defaultValue={projectListParams} onSubmit={handleSearch}></ProjectListForm>
