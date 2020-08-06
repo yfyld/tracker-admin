@@ -166,6 +166,16 @@ export interface ICustomAnalyseParam {
   dateEnd: number;
   query: string;
 }
+export interface IUserTimelineAnalyseParam {
+  projectId: number;
+  dateType: string;
+  dateStart: number;
+  dateEnd: number;
+  uid?: string;
+  utoken?: string;
+}
+
+export interface IUserTimelineAnalyse {}
 
 export function fetchEventAnalyseData(param: IEventAnalyseParam) {
   return fetch.post<IEventAnalyseData>('/analyse/event', { ...param, SHOW_LOADING: false });
@@ -180,5 +190,9 @@ export function fetchPathAnalyseData(param: IPathAnalyseParam) {
 }
 
 export function fetchCustomAnalyseData(param: ICustomAnalyseParam) {
-  return fetch.post<any>('/analyse/custom', { ...param, SHOW_LOADING: false });
+  return fetch.post<any>('/analyse/custom', { ...param });
+}
+
+export function fetchUserTimelineAnalyseData(param: IUserTimelineAnalyseParam) {
+  return fetch.post<any>('/analyse/user-timeline', { ...param });
 }

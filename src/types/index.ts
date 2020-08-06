@@ -47,7 +47,7 @@ export interface IMenuItem {
   name: string;
   icon: string;
   link?: string;
-  auth?: string[];
+  auth?: string;
   children?: IMenuItem[];
   action?: string;
 }

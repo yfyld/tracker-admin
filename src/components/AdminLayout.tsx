@@ -25,13 +25,13 @@ const AdminLayout = ({ children, history, location }: Props) => {
       </div>
       <div className={style.menu}>
         <Menu selectedKeys={[selectedKey]} onClick={({ key }) => handleMenuClick(key)}>
-          <Permission code={PERMISSION_CODE.ROUTE_USER} key={ROUTE_PATH.userManage}>
+          <Permission code={PERMISSION_CODE.PROJECT_ADD} key={ROUTE_PATH.userManage}>
             <Menu.Item>账号管理</Menu.Item>
           </Permission>
-          <Permission code={PERMISSION_CODE.ROUTE_ROLE} key={ROUTE_PATH.roleManage}>
+          <Permission code={PERMISSION_CODE.PROJECT_ADD} key={ROUTE_PATH.roleManage}>
             <Menu.Item>角色管理</Menu.Item>
           </Permission>
-          <Permission code={PERMISSION_CODE.ROUTE_PERMISSION} key={ROUTE_PATH.permissionManage}>
+          <Permission code={PERMISSION_CODE.PROJECT_ADD} key={ROUTE_PATH.permissionManage}>
             <Menu.Item>权限管理</Menu.Item>
           </Permission>
         </Menu>

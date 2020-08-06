@@ -60,7 +60,8 @@ export const ROUTE_PATH = {
   userManage: '/admin/user-manage',
   roleManage: '/admin/role-manage',
   permissionManage: '/admin/permission-manage',
-  custom: '/project/query'
+  custom: '/project/query',
+  userTimeline: '/project/user-timeline'
 };
 
 export interface IDynamicTime {
@@ -536,6 +537,7 @@ export const PERMISSION_CODE = {
   ROUTE_REPORT: 'ROUTE_REPORT',
   ROUTE_METADATA: 'ROUTE_METADATA',
   ROUTE_QUERY: 'ROUTE_QUERY',
+  ROUTER_USER_TIMELINE: 'ROUTER_USER_TIMELINE',
 
   //接口
 

@@ -15,6 +15,7 @@ const ReportList = React.lazy(() => import('@/pages/report/ReportList'));
 const Project = React.lazy(() => import('@/pages/project/Project'));
 const DraftList = React.lazy(() => import('@/pages/draft/DraftList'));
 const CustomQuery = React.lazy(() => import('@/pages/custom/CustomQuery'));
+const UserTimeline = React.lazy(() => import('@/pages/userTimeline/UserTimeline'));
 export default class Routes extends React.Component {
   public render() {
     return (
@@ -34,6 +35,7 @@ export default class Routes extends React.Component {
             <Route exact path={ROUTE_PATH.analyseFunnel} component={AnalyseFunnel} />
             <Route exact path={ROUTE_PATH.analysePath} component={AnalysePath} />
             <Route exact path={ROUTE_PATH.custom} component={CustomQuery} />
+            <Route exact path={ROUTE_PATH.userTimeline} component={UserTimeline} />
 
             <Route exact path={ROUTE_PATH.board} component={Board} />
             <Route exact path={ROUTE_PATH.projectInfo} component={Project} />

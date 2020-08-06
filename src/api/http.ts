@@ -86,8 +86,12 @@ instance.interceptors.response.use(
       response.data = response.data.result;
       return Promise.resolve(response);
     } else {
-      errorMessage(response.data.message && response.data.error ? `${response.data.message}: ${response.data.error}` : response.data.message || response.data.error);
-      if (response.data.status === 401 || response.data.status === 403) {
+      errorMessage(
+        response.data.message && response.data.error
+          ? `${response.data.message}: ${response.data.error}`
+          : response.data.message || response.data.error
+      );
+      if (response.data.status === 401) {
         config.signonAble
           ? store.dispatch(
               push(
