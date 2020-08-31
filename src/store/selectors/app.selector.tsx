@@ -11,6 +11,10 @@ export const menuDataSelector = createSelector(
   boardListSelector,
   userPermissionCodesMapSelector,
   (id, boardList, userPermissionCodesMap) => {
+    if (!id) {
+      return [];
+    }
+
     const routerData = [
       {
         key: `/project/info?projectId=${id}`,

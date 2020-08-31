@@ -8,10 +8,11 @@ import {
   doEnableMetadata,
   doDisableMetadata,
   doAddMetadataByExcel,
-  doUpdateMetadataLog
+  doUpdateMetadataLog,
+  doBatchMetadata
 } from '@/store/actions';
 import { bindActionCreators, Dispatch } from 'redux';
-import { Table, Button, Modal, Drawer, Tag, Upload, Icon, Avatar, Alert, Dropdown, Menu } from 'antd';
+import { Table, Button, Modal, Drawer, Tag, Upload, Icon, Avatar, Alert, Dropdown, Menu, Select } from 'antd';
 import { PaginationConfig, SorterResult, ColumnProps, ColumnFilterItem, TableRowSelection } from 'antd/lib/table';
 import {
   IMetadataListParam,
@@ -20,7 +21,9 @@ import {
   EMetadataType,
   fetchMetadataAddByExcel,
   IMetadataAddByExcelParam,
-  EOperatorType
+  EOperatorType,
+  ITagList,
+  IBatchMetadataParam
 } from '@/api';
 import MetadataAddModal from './components/MetadataAddModal';
 import MetadataEditModal from './components/MetadataEditModal';
@@ -41,11 +44,13 @@ interface Props {
   onDisableMetadata: (params: number) => IAction;
   onAddMetadataByExcel: (params: IMetadataAddByExcelParam) => IAction;
   onUpdateMetadataLog: (params: IInfoParam) => IAction;
+  onBatchMetadata: (params: IBatchMetadataParam) => IAction;
   metadataList: IPageData<IMetadataInfo>;
   metadataListParams: IMetadataListParam;
   tagListFilters: ColumnFilterItem[];
   projectId: number;
   uploading: boolean;
+  tagList: ITagList;
 }
 
 const MetadataList = ({
@@ -55,15 +60,17 @@ const MetadataList = ({
   onEnableMetadata,
   onDisableMetadata,
   onUpdateMetadataLog,
+  onBatchMetadata,
   metadataListParams,
   tagListFilters,
   onAddMetadataByExcel,
   projectId,
-  uploading
+  uploading,
+  tagList
 }: Props) => {
   const [addMetadataVisible, setAddMetadataVisible] = React.useState(false);
   const [editMetadataVisible, setEditMetadataVisible] = React.useState(false);
-  const [selectedRowKeys, setselectedRowKeys] = React.useState([]);
+  const [selectedRowKeys, setselectedRowKeys] = React.useState([] as number[]);
   const [curMetadataInfo, setCurMetadataInfo] = React.useState<IMetadataInfo>({
     id: null,
     code: '',
@@ -131,7 +138,7 @@ const MetadataList = ({
   const handleDeleteMetadata = (metadataId: number) => {
     confirm({
       title: '提示',
-      content: '确定要删除选中的元数据',
+      content: '确定要删除当前元数据',
       okText: '删除',
       okType: 'danger',
       cancelText: '取消',
@@ -365,21 +372,78 @@ const MetadataList = ({
 
   const rowSelection: TableRowSelection<IMetadataInfo> = {
     onChange: (selectedRowKeys, selectedRows) => {
-      setselectedRowKeys(selectedRowKeys);
+      setselectedRowKeys(selectedRowKeys as number[]);
     }
   };
 
   const handleBatch = (type: string) => {
     switch (type) {
       case 'TAG':
+        {
+          let values: string[] = [];
+          confirm({
+            title: '提示',
+            content: (
+              <Select
+                mode='tags'
+                placeholder='选择事件标签'
+                defaultValue={values}
+                onChange={(e: string[]) => {
+                  values = e;
+                }}
+                style={{ width: '100%' }}
+              >
+                {tagList.list.map((item) => (
+                  <Select.Option key={item.id} value={'' + item.name}>
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            ),
+            okText: '确定',
+            okType: 'primary',
+            cancelText: '取消',
+            onOk() {
+              console.log(values, selectedRowKeys);
+              onBatchMetadata({
+                type,
+                ids: selectedRowKeys,
+                projectId,
+                tags: values
+              });
+            }
+          });
+        }
+
         break;
       case 'DEL':
-        break;
-      case 'ENABLE':
-        break;
-      case 'DISABLE':
+        {
+          confirm({
+            title: '提示',
+            content: '确定要删除选中的元数据',
+            okText: '删除',
+            okType: 'danger',
+            cancelText: '取消',
+            onOk() {
+              onBatchMetadata({
+                type,
+                ids: selectedRowKeys,
+                projectId
+              });
+            }
+          });
+        }
+
         break;
       default:
+        {
+          onBatchMetadata({
+            type,
+            ids: selectedRowKeys,
+            projectId,
+            status: type === 'DISABLE' ? 0 : 1
+          });
+        }
         break;
     }
   };
@@ -489,6 +553,9 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
       },
       onAddMetadataByExcel: (params) => {
         return doAddMetadataByExcel.request(params);
+      },
+      onBatchMetadata: (params) => {
+        return doBatchMetadata.request(params);
       }
     },
     dispatch

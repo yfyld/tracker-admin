@@ -4,7 +4,8 @@ import {
   doAddTag,
   doDelTag,
   doAddMetadataByExcel,
-  doUpdateMetadataLog
+  doUpdateMetadataLog,
+  doBatchMetadata
 } from './../actions/metadata.action';
 import { put, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
@@ -31,7 +32,8 @@ import {
   fetchTagDel,
   fetchTagUpdate,
   fetchMetadataAddByExcel,
-  fetchMetadataLogUpdate
+  fetchMetadataLogUpdate,
+  fetchBatchMetadata
 } from '@/api';
 import { select, call } from '@/utils';
 
@@ -204,6 +206,17 @@ function* updateTag(action: ReturnType<typeof doUpdateTag.request>): Generator {
   }
 }
 
+function* batchMetadata(action: ReturnType<typeof doBatchMetadata.request>): Generator {
+  try {
+    yield call(fetchBatchMetadata, action.payload);
+    yield put(doBatchMetadata.success());
+    const metadataListParams = yield* select((state) => state.metadata.metadataListParams);
+    yield put(doGetMetadataList.request(metadataListParams));
+  } catch (error) {
+    yield put(doBatchMetadata.failure(error));
+  }
+}
+
 export default function* watchMetadata() {
   yield takeEvery(getType(doGetMetadataList.request), getMetadataList);
   yield takeEvery(getType(doGetActiveMetadataList.request), getActiveMetadataList);
@@ -223,4 +236,6 @@ export default function* watchMetadata() {
   yield takeEvery(getType(doUpdateTag.request), updateTag);
   yield takeEvery(getType(doAddTag.request), addTag);
   yield takeEvery(getType(doDelTag.request), deleteTag);
+
+  yield takeEvery(getType(doBatchMetadata.request), batchMetadata);
 }

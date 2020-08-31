@@ -7,7 +7,8 @@ import {
   ITagListParam,
   ITagList,
   IMetadataAddByExcelParam,
-  IFieldListParam
+  IFieldListParam,
+  IBatchMetadataParam
 } from './../../api/metadata.api';
 import { createAsyncAction } from 'typesafe-actions';
 import { IPageData } from '@/types';
@@ -97,3 +98,9 @@ export const doUpdateTag = createAsyncAction(
   actionType.UPDATE_TAG_SUCCESS,
   actionType.UPDATE_TAG_FAILURE
 )<ITagUpdateParam, undefined, Error>();
+
+export const doBatchMetadata = createAsyncAction(
+  actionType.BATCH_METADATA_REQUEST,
+  actionType.BATCH_METADATA_SUCCESS,
+  actionType.BATCH_METADATA_FAILURE
+)<IBatchMetadataParam, undefined, Error>();

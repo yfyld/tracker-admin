@@ -113,6 +113,14 @@ export interface IMetadataAddByExcelParam {
   projectId: number;
 }
 
+export interface IBatchMetadataParam {
+  ids: number[];
+  type: string;
+  projectId: number;
+  tags?: string[];
+  status?: number;
+}
+
 export function fetchMetadataList(params: IMetadataListParam) {
   return fetch.get<IPageData<IMetadataInfo>>('/metadata/', params);
 }
@@ -163,4 +171,8 @@ export function fetchTagDel(projectId: number, tagId: number) {
 
 export function fetchFieldList(param: IFieldListParam) {
   return fetch.get<IPageData<IFieldInfo>>('/metadata/fields', param);
+}
+
+export function fetchBatchMetadata(param: IBatchMetadataParam) {
+  return fetch.post('/metadata/batch', param);
 }

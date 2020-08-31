@@ -50,12 +50,14 @@ const UserEditModal = (props: Props) => {
   //   type: item.type
   // }));
 
-  const roleOptions: CheckboxOptionType[] = props.allRoleList.list.map((item) => ({
-    label: item.name,
-    value: item.id,
-    disabled: !item.status,
-    type: item.type
-  }));
+  const roleOptions: CheckboxOptionType[] = props.allRoleList.list
+    .filter((item) => item.type === 2)
+    .map((item) => ({
+      label: item.name,
+      value: item.id,
+      disabled: !item.status,
+      type: item.type
+    }));
 
   return (
     <Modal onOk={handleSubmit} title='编辑用户' visible={props.visible} onCancel={() => props.onClose(false)}>
