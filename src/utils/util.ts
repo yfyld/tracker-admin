@@ -1,5 +1,5 @@
 import { ROUTE_PATH } from './../constants/constant';
-import { createBrowserHistory } from 'history';
+import { createBrowserHistory, createHashHistory } from 'history';
 
 import { matchPath } from 'react-router-dom';
 import { IStoreState, IAction } from '@/types';
@@ -88,7 +88,7 @@ export const mapLocationIntoActions = (
     })
     .reduce((a: any, b: any) => a.concat(b), []);
 
-export const history = createBrowserHistory();
+export const history = createHashHistory();
 
 // export function createReducer(initialState: object, handlers: object) {
 //     return function reducer(state = initialState, action: IAction) {
