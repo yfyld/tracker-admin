@@ -20,9 +20,16 @@ const Dimension = ({ fieldList = { list: EVENT_ATTRS }, dimension, onChange }: P
           <div className={style.center}>按</div>
         </Col>
         <Col span={3}>
-          <Select value={dimension} onChange={onChange}>
+          <Select
+            value={dimension}
+            onChange={onChange}
+            showSearch
+            filterOption={(input, option) =>
+              (option.props.children as string).toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
             <Option value=''>总体</Option>
-            {fieldList.list.map(field => (
+            {fieldList.list.map((field) => (
               <Option value={field.value} key={field.value}>
                 {field.name}
               </Option>

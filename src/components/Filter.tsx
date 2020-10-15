@@ -87,7 +87,14 @@ const Filter = ({ fieldList = { list: EVENT_ATTRS }, filterInfo, onChange }: Pro
             {filterInfo.filterValues.map((filter, index) => (
               <Row gutter={16} key={filter.id}>
                 <Col span={5}>
-                  <Select value={filter.key} onChange={(val: string) => handleFieldChange(val, index)}>
+                  <Select
+                    value={filter.key}
+                    onChange={(val: string) => handleFieldChange(val, index)}
+                    showSearch
+                    filterOption={(input, option) =>
+                      (option.props.children as string).toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                  >
                     {fieldList.list.map((field) => (
                       <Option value={field.value} key={field.value}>
                         {field.name}
