@@ -3,8 +3,9 @@ import style from './AnaluseRangePicker.module.less';
 import { DatePicker, Tag, Button } from 'antd';
 import moment from 'moment';
 import { DYNAMIC_TIME, IDynamicTime } from '@/constants';
-import { RangePickerValue, RangePickerProps } from 'antd/lib/date-picker/interface';
+import { RangePickerValue, RangePickerProps, RangePickerPresetRange } from 'antd/lib/date-picker/interface';
 import { IDate } from '@/types';
+import { isArray } from 'lodash';
 const RangePicker = DatePicker.RangePicker;
 type Props = {
   value?: IDate;
@@ -20,12 +21,20 @@ class AnalyseRangePicker extends React.Component<Props> {
   };
   state = {
     open: false,
-    showIcon: this.props.defalutShowIcon
+    showIcon: this.props.defalutShowIcon,
+    newValue: {} as IDate
   };
+
+  componentDidMount() {
+    this.setState({
+      newValue: this.props.value.dateStart ? [moment(this.props.value.dateStart), moment(this.props.value.dateEnd)] : []
+    });
+  }
+
   handleSelectDynamicTime = (item: IDynamicTime) => {
     const newValue = { dateStart: item.startDate(), dateEnd: item.endDate(), dateType: item.value };
     this.props.onChange(newValue);
-    this.setState({ open: false });
+    this.setState({ open: false, newValue });
     if (!newValue.dateStart) {
       this.setState({ showIcon: true });
     }
@@ -36,11 +45,24 @@ class AnalyseRangePicker extends React.Component<Props> {
       value && value[0]
         ? { dateStart: value[0].valueOf(), dateEnd: value[1].valueOf(), dateType: '' }
         : { dateStart: null, dateEnd: null, dateType: '' };
-    this.setState({ open: false });
-    this.props.onChange(newValue);
+    this.setState({ newValue });
+
     if (!newValue.dateStart) {
       this.setState({ showIcon: true });
+      this.props.onChange(newValue);
     }
+  };
+
+  handlePickerOk = (value: RangePickerPresetRange) => {
+    if (isArray(value)) {
+      const newValue =
+        value.length > 1
+          ? { dateStart: value[0].valueOf(), dateEnd: value[1].valueOf(), dateType: '' }
+          : { dateStart: null, dateEnd: null, dateType: '' };
+      this.props.onChange(newValue);
+    }
+
+    this.setState({ open: false });
   };
 
   handleOpenChange = (open: boolean) => {
@@ -51,7 +73,8 @@ class AnalyseRangePicker extends React.Component<Props> {
 
   getShowDate = () => {
     if (this.props.value.dateType) {
-      return '| ' + DYNAMIC_TIME.find(item => item.value === this.props.value.dateType).name;
+      const date = DYNAMIC_TIME.find((item) => item.value === this.props.value.dateType);
+      return date ? '| ' + date.name : '';
     } else {
       return '';
     }
@@ -71,7 +94,7 @@ class AnalyseRangePicker extends React.Component<Props> {
           renderExtraFooter={() => (
             <div>
               <h3>动态时间:</h3>
-              {DYNAMIC_TIME.map(item => (
+              {DYNAMIC_TIME.map((item) => (
                 <Button
                   size='small'
                   key={item.value}
@@ -84,11 +107,15 @@ class AnalyseRangePicker extends React.Component<Props> {
             </div>
           )}
           open={this.state.open}
-          format='YYYY-MM-DD'
+          format='YYYY-MM-DD HH:mm'
+          showTime
           onOpenChange={this.handleOpenChange}
           value={
-            this.props.value.dateStart ? [moment(this.props.value.dateStart), moment(this.props.value.dateEnd)] : []
+            this.state.newValue.dateStart
+              ? [moment(this.state.newValue.dateStart), moment(this.state.newValue.dateEnd)]
+              : []
           }
+          onOk={this.handlePickerOk}
           onChange={this.handlePickerChange}
         />
         <span>{this.getShowDate()}</span>

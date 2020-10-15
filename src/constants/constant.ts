@@ -50,6 +50,7 @@ export const ROUTE_PATH = {
   analyseFunnel: '/project/analyse/funnel',
   analysePath: '/project/analyse/path',
   board: '/project/board',
+  boardList: '/project/board-list',
   reportList: '/project/report-list',
   draft: '/project/draft',
   teamList: '/team-list',
@@ -75,8 +76,9 @@ export const DYNAMIC_TIME: IDynamicTime[] = [
     name: '当天',
     startDate: () => new Date().setHours(0, 0, 0, 0),
     endDate: () => new Date().setHours(23, 59, 59, 999),
-    value: 'DAY'
+    value: 'TODAY'
   },
+
   {
     name: '最近3天',
     startDate: () => new Date().setHours(0, 0, 0, 0) - 3 * 86400000,

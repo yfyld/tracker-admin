@@ -11,6 +11,7 @@ const AnalyseFunnel = React.lazy(() => import('@/pages/analyse/AnalyseFunnel'));
 const AnalysePath = React.lazy(() => import('@/pages/analyse/AnalysePath'));
 
 const Board = React.lazy(() => import('@/pages/board/Board'));
+const BoardList = React.lazy(() => import('@/pages/board/BoardList'));
 const ReportList = React.lazy(() => import('@/pages/report/ReportList'));
 const Project = React.lazy(() => import('@/pages/project/Project'));
 const DraftList = React.lazy(() => import('@/pages/draft/DraftList'));
@@ -42,6 +43,8 @@ export default class Routes extends React.Component {
             <Route exact path={ROUTE_PATH.reportList} component={ReportList} />
             <Route exact path={ROUTE_PATH.draft} component={DraftList} />
             <Route exact path={ROUTE_PATH.draft} component={DraftList} />
+
+            <Route exact path={ROUTE_PATH.boardList} component={BoardList} />
           </Switch>
         </React.Suspense>
       </CoreLayout>

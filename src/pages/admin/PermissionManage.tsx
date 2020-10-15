@@ -137,7 +137,11 @@ const PermissionManage = (props: Props) => {
           rowKey='id'
           columns={columns}
           dataSource={props.permissionList.list}
-          pagination={{ pageSize: 20, total: props.permissionList.totalCount }}
+          pagination={{
+            pageSize: props.permissionListParams.pageSize,
+            total: props.permissionList.totalCount,
+            current: props.permissionListParams.page
+          }}
           onChange={handleTableChange}
         />
       </div>

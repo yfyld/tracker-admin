@@ -35,10 +35,7 @@ const ProjectPane = ({ boardInfo, doDeleteProject }: Props) => {
     });
   };
   return (
-    <Link
-      className={style.wrapper}
-      to={`${ROUTE_PATH.boardDetail}?projectId=${boardInfo.projectId}&boardId=${boardInfo.id}`}
-    >
+    <Link className={style.wrapper} to={`${ROUTE_PATH.board}?projectId=${boardInfo.projectId}&boardId=${boardInfo.id}`}>
       <Card
         style={{ width: 300 }}
         cover={<img alt='image' src={noimg} />}
@@ -56,7 +53,7 @@ const ProjectPane = ({ boardInfo, doDeleteProject }: Props) => {
         ]}
       >
         <Meta
-          avatar={<AvatarText info={boardInfo.creator} />}
+          // avatar={<AvatarText info={boardInfo.creator} />}
           title={boardInfo.name}
           description={boardInfo.description || '这人太懒了,没写描述'}
         />

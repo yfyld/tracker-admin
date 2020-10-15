@@ -9,14 +9,15 @@ import {
   IBoardAddParam,
   IReportAppendToBoard,
   IMyBoardListParam,
-  IMyBoardListItem
+  IBoardListItem,
+  IBoardList
 } from '@/api';
 
 export const doGetBoardList = createAsyncAction(
   actionType.GET_BOARD_LIST_REQUEST,
   actionType.GET_BOARD_LIST_SUCCESS,
   actionType.GET_BOARD_LIST_FAILURE
-)<IBoardListParam, IPageData<IBoardInfo>, Error>();
+)<IBoardListParam, IBoardList, Error>();
 
 export const doGetBoardInfo = createAsyncAction(
   actionType.GET_BOARD_INFO_REQUEST,
@@ -52,8 +53,8 @@ export const doGetMyBoardList = createAsyncAction(
   actionType.GET_MY_BOARD_LIST_REQUEST,
   actionType.GET_MY_BOARD_LIST_SUCCESS,
   actionType.GET_MY_BOARD_LIST_FAILURE
-)<IMyBoardListParam, IPageData<IMyBoardListItem>, Error>();
+)<IMyBoardListParam, IPageData<IBoardListItem>, Error>();
 
-export const doChangeBoardGlobalDate = createAction(actionType.CHENGE_GLOBAL_DATE, action => (date: IDate) =>
+export const doChangeBoardGlobalDate = createAction(actionType.CHENGE_GLOBAL_DATE, (action) => (date: IDate) =>
   action(date)
 );

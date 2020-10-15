@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { IStoreState } from '@/types';
-import { ADD_BROAD, PERMISSION_CODE } from '@/constants';
+import { ADD_BROAD, PERMISSION_CODE, ROUTE_PATH } from '@/constants';
 
 const projectIdSelector = (state: IStoreState) => state.project.projectInfo.id;
 const boardListSelector = (state: IStoreState) => state.board.boardList.list;
@@ -17,22 +17,22 @@ export const menuDataSelector = createSelector(
 
     const routerData = [
       {
-        key: `/project/info?projectId=${id}`,
+        key: `${ROUTE_PATH.projectInfo}?projectId=${id}`,
         name: '应用信息',
         icon: 'appstore',
         auth: PERMISSION_CODE.PROJECT_INFO
       },
       {
-        key: 'broad',
+        key: `${ROUTE_PATH.boardList}?projectId=${id}`,
         name: '数据看板',
         icon: 'dashboard',
-        action: ADD_BROAD,
-        children: boardList.map((item) => ({
-          key: `/project/board?projectId=${id}&boardId=${item.id}`,
-          icon: 'file',
-          name: item.name,
-          auth: PERMISSION_CODE.ROUTE_BOARD_LIST
-        }))
+        auth: PERMISSION_CODE.BOARD_SEARCH
+        // children: boardList.map((item) => ({
+        //   key: `/project/board?projectId=${id}&boardId=${item.id}`,
+        //   icon: 'file',
+        //   name: item.name,
+        //   auth: PERMISSION_CODE.ROUTE_BOARD_LIST
+        // }))
       },
       {
         key: 'analyse',

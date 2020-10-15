@@ -6,7 +6,7 @@ import { IStoreState, IPageData } from '@/types';
 import { Select, Pagination } from 'antd';
 import AppHeader from '@/components/AppHeader';
 import BoardPane from './components/BoardPane';
-import { IMyBoardListItem, IMyBoardListParam } from '@/api';
+import { IBoardListItem, IMyBoardListParam } from '@/api';
 
 import { IAction } from '@/types';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -15,7 +15,7 @@ import { doGetMyBoardList } from '@/store/actions';
 import MyBoardForm from './components/MyBoardForm';
 
 interface Props {
-  myBoardList: IPageData<IMyBoardListItem>;
+  myBoardList: IPageData<IBoardListItem>;
   myBoardListParams: IMyBoardListParam;
   onGetMyBoardList: (param: IMyBoardListParam) => IAction;
 }
@@ -40,7 +40,7 @@ const MyBoard = ({ myBoardList, onGetMyBoardList, myBoardListParams }: Props) =>
         </Select>
       </div>
       <div className={style.listBox}>
-        {myBoardList.list.map(board => (
+        {myBoardList.list.map((board) => (
           <BoardPane key={board.id} boardInfo={board} />
         ))}
       </div>

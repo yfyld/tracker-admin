@@ -87,9 +87,13 @@ const handlers = {
         action: doGetProjectInfo.request(projectId),
         ttl: CACHE_TIME,
         disable: state.project.projectInfo.id === projectId
-      },
+      }
+    ];
+  },
+  '/project/board-list': ({ search: { projectId } }: any, state: IStoreState): IHandler[] => {
+    return [
       {
-        action: doGetBoardList.request({ projectId, page: 1, pageSize: 1000 }),
+        action: doGetBoardList.request({ projectId, page: 1, pageSize: 20 }),
         ttl: CACHE_TIME,
         disable: state.board.boardList.list.length && projectId === state.board.boardListParams.projectId
       }
@@ -97,11 +101,12 @@ const handlers = {
   },
   '/project/info': ({ search: { projectId } }: any, state: IStoreState): IHandler[] => {
     return [
-      {
-        action: doGetProjectList.request({ ...state.project.projectListParams, teamId: null }),
-        ttl: CACHE_TIME,
-        disable: false
-      },
+      // {
+      //   //关联项目列表
+      //   action: doGetProjectList.request({ ...state.project.projectListParams, teamId: null }),
+      //   ttl: CACHE_TIME,
+      //   disable: false
+      // },
       {
         action: doGetAllRole.request(),
         ttl: CACHE_TIME,

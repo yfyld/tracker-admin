@@ -136,7 +136,7 @@ const UserManage = (props: Props) => {
           >
             <Form.Item label=''>
               {getFieldDecorator('username', {
-                initialValue: props.userInfo.username
+                initialValue: ''
               })(<Input.Search size='large' placeholder='请输入角色名/角色码' />)}
             </Form.Item>
           </Form>
@@ -148,7 +148,11 @@ const UserManage = (props: Props) => {
           rowKey='id'
           columns={columns}
           dataSource={props.userList.list}
-          pagination={{ pageSize: 20 }}
+          pagination={{
+            pageSize: props.userListParams.pageSize,
+            total: props.userList.totalCount,
+            current: props.userListParams.page
+          }}
           onChange={handleTableChange}
         />
       </div>
@@ -157,10 +161,11 @@ const UserManage = (props: Props) => {
 };
 
 const mapStateToProps = (state: IStoreState) => {
-  const { userInfo, userList } = state.app;
+  const { userInfo, userList, userListParams } = state.app;
   return {
     userInfo,
-    userList
+    userList,
+    userListParams
   };
 };
 

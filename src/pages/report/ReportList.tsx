@@ -6,7 +6,7 @@ import { doGetReportList, doAddReport, doDeleteReport, doAppendReportToBoard } f
 import { bindActionCreators, Dispatch } from 'redux';
 import { Table, Button, Icon, Tooltip, Modal, Popover, Select, message, Dropdown, Menu } from 'antd';
 import { PaginationConfig, SorterResult, ColumnProps, ColumnFilterItem } from 'antd/lib/table';
-import { IReportListParam, IReportInfo, IReportAddParam, IBoardInfo, IReportAppendToBoard } from '@/api';
+import { IReportListParam, IReportInfo, IReportAddParam, IBoardInfo, IReportAppendToBoard, IBoardList } from '@/api';
 import ReportAddModal from './components/ReportAddModal';
 import ReportListForm from './components/ReportListForm';
 import BoardAppendReportModal from '@/components/BoardAppendReportModal';
@@ -21,7 +21,7 @@ interface Props {
   onAddReport: (params: IReportAddParam) => IAction;
   onDeleteReport: (param: number) => IAction;
   reportList: IPageData<IReportInfo>;
-  boardList: IPageData<IBoardInfo>;
+  boardList: IBoardList;
   reportListParams: IReportListParam;
   boardListFilters: ColumnFilterItem[];
   boardListMap: { [prop: string]: IBoardInfo };

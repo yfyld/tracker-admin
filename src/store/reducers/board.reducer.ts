@@ -3,14 +3,14 @@ import { doGetBoardList, doGetBoardInfo, doGetMyBoardList, doChangeBoardGlobalDa
 import update from 'immutability-helper';
 import { getType } from 'typesafe-actions';
 import { IAction, IPageData, IDate } from '@/types';
-import { IBoardInfo, IReportInfo, IBoardListParam, IMyBoardListParam, IMyBoardListItem } from '@/api';
+import { IBoardInfo, IReportInfo, IBoardListParam, IMyBoardListParam, IBoardListItem } from '@/api';
 
 export interface BoardState {
   boardInfo: IBoardInfo;
   boardListParams: IBoardListParam;
-  boardList: IPageData<IBoardInfo>;
+  boardList: IPageData<IBoardListItem>;
   myBoardListParams: IMyBoardListParam;
-  myBoardList: IPageData<IMyBoardListItem>;
+  myBoardList: IPageData<IBoardListItem>;
   globalDate: IDate;
 }
 

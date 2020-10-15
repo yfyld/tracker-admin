@@ -30,6 +30,10 @@ export default function DateParse({ dateStart, dateEnd, dateType }: Props) {
     dateStart = new Date().setHours(0, 0, 0, 0);
     dateEnd = now;
     type = '今天';
+  } else if (dateType === 'DAY') {
+    dateStart = new Date().setHours(0, 0, 0, 0);
+    dateEnd = now;
+    type = '今天';
   } else if (dateType === 'WEEK') {
     dateStart = getWeekStartDate();
     dateEnd = now;
@@ -58,6 +62,18 @@ export default function DateParse({ dateStart, dateEnd, dateType }: Props) {
     dateStart = getLastYearStartDate();
     dateEnd = getYearStartDate() - 1;
     type = '去年';
+  } else if (dateType === 'RECENT_3_DAY') {
+    dateStart = new Date().setHours(0, 0, 0, 0) - 3 * 86400000;
+    dateEnd = new Date().setHours(23, 59, 59, 999);
+    type = '最近3天';
+  } else if (dateType === 'RECENT_7_DAY') {
+    dateStart = new Date().setHours(0, 0, 0, 0) - 7 * 86400000;
+    dateEnd = new Date().setHours(23, 59, 59, 999);
+    type = '最近7天';
+  } else if (dateType === 'RECENT_15_DAY') {
+    dateStart = new Date().setHours(0, 0, 0, 0) - 15 * 86400000;
+    dateEnd = new Date().setHours(23, 59, 59, 999);
+    type = '最近15天';
   }
 
   return (

@@ -13,13 +13,12 @@ export interface IBoardInfo {
   reports: IReportInfo[];
 }
 
-export type IBoardList = IPageData<IBoardInfo>;
-
 export interface IBoardListParam extends IPageQuery {
   projectId?: number;
   status?: number;
   isPublic?: boolean;
   name?: string;
+  type?: number;
 }
 
 export interface IBoardAddParam {
@@ -54,20 +53,24 @@ export interface IMyBoardListParam {
   pageSize: number;
 }
 
-export interface IMyBoardListItem {
+export interface IBoardListItem {
   id: number;
   projectId: number;
   name: string;
   creator: IMemberInfo;
   description: string;
+  layout: RGL.Layout[];
+  reports: IReportInfo[];
 }
+
+export type IBoardList = IPageData<IBoardListItem>;
 
 export interface IBoardAddResponse {
   id: number;
 }
 
 export function fetchBoardList(params: IBoardListParam) {
-  return fetch.get<IPageData<IBoardInfo>>('/board/', params);
+  return fetch.get<IBoardList>('/board/', params);
 }
 
 export function fetchBoardInfo(params: IInfoParam) {
@@ -91,5 +94,5 @@ export function fetchReportAppendToBoard(params: IReportAppendToBoard) {
 }
 
 export function fetchMyBoardList(params: IMyBoardListParam) {
-  return fetch.get<IPageData<IMyBoardListItem>>('/board/my-board', params);
+  return fetch.get<IPageData<IBoardListItem>>('/board/my-board', params);
 }

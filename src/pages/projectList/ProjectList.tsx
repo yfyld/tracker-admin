@@ -165,7 +165,16 @@ const ProjectList = ({
         ))}
       </div> */}
       <div className='app-tablePage-table'>
-        <Table rowKey='id' columns={columns} dataSource={projectList.list} />
+        <Table
+          rowKey='id'
+          columns={columns}
+          dataSource={projectList.list}
+          pagination={{
+            pageSize: projectListParams.pageSize,
+            total: projectList.totalCount,
+            current: projectListParams.page
+          }}
+        />
       </div>
     </div>
   );

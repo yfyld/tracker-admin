@@ -159,7 +159,11 @@ const RoleManage = (props: Props) => {
           rowKey='id'
           columns={columns}
           dataSource={props.roleList.list}
-          pagination={{ pageSize: 20 }}
+          pagination={{
+            pageSize: props.roleListParams.pageSize,
+            total: props.roleList.totalCount,
+            current: props.roleListParams.page
+          }}
           onChange={handleTableChange}
         />
       </div>
