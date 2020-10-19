@@ -497,6 +497,9 @@ const MetadataList = ({
             <Button size='large' onClick={() => setTagDrawerVisible(true)}>
               标签管理
             </Button>
+            <a href={`${config.baseURL}/metadata/export`}>
+              <Button size='large'>导出</Button>
+            </a>
           </div>
           <div>
             <MetadataListForm defaultValue={metadataListParams} onSubmit={onGetMetadataList}></MetadataListForm>

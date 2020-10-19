@@ -130,20 +130,20 @@ instance.delete = (url: string, data?: object, config: AxiosRequestConfig = {}):
   return deleteFn(url, config);
 };
 
-export function updateToken(token?: string): string {
-  if (typeof token === 'undefined') {
-    const cookieToken = getCookie('TELESCOPE_TOKEN');
-    if (cookieToken) {
-      setCookie('TELESCOPE_TOKEN', '');
-      return updateToken(cookieToken);
-    }
-    token = localStore.getSyncItem('token');
-  } else {
-    localStore.setSyncItem('token', token);
-  }
-  instance.defaults.headers['Authorization'] = 'Bearer ' + token;
-  return token;
-}
+// export function updateToken(token?: string): string {
+//   if (typeof token === 'undefined') {
+//     const cookieToken = getCookie('TELESCOPE_TOKEN');
+//     if (cookieToken) {
+//       setCookie('TELESCOPE_TOKEN', '');
+//       return updateToken(cookieToken);
+//     }
+//     token = localStore.getSyncItem('token');
+//   } else {
+//     localStore.setSyncItem('token', token);
+//   }
+//   instance.defaults.headers['Authorization'] = 'Bearer ' + token;
+//   return token;
+// }
 
-updateToken();
+// updateToken();
 export default instance;

@@ -45,14 +45,14 @@ import {
 
 import { message } from 'antd';
 import { push } from 'connected-react-router';
-import http, { updateToken } from '@/api/http';
+import http from '@/api/http';
 import handlers from '@/router/handler';
 import { ROUTE_PATH } from '@/constants';
 
 function* triggerFetchOnLocation(): Generator {
-  if (!http.defaults.headers['Authorization']) {
-    yield call(updateToken);
-  }
+  // if (!http.defaults.headers['Authorization']) {
+  //   yield call(updateToken);
+  // }
   const state = yield* select((state) => state);
 
   const actions = mapLocationIntoActions(state.router.location, handlers, state)
@@ -73,7 +73,7 @@ function* login(action: ReturnType<typeof doLogin.request>): Generator {
     yield put(doLogin.success(response.data));
     message.success('登录成功');
 
-    yield call(updateToken, response.data.accessToken);
+    // yield call(updateToken, response.data.accessToken);
     yield delay(300);
     yield put(push('/project-list'));
   } catch (error) {
@@ -89,7 +89,7 @@ function* logout(action: ReturnType<typeof doLogin.request>): Generator {
     yield put(doResetStore());
     message.success('注销成功');
 
-    yield call(updateToken, '');
+    // yield call(updateToken, '');
     yield delay(300);
     yield put(push('/login'));
   } catch (error) {
@@ -129,8 +129,8 @@ function* addUser(action: ReturnType<typeof doSignup.request>): Generator {
 }
 
 function* resetStore(action: ReturnType<typeof doResetStore>): Generator {
-  window.localStorage.removeItem('token');
-  updateToken('');
+  // window.localStorage.removeItem('token');
+  // updateToken('');
 }
 
 function* updateUser(action: ReturnType<typeof doPutUser.request>): Generator {

@@ -81,7 +81,7 @@ const AnalysePath = ({
           <Indicator
             addText='+添加页面'
             hasCustomName
-            type={EMetadataType.page}
+            // type={EMetadataType.page}
             indicators={pathAnalyseParam.indicators}
             onChange={(indicators, indicator) => handleChange({ ...pathAnalyseParam, indicators }, indicator)}
           />

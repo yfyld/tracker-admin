@@ -11,7 +11,7 @@ interface Props {
 const ProjectCode = ({ projectInfo }: Props) => {
   const scriptCode = `<script
   src='//static.91jkys.com/f2e/telescope-sdk/telescope.min.js'
-  trackKey='${projectInfo.trackKey}'
+  track-key='${projectInfo.trackKey}'
   crossorigin='anonymous'
 ></script>`;
 
