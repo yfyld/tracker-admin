@@ -37,6 +37,7 @@ const UserManage = (props: Props) => {
   const [chooseRolesVisible, setChooseRolesVisible] = React.useState(false);
   const [chooseUpdateUser, setchooseUpdateUser] = React.useState<IBaseUser>(null);
   const [editUserVisible, setEditUserVisible] = React.useState(false);
+  const [searchValue, setSearchValue] = React.useState('');
 
   const handleFilter = () => {
     props.form.validateFields((err, values) => {
@@ -82,7 +83,7 @@ const UserManage = (props: Props) => {
       key: 'role',
       title: '角色',
       dataIndex: 'roles',
-      render: (text, record) => <div>{record.roles.map((item) => item.name).join(',')}</div>
+      render: (text, record) => <div>{record.roles.map(item => item.name).join(',')}</div>
     },
     {
       title: '操作',
@@ -136,7 +137,11 @@ const UserManage = (props: Props) => {
           >
             <Form.Item label=''>
               {getFieldDecorator('username', {
+<<<<<<< HEAD
                 initialValue: ''
+=======
+                initialValue: searchValue
+>>>>>>> d9031837c32816a5323692103a20f7a236b1ed86
               })(<Input.Search size='large' placeholder='请输入角色名/角色码' />)}
             </Form.Item>
           </Form>
@@ -188,4 +193,7 @@ const mapDispatchToProps = (dispatch: Dispatch<IAction>) =>
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(Form.create<Props>()(UserManage));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Form.create<Props>()(UserManage));
