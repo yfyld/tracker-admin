@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { Route, Redirect, RouteProps } from 'react-router-dom';
-import { localStore } from '@/utils';
+import { localStore, getCookie } from '@/utils';
 import config from '@/config/config';
 
 const PrivateRoute = ({ component: Component, ...rest }: RouteProps) => (
   <Route
     {...rest}
-    render={props =>
-      localStore.getSyncItem('token') ? (
+    render={(props) =>
+      getCookie('TELESCOPE_LOGIN') === 'true' ? (
         <Component {...props} />
       ) : (
         <Redirect
