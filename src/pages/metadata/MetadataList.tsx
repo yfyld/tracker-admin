@@ -35,6 +35,7 @@ import { UploadFile } from 'antd/lib/upload/interface';
 import config from '@/config';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
+import { objToQueryString } from '@/utils';
 const { confirm } = Modal;
 
 interface Props {
@@ -497,8 +498,9 @@ const MetadataList = ({
             <Button size='large' onClick={() => setTagDrawerVisible(true)}>
               标签管理
             </Button>
-            <a href={`${config.baseURL}/metadata/export`}>
-              <Button size='large'>导出</Button>
+            &nbsp;
+            <a href={`${config.baseURL}/metadata/export?${objToQueryString(metadataListParams)}`}>
+              <Button size='large'>导出元数据</Button>
             </a>
           </div>
           <div>

@@ -457,7 +457,7 @@ const AnalyseEventChart = ({ data }: Props) => {
             {getIndicatorTypeCname(item.indicatorType)}: <strong>{Number(item.compare.yoyCurrent)} </strong>{' '}
           </p>
           <p>
-            同比:
+            月同比:
             <span style={{ color: Number(item.compare.yoyPercentage) > 1 ? COLOR.success : COLOR.danger }}>
               <Icon type={Number(item.compare.yoyPercentage) > 1 ? 'caret-up' : 'caret-down'} />
               {item.compare.yoyPercentage === null

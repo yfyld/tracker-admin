@@ -108,7 +108,9 @@ class AnalyseRangePicker extends React.Component<Props> {
           )}
           open={this.state.open}
           format='YYYY-MM-DD HH:mm'
-          showTime
+          showTime={{
+            defaultValue: [moment(new Date('2000/12/12 00:00:00')), moment(new Date('2000/12/12 23:59:59'))]
+          }}
           onOpenChange={this.handleOpenChange}
           value={
             this.state.newValue.dateStart

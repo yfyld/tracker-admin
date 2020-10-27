@@ -166,3 +166,14 @@ export const getIndicatorTypeCname = (type: string) => {
       return '日均用户数';
   }
 };
+
+export const objToQueryString = (obj: Object) => {
+  return Object.entries(obj)
+    .filter((item) => {
+      return item[1] || item[1] === false;
+    })
+    .map((item) => {
+      return item[0] + '=' + (item[1] || '');
+    })
+    .join('&');
+};
