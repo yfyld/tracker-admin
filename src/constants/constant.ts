@@ -80,14 +80,21 @@ export const DYNAMIC_TIME: IDynamicTime[] = [
   },
 
   {
+    name: '昨天',
+    startDate: () => new Date().setHours(0, 0, 0, 0) - 1 * 86400000,
+    endDate: () => new Date().setHours(23, 59, 59, 999) - 1 * 86400000,
+    value: 'YESTERDAY'
+  },
+
+  {
     name: '最近3天',
-    startDate: () => new Date().setHours(0, 0, 0, 0) - 3 * 86400000,
+    startDate: () => new Date().setHours(0, 0, 0, 0) - 2 * 86400000,
     endDate: () => new Date().setHours(23, 59, 59, 999),
     value: 'RECENT_3_DAY'
   },
   {
     name: '最近7天',
-    startDate: () => new Date().setHours(0, 0, 0, 0) - 7 * 86400000,
+    startDate: () => new Date().setHours(0, 0, 0, 0) - 6 * 86400000,
     endDate: () => new Date().setHours(23, 59, 59, 999),
     value: 'RECENT_7_DAY'
   },
@@ -105,7 +112,7 @@ export const DYNAMIC_TIME: IDynamicTime[] = [
   },
   {
     name: '最近15天',
-    startDate: () => new Date().setHours(0, 0, 0, 0) - 15 * 86400000,
+    startDate: () => new Date().setHours(0, 0, 0, 0) - 14 * 86400000,
     endDate: () => new Date().setHours(23, 59, 59, 999),
     value: 'RECENT_15_DAY'
   },
@@ -114,6 +121,12 @@ export const DYNAMIC_TIME: IDynamicTime[] = [
     startDate: () => getMonthStartDate(),
     endDate: () => new Date().setHours(23, 59, 59, 999),
     value: 'MONTH'
+  },
+  {
+    name: '最近30天',
+    startDate: () => new Date().setHours(0, 0, 0, 0) - 29 * 86400000,
+    endDate: () => new Date().setHours(23, 59, 59, 999),
+    value: 'RECENT_30_DAY'
   },
   {
     name: '上个月',
@@ -135,7 +148,7 @@ export const DYNAMIC_TIME: IDynamicTime[] = [
   },
   {
     name: '半年',
-    startDate: () => new Date().setHours(0, 0, 0, 0) - 183 * 86400000,
+    startDate: () => new Date().setHours(0, 0, 0, 0) - 182 * 86400000,
     endDate: () => new Date().setHours(23, 59, 59, 999),
     value: 'HALF_YEAR'
   },

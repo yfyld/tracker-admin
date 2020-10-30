@@ -14,7 +14,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { doAddReport, doUpdateReport, doGetEventAnalyse } from '@/store/actions';
 import { IAction, IStoreState, IListData, IDate } from '@/types';
 import { DYNAMIC_TIME, EVENT_ATTRS } from '@/constants';
-import AnalyseEventChart from './components/AnalyseEventChart';
+import AnalyseEventChart, { CRef } from './components/AnalyseEventChart';
 const { Option } = Select;
 const { Panel } = Collapse;
 const { Group } = Input;
@@ -24,6 +24,7 @@ interface Props {
   eventAnalyseData: IEventAnalyseData;
   eventAnalyseParam: IEventAnalyseParam;
   analyseLoading: boolean;
+  reportInfo: IReportInfo;
 }
 
 const AnalyseEvent = ({
@@ -32,12 +33,21 @@ const AnalyseEvent = ({
   onGetEventAnalyseData,
   projectId,
   eventAnalyseData,
-  eventAnalyseParam
+  eventAnalyseParam,
+  reportInfo
 }: Props) => {
   const handleChange = (info: IEventAnalyseParam) => {
     info.projectId = projectId;
     onGetEventAnalyseData(info);
   };
+
+  const handlePrint = () => {
+    if (cRef.current) {
+      cRef.current.print(reportInfo.name);
+    }
+  };
+
+  const cRef = React.useRef<CRef>(null);
 
   return (
     <div className={style.wrapper}>
@@ -110,7 +120,9 @@ const AnalyseEvent = ({
                 <Option value='MONTH'>按月</Option>
                 <Option value='YEAR'>按年</Option>
               </Select>
-              <Button icon='download'>导出</Button>
+              <Button icon='download' onClick={handlePrint}>
+                导出
+              </Button>
             </Group>
           </Col>
         </Row>
@@ -118,7 +130,7 @@ const AnalyseEvent = ({
         <br />
         <Spin spinning={analyseLoading}>
           <div style={{ height: eventAnalyseParam.type === 'TABLE' ? 800 : 400 }}>
-            <AnalyseEventChart data={eventAnalyseData}></AnalyseEventChart>
+            <AnalyseEventChart ref={cRef} data={eventAnalyseData}></AnalyseEventChart>
           </div>
         </Spin>
         <div></div>
@@ -129,12 +141,14 @@ const AnalyseEvent = ({
 
 const mapStateToProps = (state: IStoreState) => {
   const projectId = state.project.projectInfo.id;
+  const { reportInfo } = state.report;
   const { eventAnalyseData, eventAnalyseParam, analyseLoading } = state.analyse;
   return {
     projectId,
     eventAnalyseData,
     eventAnalyseParam,
-    analyseLoading
+    analyseLoading,
+    reportInfo
   };
 };
 

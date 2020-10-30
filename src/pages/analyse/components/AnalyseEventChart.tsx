@@ -6,12 +6,16 @@ import { IEventAnalyseParam, IEventAnalyseData } from '@/api';
 
 import style from './AnalyseEventChart.module.less';
 
-import { getFormatByTimeUnit, dayjs, getIndicatorTypeCname } from '@/utils';
+import { getFormatByTimeUnit, dayjs, getIndicatorTypeCname, exportExcel } from '@/utils';
 import { COLOR } from '@/constants';
 import NoData from '@/components/NoData';
 
 interface Props {
   data: IEventAnalyseData;
+}
+
+export interface CRef {
+  print: (name?: string) => void;
 }
 
 const getBarOptions = (data: IEventAnalyseData): ObjectMap => {
@@ -441,7 +445,17 @@ const getTableData = (data: IEventAnalyseData): TableColumnProps[] => {
   // return Object.values(date);
 };
 
-const AnalyseEventChart = ({ data }: Props) => {
+const AnalyseEventChart = React.forwardRef<CRef, Props>(({ data }, ref) => {
+  React.useImperativeHandle(ref, () => ({
+    print
+  }));
+
+  const print = (name: string) => {
+    const tableData = getColumns(data);
+    const dataSource = getTableData(data);
+    exportExcel(tableData, dataSource, name);
+  };
+
   const hasData = !!data.list.find((item) => item.data.length > 0);
 
   if (!hasData) {
@@ -482,12 +496,13 @@ const AnalyseEventChart = ({ data }: Props) => {
       return <div>{compare}</div>;
     case 'TABLE': {
       const tableData = getColumns(data);
+      const dataSource = getTableData(data);
       const tableScroll = tableData.length > 5 ? { x: tableData.length * 200 } : {};
       return (
         <div className={style.content}>
           {compare}
           <div className={style.main}>
-            <Table columns={tableData} dataSource={getTableData(data)} scroll={tableScroll} />
+            <Table columns={tableData} dataSource={dataSource} scroll={tableScroll} />
           </div>
         </div>
       );
@@ -509,6 +524,6 @@ const AnalyseEventChart = ({ data }: Props) => {
         </div>
       );
   }
-};
+});
 
 export default AnalyseEventChart;
