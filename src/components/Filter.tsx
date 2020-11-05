@@ -134,7 +134,7 @@ const Filter = ({ fieldList = { list: EVENT_ATTRS }, filterInfo, onChange }: Pro
                           onChange={(val: string) => handleFilterValueChange(val, index)}
                           mode='tags'
                           style={{ width: '100%' }}
-                          tokenSeparators={[',']}
+                          tokenSeparators={[';;']}
                         >
                           {recommend.map((item) => (
                             <Option key={item.value} value={item.value}>
