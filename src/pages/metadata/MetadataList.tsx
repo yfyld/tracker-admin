@@ -83,6 +83,7 @@ const MetadataList = ({
     tags: [],
     log: 0,
     logByApp: 0,
+    logByH5: 0,
     operatorType: 0,
     recentLog: 0
   });
@@ -314,7 +315,7 @@ const MetadataList = ({
             <br />
             <span>app日志:{record.logByApp}条</span>
             <br />
-            <span>H5日志:{record.log - record.logByApp}条</span>
+            <span>H5日志:{record.logByH5}条</span>
           </div>
         ) : (
           <span>无</span>

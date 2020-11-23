@@ -113,12 +113,12 @@ const Filter = ({ fieldList = { list: EVENT_ATTRS }, filterInfo, onChange }: Pro
                     <Option value='less'>小于</Option>
                     <Option value='between'>区间</Option>
 
-                    <Option value='contain'>包含</Option>
-                    <Option value='notContain'>不包含</Option>
+                    {/* <Option value='contain'>包含</Option>
+                    <Option value='notContain'>不包含</Option> */}
                     <Option value='isEmpty'>为空</Option>
                     <Option value='isNotEmpty'>不为空</Option>
-                    <Option value='rlike'>正则匹配</Option>
-                    <Option value='notrlike'>正则不匹配</Option>
+                    {/* <Option value='rlike'>正则匹配</Option>
+                    <Option value='notrlike'>正则不匹配</Option> */}
                   </Select>
                 </Col>
                 {filter.type !== 'isEmpty' &&
@@ -128,7 +128,10 @@ const Filter = ({ fieldList = { list: EVENT_ATTRS }, filterInfo, onChange }: Pro
                   filter.type !== 'rlike' &&
                   filter.type !== 'notrlike' && (
                     <Col span={8}>
-                      {filter.type === 'equal' || filter.type === 'notEqual' ? (
+                      {filter.type === 'equal' ||
+                      filter.type === 'notEqual' ||
+                      filter.type === 'notContain' ||
+                      filter.type === 'contain' ? (
                         <Select
                           value={filter.value}
                           onChange={(val: string) => handleFilterValueChange(val, index)}

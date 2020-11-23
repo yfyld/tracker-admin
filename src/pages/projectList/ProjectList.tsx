@@ -13,7 +13,7 @@ import { IAction } from '@/types';
 import { bindActionCreators, Dispatch } from 'redux';
 import { doGetProjectList, doDeleteProject, doUpdateProject } from '@/store/actions';
 import ProjectListForm from './components/ProjectListForm';
-import { ColumnProps } from 'antd/lib/table';
+import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import ProjectUpdateModal from './components/ProjectUpdateModal';
 import { ROUTE_PATH, PERMISSION_CODE } from '@/constants';
 import { Link } from 'react-router-dom';
@@ -99,7 +99,12 @@ const ProjectList = ({
     if (team) {
       param.teamId = team.id;
     }
+    param.page = 1;
     onGetProjectList(param);
+  };
+
+  const handleChange = (param: PaginationConfig) => {
+    onGetProjectList({ ...projectListParams, page: param.current });
   };
 
   const handleDelete = (info: IProjectListItem) => {
@@ -169,6 +174,7 @@ const ProjectList = ({
           rowKey='id'
           columns={columns}
           dataSource={projectList.list}
+          onChange={handleChange}
           pagination={{
             pageSize: projectListParams.pageSize,
             total: projectList.totalCount,

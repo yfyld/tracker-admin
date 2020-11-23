@@ -43,6 +43,7 @@ const initialState = (): MetadataState => ({
     tags: [],
     log: null,
     logByApp: null,
+    logByH5: null,
     operatorType: 0,
     recentLog: null
   },
