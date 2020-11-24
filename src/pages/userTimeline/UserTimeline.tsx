@@ -28,7 +28,8 @@ const UserTimeline = ({ projectId }: Props) => {
     dateEnd: DYNAMIC_TIME[1].endDate(),
     dateType: DYNAMIC_TIME[1].value,
     uid: '',
-    utoken: ''
+    deviceId: '',
+    ip: ''
   });
 
   const [result, setResult] = React.useState([]);
@@ -45,18 +46,25 @@ const UserTimeline = ({ projectId }: Props) => {
     <div className={style.wrapper}>
       <div className={style.preview}>
         <Row>
-          <Col span={6}>
+          <Col span={4}>
             <Input
               placeholder='uid'
               value={param.uid}
               onChange={(val) => handleChange({ ...param, uid: val.target.value })}
             ></Input>
           </Col>
-          <Col span={6}>
+          <Col span={4}>
             <Input
-              placeholder='utoken'
-              value={param.utoken}
-              onChange={(val) => handleChange({ ...param, utoken: val.target.value })}
+              placeholder='deviceId'
+              value={param.deviceId}
+              onChange={(val) => handleChange({ ...param, deviceId: val.target.value })}
+            ></Input>
+          </Col>
+          <Col span={4}>
+            <Input
+              placeholder='ip'
+              value={param.ip}
+              onChange={(val) => handleChange({ ...param, ip: val.target.value })}
             ></Input>
           </Col>
           <Col span={10}>
