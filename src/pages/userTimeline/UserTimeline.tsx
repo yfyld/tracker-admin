@@ -42,14 +42,14 @@ const UserTimeline = ({ projectId }: Props) => {
     });
   };
 
-  const logContent = (context: any) => {
+  const logContent = (context: { [prop: string]: string }) => {
     return (
       <div style={{ width: 680, height: 500, overflow: 'auto' }}>
         {Object.entries(context).map(([key, value]) => {
           return (
             <div>
               <h4>{key}</h4>
-              <p>{value}</p>
+              <p>{typeof value === 'string' ? unescape(value.replace(/\\u/gi, '%u')) : value}</p>
             </div>
           );
         })}
