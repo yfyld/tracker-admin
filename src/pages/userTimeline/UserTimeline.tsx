@@ -1,4 +1,4 @@
-import { Icon, Collapse, Divider, Select, Input, Row, Col, Button, Spin, Table, Timeline } from 'antd';
+import { Icon, Collapse, Divider, Select, Input, Row, Col, Button, Spin, Table, Timeline, Popover } from 'antd';
 import React from 'react';
 import AnalyseRangePicker from '@/components/AnalyseRangePicker';
 
@@ -32,7 +32,7 @@ const UserTimeline = ({ projectId }: Props) => {
     ip: ''
   });
 
-  const [result, setResult] = React.useState([]);
+  const [result, setResult] = React.useState<{ [props: string]: any }[]>([]);
 
   const [loading, setloading] = React.useState(false);
 
@@ -40,6 +40,21 @@ const UserTimeline = ({ projectId }: Props) => {
     fetchUserTimelineAnalyseData({ ...param, projectId }).then((res) => {
       setResult(res.data);
     });
+  };
+
+  const logContent = (context: any) => {
+    return (
+      <div style={{ width: 680, height: 500, overflow: 'auto' }}>
+        {Object.entries(context).map(([key, value]) => {
+          return (
+            <div>
+              <h4>{key}</h4>
+              <p>{value}</p>
+            </div>
+          );
+        })}
+      </div>
+    );
   };
 
   return (
@@ -89,15 +104,20 @@ const UserTimeline = ({ projectId }: Props) => {
             <Timeline mode='alternate'>
               {result.map((item) => (
                 <Timeline.Item color='green' dot={<Icon type='clock-circle-o' style={{ fontSize: '16px' }} />}>
-                  <div>{dayjs(Number(item.trackTime)).format('YYYY-MM-DD HH:mm:ss')}</div>
                   <div>
-                    {item.actionType === 'PAGE' ? '访问了' : '触发了'} <strong>{item.trackName}</strong>{' '}
-                  </div>
-                  {item.actionType === 'PAGE' && (
-                    <div>{item.durationTime ? item.durationTime / 1000 + '秒' : '访问时间太短或未获取'}</div>
-                  )}
-                  <div>
-                    {item.appid === 'null' ? 'H5' : 'APP'},项目版本:{item.version},系统:{item.os},浏览器:{item.browser}
+                    <Popover trigger='click' content={logContent(item)} title='日志详情'>
+                      <div>{dayjs(Number(item.trackTime)).format('YYYY-MM-DD HH:mm:ss')}</div>
+                      <div>
+                        {item.actionType === 'PAGE' ? '访问了' : '触发了'} <strong>{item.trackName}</strong>{' '}
+                      </div>
+                      {item.actionType === 'PAGE' && (
+                        <div>{item.durationTime ? item.durationTime / 1000 + '秒' : '访问时间太短或未获取'}</div>
+                      )}
+                      <div>
+                        {item.appid === 'null' ? 'H5' : 'APP'},项目版本:{item.version},系统:{item.os},浏览器:
+                        {item.browser}
+                      </div>
+                    </Popover>
                   </div>
                 </Timeline.Item>
               ))}
