@@ -108,7 +108,8 @@ const UserTimeline = ({ projectId }: Props) => {
                     <Popover trigger='click' content={logContent(item)} title='日志详情'>
                       <div>{dayjs(Number(item.trackTime)).format('YYYY-MM-DD HH:mm:ss')}</div>
                       <div>
-                        {item.actionType === 'PAGE' ? '访问了' : '触发了'} <strong>{item.trackName}</strong>{' '}
+                        {item.actionType === 'PAGE' ? '访问了' : '触发了'}{' '}
+                        <strong>{item.trackName || item.trackId}</strong>{' '}
                       </div>
                       {item.actionType === 'PAGE' && (
                         <div>{item.durationTime ? item.durationTime / 1000 + '秒' : '访问时间太短或未获取'}</div>
