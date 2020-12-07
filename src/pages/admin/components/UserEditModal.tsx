@@ -92,6 +92,7 @@ const UserEditModal = (props: Props) => {
             initialValue: props.userInfo.roles.map((item) => item.id)
           })(<Checkbox.Group options={roleOptions} />)}
         </Form.Item>
+        <Form.Item label='密码'>{getFieldDecorator('password', {})(<Input placeholder='请输入密码' />)}</Form.Item>
       </Form>
     </Modal>
   );

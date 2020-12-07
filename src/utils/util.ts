@@ -177,3 +177,15 @@ export const objToQueryString = (obj: Object) => {
     })
     .join('&');
 };
+
+export const getSearchParams = (search: string) => {
+  const query = search.substr(1).split('&');
+  var params: { [prop: string]: string } = {};
+  for (let i = 0; i < query.length; i++) {
+    let q = query[i].split('=');
+    if (q.length === 2) {
+      params[q[0]] = q[1];
+    }
+  }
+  return params;
+};

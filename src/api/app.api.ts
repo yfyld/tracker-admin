@@ -40,6 +40,7 @@ export interface IBaseUser {
   nickname: string;
   email: string;
   mobile: string;
+  password?: string;
   roles: IRoleInfo[];
 }
 

@@ -11,26 +11,36 @@ import { IAction, IStoreState, IListData, IDate } from '@/types';
 import { fetchCustomAnalyseData, fetchUserTimelineAnalyseData } from '@/api';
 import { DYNAMIC_TIME } from '@/constants';
 import dayjs from 'dayjs';
-import { getFormatByTimeUnit } from '@/utils';
+import { getFormatByTimeUnit, getSearchParams } from '@/utils';
 import { ColumnProps } from 'antd/lib/table';
 
 interface Props {
   projectId: number;
+  search: string;
 }
 
-const UserTimeline = ({ projectId }: Props) => {
+const UserTimeline = ({ projectId, search }: Props) => {
   const handleChange = (info: any) => {
     setparam(info);
   };
 
+  const searchParam = getSearchParams(search);
+
   const [param, setparam] = React.useState({
-    dateStart: DYNAMIC_TIME[1].startDate(),
-    dateEnd: DYNAMIC_TIME[1].endDate(),
-    dateType: DYNAMIC_TIME[1].value,
-    uid: '',
-    deviceId: '',
-    ip: ''
+    dateStart: searchParam.dateStart ? Number(searchParam.dateStart) : DYNAMIC_TIME[1].startDate(),
+    dateEnd: searchParam.dateEnd ? Number(searchParam.dateEnd) : DYNAMIC_TIME[1].endDate(),
+    uid: searchParam.uid || '',
+    deviceId: searchParam.deviceId || '',
+    ip: searchParam.ip || '',
+    dateType: searchParam.dateStart ? '' : DYNAMIC_TIME[1].value
   });
+
+  React.useEffect(() => {
+    //有参数自动查
+    if (param.uid || param.deviceId || param.ip) {
+      handleQuery();
+    }
+  }, [search]);
 
   const [result, setResult] = React.useState<{ [props: string]: any }[]>([]);
 
@@ -134,8 +144,10 @@ const UserTimeline = ({ projectId }: Props) => {
 
 const mapStateToProps = (state: IStoreState) => {
   const projectId = state.project.projectInfo.id;
+  const { search } = state.router.location;
   return {
-    projectId
+    projectId,
+    search
   };
 };
 

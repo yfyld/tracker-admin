@@ -27,7 +27,10 @@ class AnalyseRangePicker extends React.Component<Props> {
 
   componentDidMount() {
     this.setState({
-      newValue: this.props.value.dateStart ? [moment(this.props.value.dateStart), moment(this.props.value.dateEnd)] : []
+      newValue: {
+        dateStart: this.props.value.dateStart,
+        dateEnd: this.props.value.dateEnd
+      }
     });
   }
 

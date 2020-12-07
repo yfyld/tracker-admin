@@ -59,7 +59,7 @@ const errorMessage = (mes: string) => {
 // 实例
 const instance: AxiosInstance = axios.create({
   baseURL: config.baseURL,
-  timeout: 30000,
+  timeout: 60000,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json'
@@ -88,7 +88,7 @@ instance.interceptors.response.use(
     } else {
       errorMessage(
         response.data.message && response.data.error
-          ? `${response.data.message}: ${response.data.error}`
+          ? `${response.data.message}: ${response.data.error.message || response.data.error}`
           : response.data.message || response.data.error
       );
       if (response.data.status === 401) {
