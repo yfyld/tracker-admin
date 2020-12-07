@@ -37,10 +37,10 @@ const UserTimeline = ({ projectId, search }: Props) => {
 
   React.useEffect(() => {
     //有参数自动查
-    if (param.uid || param.deviceId || param.ip) {
+    if ((param.uid || param.deviceId || param.ip) && projectId) {
       handleQuery();
     }
-  }, [search]);
+  }, [search, projectId]);
 
   const [result, setResult] = React.useState<{ [props: string]: any }[]>([]);
 
