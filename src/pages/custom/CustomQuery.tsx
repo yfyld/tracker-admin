@@ -40,6 +40,7 @@ const CustomQuery = ({ projectId }: Props) => {
   const [loading, setloading] = React.useState(false);
 
   const handleQuery = () => {
+    setloading(true);
     if (param.query && !dataSourceCache.find((item) => item.value === param.query)) {
       dataSourceCache.unshift({ value: param.query, text: param.query });
       if (dataSourceCache.length > 100) {
@@ -48,9 +49,13 @@ const CustomQuery = ({ projectId }: Props) => {
       window.localStorage.setItem('TELESCOPE_QUERY_DATA_SOURCE', JSON.stringify(dataSourceCache));
     }
 
-    fetchCustomAnalyseData({ ...param, projectId }).then((res) => {
-      setResult(res.data);
-    });
+    fetchCustomAnalyseData({ ...param, projectId })
+      .then((res) => {
+        setResult(res.data);
+      })
+      .finally(() => {
+        setloading(false);
+      });
   };
   const handleSearch = (searchText: string) => {
     setDataSource(dataSourceCache.filter((item) => item.value.indexOf(searchText) >= 0));
