@@ -11,7 +11,7 @@ import { IAction, IStoreState, IListData, IDate } from '@/types';
 import { fetchCustomAnalyseData } from '@/api';
 import { DYNAMIC_TIME } from '@/constants';
 import dayjs from 'dayjs';
-import { getFormatByTimeUnit } from '@/utils';
+import { exportExcel, getFormatByTimeUnit } from '@/utils';
 import { ColumnProps } from 'antd/lib/table';
 
 interface Props {
@@ -154,6 +154,10 @@ const CustomQuery = ({ projectId }: Props) => {
     return columns;
   };
 
+  const handleExport = () => {
+    exportExcel(getTableColumns(result), result, '自定义查询');
+  };
+
   return (
     <div className={style.wrapper}>
       <div className={style.preview}>
@@ -185,6 +189,9 @@ const CustomQuery = ({ projectId }: Props) => {
         <br />
         <br />
         <div className='app-tablePage-table'>
+          <div className='app-tablePage-tableBtnBox'>
+            <Button onClick={handleExport}>导出</Button>
+          </div>
           <Spin spinning={loading}>
             <Table columns={getTableColumns(result)} bordered dataSource={result} rowKey='id' />
 
